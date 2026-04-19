@@ -395,7 +395,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <div id="content">
 
 <!-- CALCULADORA -->
-<div id="screen-calc" class="screen active">
+<div id="screen-calc" class="screen">
   <div id="calc-display"><div id="calc-expr"></div><div id="calc-result">0</div></div>
   <div class="calc-grid">
     <button class="calc-btn fn" onclick="calcFn('C')">C</button>
@@ -645,10 +645,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <!-- TAREAS MEJORADAS -->
 <div id="screen-todo" class="screen">
   <div class="card" style="padding:12px">
-    <input class="sm-input" id="todo-input" placeholder="Nueva tarea..." style="margin-bottom:9px" onkeydown="if(event.key==='Enter')todoAdd()">
-    <div style="display:flex;gap:7px;align-items:flex-end;margin-bottom:2px">
-      <div style="flex:1"><div class="field-label">Fecha límite</div><input class="sm-input" type="date" id="todo-date"></div>
-      <div style="flex:1">
+    <div style="display:flex;gap:7px;margin-bottom:9px">
+      <input class="sm-input" id="todo-input" placeholder="Nueva tarea..." style="flex:1" onkeydown="if(event.key==='Enter')todoAdd()">
+      <button class="btn btn-primary" style="padding:10px 16px;border-radius:10px;flex-shrink:0;font-size:18px;line-height:1" onclick="todoAdd()">+</button>
+    </div>
+    <div class="row-2" style="margin-bottom:2px">
+      <div><div class="field-label">Fecha límite</div><input class="sm-input" type="date" id="todo-date"></div>
+      <div>
         <div class="field-label">Prioridad</div>
         <div class="priority-btns" id="todo-prio-btns">
           <button class="prio-btn active-low" data-p="low" onclick="todoSetPrio(this)">Baja</button>
@@ -656,7 +659,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <button class="prio-btn" data-p="high" onclick="todoSetPrio(this)">Alta</button>
         </div>
       </div>
-      <button class="btn btn-primary" style="padding:10px 18px;border-radius:10px;flex-shrink:0" onclick="todoAdd()">+</button>
     </div>
   </div>
   <div class="todo-cats" id="todo-cats">
@@ -1110,10 +1112,9 @@ const CATEGORIES=[
     {id:'tip',name:'Propinas',desc:'Calcular propina y dividir cuenta',icon:'🍽️'},
   ]},
   {id:'conversiones',name:'Conversiones',icon:'🔄',tools:[
-    {id:'fx',name:'Conversor de moneda',desc:'Divisas del mundo + dólar blue',icon:'💱'},
+    {id:'fx',name:'Conversor de moneda',desc:'Divisas + dólar blue, MEP y CCL',icon:'💱'},
     {id:'units',name:'Conversor de unidades',desc:'Longitud, peso, temperatura y más',icon:'📐'},
     {id:'crypto',name:'Cripto',desc:'Precios de Bitcoin, ETH y más',icon:'₿'},
-    {id:'dolar',name:'Dólar blue',desc:'Todas las cotizaciones del dólar',icon:'💵'},
     {id:'dates',name:'Fechas',desc:'Diferencia, suma y calculadora de edad',icon:'📅'},
   ]},
   {id:'azar',name:'Azar',icon:'🎲',tools:[
@@ -1376,7 +1377,7 @@ todoRender();
 
 // ══ CLIMA con forecast ══
 const W_ICONS={'01d':'☀️','01n':'🌙','02d':'⛅','02n':'☁️','03d':'☁️','03n':'☁️','04d':'☁️','04n':'☁️','09d':'🌧️','09n':'🌧️','10d':'🌦️','10n':'🌧️','11d':'⛈️','11n':'⛈️','13d':'❄️','13n':'❄️','50d':'🌫️','50n':'🌫️'};
-const OWM_KEY='bd5e378503939ddaee76f12ad7a97608';
+const OWM_KEY='__OWM_KEY__';
 async function weatherFetch(url,forecastUrl){document.getElementById('weather-error').style.display='none';try{const r=await fetch(url);const d=await r.json();if(d.cod!==200)throw new Error(d.message);document.getElementById('weather-content').style.display='block';document.getElementById('w-icon').textContent=W_ICONS[d.weather[0].icon]||'🌡️';document.getElementById('w-temp').textContent=Math.round(d.main.temp)+'°C';document.getElementById('w-desc').textContent=d.weather[0].description;document.getElementById('w-city').textContent=d.name+', '+d.sys.country;document.getElementById('w-feels').textContent=Math.round(d.main.feels_like)+'°C';document.getElementById('w-humidity').textContent=d.main.humidity+'%';document.getElementById('w-wind').textContent=Math.round(d.wind.speed*3.6)+' km/h';document.getElementById('w-pressure').textContent=d.main.pressure+' hPa';if(forecastUrl){const fr=await fetch(forecastUrl);const fd=await fr.json();if(fd.list){const days={};fd.list.forEach(item=>{const day=item.dt_txt.slice(0,10);if(!days[day])days[day]={icon:item.weather[0].icon,hi:item.main.temp_max,lo:item.main.temp_min};else{if(item.main.temp_max>days[day].hi)days[day].hi=item.main.temp_max;if(item.main.temp_min<days[day].lo)days[day].lo=item.main.temp_min;}});const DAYS_ES2=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];const fc=document.getElementById('w-forecast-card');fc.style.display='block';document.getElementById('w-forecast').innerHTML=Object.entries(days).slice(1,6).map(([date,v])=>{const d=new Date(date+'T12:00:00');return`<div class="forecast-day"><div class="forecast-day-name">${DAYS_ES2[d.getDay()]}</div><div class="forecast-day-icon">${W_ICONS[v.icon]||'🌡️'}</div><div class="forecast-day-hi">${Math.round(v.hi)}°</div><div class="forecast-day-lo">${Math.round(v.lo)}°</div></div>`;}).join('');}}}catch(e){document.getElementById('weather-content').style.display='none';const err=document.getElementById('weather-error');err.style.display='block';err.textContent='Error: '+(e.message||'Sin conexión');}}
 function weatherSearch(){const city=document.getElementById('weather-city-input').value.trim();if(!city)return;weatherFetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OWM_KEY}&units=metric&lang=es`,`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${OWM_KEY}&units=metric&lang=es`);}
 function weatherGeo(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(pos=>{weatherFetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${OWM_KEY}&units=metric&lang=es`,`https://api.openweathermap.org/data/2.5/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${OWM_KEY}&units=metric&lang=es`);},()=>{const e=document.getElementById('weather-error');e.style.display='block';e.textContent='No se pudo obtener la ubicación';});}
