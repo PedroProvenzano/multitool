@@ -1049,7 +1049,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <!-- HOME -->
-<div id="screen-home" class="screen active" style="display:block">
+<div id="screen-home" class="screen active">
   <div style="padding:16px 14px 6px">
     <div class="home-greeting">ToolKit 🧰</div>
     <div class="home-sub">Elegí una categoría</div>
@@ -1150,6 +1150,16 @@ const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Convers
 
 let navStack=[];
 
+function navShow(id){
+  // Oculta todas las pantallas y muestra solo la indicada
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  const el=document.getElementById(id);
+  if(el){el.classList.add('active');el.style.display='';}
+}
+
 function navRenderHome(){
   document.getElementById('cat-grid').innerHTML=CATEGORIES.map(cat=>`<div class="cat-card" onclick="navOpenCategory('${cat.id}')"><div class="cat-icon">${cat.icon}</div><div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.tools.length} herramientas</div></div></div>`).join('');
 }
@@ -1157,8 +1167,7 @@ function navRenderHome(){
 function navOpenCategory(catId){
   const cat=CATEGORIES.find(c=>c.id===catId);if(!cat)return;
   navStack=['home'];
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-toollist').classList.add('active');
+  navShow('screen-toollist');
   document.getElementById('toollist-cat-name').textContent=cat.icon+' '+cat.name;
   document.getElementById('tool-list-grid').innerHTML=cat.tools.map(t=>`<div class="tool-list-item" onclick="navOpenTool('${t.id}','${catId}')"><div class="tool-item-icon">${t.icon}</div><div><div class="tool-item-name">${t.name}</div><div class="tool-item-desc">${t.desc}</div></div></div>`).join('');
   document.getElementById('header-label').textContent=cat.name;
@@ -1167,9 +1176,7 @@ function navOpenCategory(catId){
 
 function navOpenTool(toolId,catId){
   navStack=['home','category:'+catId];
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const screen=document.getElementById('screen-'+toolId);
-  if(screen)screen.classList.add('active');
+  navShow('screen-'+toolId);
   document.getElementById('header-label').textContent=toolNames[toolId]||toolId;
   document.getElementById('header-back').style.display='flex';
 }
@@ -1177,9 +1184,8 @@ function navOpenTool(toolId,catId){
 function navBack(){
   if(!navStack.length)return;
   const prev=navStack.pop();
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   if(prev==='home'||!navStack.length){
-    document.getElementById('screen-home').classList.add('active');
+    navShow('screen-home');
     document.getElementById('header-label').textContent='ToolKit';
     document.getElementById('header-back').style.display='none';
     navStack=[];
@@ -1194,6 +1200,8 @@ function navBack(){
 function switchTab(btn){navOpenTool(btn.dataset.screen,'');}
 
 navRenderHome();
+// Asegurar que solo el home sea visible al iniciar
+navShow('screen-home');
 
 // ══ MODO / TABS ══
 function updateOnlineUI(){const online=navigator.onLine;const b=document.getElementById('mode-toggle');b.className=online?'online':'';document.getElementById('mode-text').textContent=online?'Online':'Offline';document.getElementById('offline-banner').classList.toggle('show',!online);}
