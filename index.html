@@ -344,6 +344,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .dolar-var{font-size:11px;margin-top:2px}
 .dolar-var.up{color:var(--success)}.dolar-var.dn{color:var(--danger)}
 
+/* GASTOS */
+.exp-cat-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.exp-item-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border)}
+.exp-day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.exp-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 2px;opacity:.5;transition:opacity .15s}
+.exp-del-btn:hover{opacity:1;color:var(--danger)}
+
 /* HOME / CATEGORÍAS */
 #screen-home{padding:14px}
 .home-greeting{font-size:22px;font-weight:600;margin-bottom:4px}
@@ -645,18 +652,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <!-- TAREAS MEJORADAS -->
 <div id="screen-todo" class="screen">
   <div class="card" style="padding:12px">
-    <div style="display:flex;gap:7px;margin-bottom:9px">
+    <div style="display:flex;gap:7px;margin-bottom:10px">
       <input class="sm-input" id="todo-input" placeholder="Nueva tarea..." style="flex:1" onkeydown="if(event.key==='Enter')todoAdd()">
-      <button class="btn btn-primary" style="padding:10px 16px;border-radius:10px;flex-shrink:0;font-size:18px;line-height:1" onclick="todoAdd()">+</button>
+      <button class="btn btn-primary" style="padding:10px 18px;border-radius:10px;flex-shrink:0;font-size:20px;line-height:1;min-width:48px" onclick="todoAdd()">+</button>
     </div>
-    <div class="row-2" style="margin-bottom:2px">
-      <div><div class="field-label">Fecha límite</div><input class="sm-input" type="date" id="todo-date"></div>
-      <div>
+    <div style="display:flex;gap:10px;align-items:flex-end">
+      <div style="flex:1">
+        <div class="field-label">Fecha límite</div>
+        <input class="sm-input" type="date" id="todo-date">
+      </div>
+      <div style="flex:1">
         <div class="field-label">Prioridad</div>
-        <div class="priority-btns" id="todo-prio-btns">
-          <button class="prio-btn active-low" data-p="low" onclick="todoSetPrio(this)">Baja</button>
-          <button class="prio-btn" data-p="mid" onclick="todoSetPrio(this)">Med</button>
-          <button class="prio-btn" data-p="high" onclick="todoSetPrio(this)">Alta</button>
+        <div style="display:flex;gap:6px">
+          <button class="prio-btn active-low" data-p="low" onclick="todoSetPrio(this)" style="flex:1;min-width:0">🟢 Baja</button>
+          <button class="prio-btn" data-p="mid" onclick="todoSetPrio(this)" style="flex:1;min-width:0">🟡 Med</button>
+          <button class="prio-btn" data-p="high" onclick="todoSetPrio(this)" style="flex:1;min-width:0">🔴 Alta</button>
         </div>
       </div>
     </div>
@@ -1048,6 +1058,62 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   <button class="btn btn-ghost" style="width:100%;font-size:12px;margin-top:4px" onclick="newsFetch()">↻ Actualizar</button>
 </div>
 
+<!-- GASTOS -->
+<div id="screen-expenses" class="screen">
+  <div class="card" style="padding:12px">
+    <div class="row-2" style="margin-bottom:10px">
+      <div>
+        <div class="field-label">Importe ($)</div>
+        <input class="sm-input" type="number" id="exp-amount" placeholder="0.00" style="font-family:var(--font-mono);font-size:18px" inputmode="decimal">
+      </div>
+      <div>
+        <div class="field-label">Fecha</div>
+        <input class="sm-input" type="date" id="exp-date">
+      </div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div class="field-label">Descripción</div>
+      <input class="sm-input" id="exp-desc" placeholder="¿En qué gastaste?" onkeydown="if(event.key==='Enter')expAdd()">
+    </div>
+    <div style="margin-bottom:12px">
+      <div class="field-label" style="margin-bottom:7px">Categoría</div>
+      <div class="exp-cat-pills" id="exp-cat-pills">
+        <button class="mode-pill active" data-cat="🍔 Comida" onclick="expSetCat(this)">🍔 Comida</button>
+        <button class="mode-pill" data-cat="🚗 Transporte" onclick="expSetCat(this)">🚗 Trans.</button>
+        <button class="mode-pill" data-cat="🏠 Hogar" onclick="expSetCat(this)">🏠 Hogar</button>
+        <button class="mode-pill" data-cat="⚕️ Salud" onclick="expSetCat(this)">⚕️ Salud</button>
+        <button class="mode-pill" data-cat="🎮 Ocio" onclick="expSetCat(this)">🎮 Ocio</button>
+        <button class="mode-pill" data-cat="📦 Otro" onclick="expSetCat(this)">📦 Otro</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="expAdd()">+ Agregar gasto</button>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Este mes</div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div id="exp-total" style="font-family:var(--font-mono);font-size:32px;font-weight:500;color:var(--danger)">$0</div>
+        <div id="exp-month-label" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+      </div>
+      <div style="text-align:right">
+        <div id="exp-count" style="font-family:var(--font-mono);font-size:26px;font-weight:500">0</div>
+        <div style="font-size:11px;color:var(--muted)">gastos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="card-label">Google Sheets <span style="color:var(--muted);font-size:10px;text-transform:none;letter-spacing:0">(opcional)</span></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Pegá la URL de tu Apps Script para guardar cada gasto automáticamente en una hoja de cálculo.</div>
+    <input class="sm-input" id="exp-webhook" placeholder="https://script.google.com/macros/s/..." style="margin-bottom:6px" oninput="expSaveWebhook()">
+    <div id="exp-webhook-status" style="font-size:11px;min-height:14px"></div>
+  </div>
+
+  <div id="exp-list"></div>
+  <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:10px;font-size:12px;margin-top:4px" onclick="expClearAll()">Borrar todos los gastos</button>
+</div>
+
 <!-- HOME -->
 <div id="screen-home" class="screen active">
   <div style="padding:16px 14px 6px">
@@ -1130,6 +1196,7 @@ const CATEGORIES=[
   {id:'org',name:'Organización',icon:'📋',tools:[
     {id:'notes',name:'Notas',desc:'Bloc de notas con etiquetas',icon:'📝'},
     {id:'todo',name:'Tareas',desc:'Lista de tareas con prioridad',icon:'✅'},
+    {id:'expenses',name:'Gastos',desc:'Registrá gastos y sincronizá con Google Sheets',icon:'💸'},
     {id:'tally',name:'Contador',desc:'Contar con +/−',icon:'🔢'},
     {id:'split',name:'Dividir gastos',desc:'Quién le debe a quién',icon:'🤝'},
     {id:'games',name:'Marcador',desc:'Puntaje para juegos de mesa',icon:'🏆'},
@@ -1146,7 +1213,7 @@ const CATEGORIES=[
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias'};
 
 let navStack=[];
 
@@ -1540,10 +1607,70 @@ function dolarConvert(){const amount=parseFloat(document.getElementById('dolar-a
 
 // ══ NOTICIAS ══
 let newsTopic='argentina';
-const NEWS_SOURCES={argentina:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.infobae.com/feeds/rss/',label:'Infobae'},tecnologia:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.feedburner.com/TechCrunch',label:'TechCrunch'},economia:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.cronista.com/rss/',label:'El Cronista'},deportes:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.ole.com.ar/rss/ultimas-noticias/',label:'Olé'},mundo:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.bbci.co.uk/mundo/rss.xml',label:'BBC Mundo'}};
+const NEWS_SOURCES={argentina:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.lanacion.com.ar/arc/outboundfeeds/rss/?outputType=xml',label:'La Nación'},tecnologia:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.feedburner.com/TechCrunch',label:'TechCrunch'},economia:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.ambito.com/rss/economia',label:'Ámbito'},deportes:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.ole.com.ar/rss/ultimas-noticias/',label:'Olé'},mundo:{url:'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.bbci.co.uk/mundo/rss.xml',label:'BBC Mundo'}};
 function newsSetCat(btn){document.querySelectorAll('.news-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');newsTopic=btn.dataset.topic;newsFetch();}
 async function newsFetch(){const list=document.getElementById('news-list'),loading=document.getElementById('news-loading');list.innerHTML='';loading.style.display='block';const src=NEWS_SOURCES[newsTopic];try{const r=await fetch(src.url);const d=await r.json();loading.style.display='none';if(d.items&&d.items.length){list.innerHTML=d.items.slice(0,12).map(item=>`<div class="news-card" onclick="window.open('${item.link}','_blank')"><div class="news-source">${src.label} · ${new Date(item.pubDate).toLocaleDateString('es-AR')}</div><div class="news-title">${item.title}</div><div class="news-desc">${(item.description||'').replace(/<[^>]*>/g,'').slice(0,120)}...</div></div>`).join('');}else{list.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No hay noticias disponibles</div>';}}catch(e){loading.style.display='none';list.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger);font-size:13px">Sin conexión para cargar noticias</div>';}}
 if(navigator.onLine)newsFetch();else document.getElementById('news-loading').textContent='Sin conexión para cargar noticias';
+
+// ══ GASTOS ══
+let expenses=JSON.parse(localStorage.getItem('expenses')||'[]'),expCat='🍔 Comida';
+function expSetCat(btn){document.querySelectorAll('#exp-cat-pills .mode-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');expCat=btn.dataset.cat;}
+function expAdd(){
+  const amount=parseFloat(document.getElementById('exp-amount').value);
+  if(!amount||amount<=0)return;
+  const desc=document.getElementById('exp-desc').value.trim()||expCat;
+  const date=document.getElementById('exp-date').value||new Date().toISOString().slice(0,10);
+  const exp={id:Date.now()+'',amount,desc,cat:expCat,date};
+  expenses.unshift(exp);
+  localStorage.setItem('expenses',JSON.stringify(expenses));
+  document.getElementById('exp-amount').value='';
+  document.getElementById('exp-desc').value='';
+  expRender();
+  expSyncSheets(exp);
+}
+function expRender(){
+  const now=new Date();
+  const thisMonth=now.toISOString().slice(0,7);
+  const monthExp=expenses.filter(e=>e.date.startsWith(thisMonth));
+  const total=monthExp.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('exp-total').textContent='$'+total.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('exp-count').textContent=monthExp.length;
+  document.getElementById('exp-month-label').textContent=now.toLocaleString('es-AR',{month:'long',year:'numeric'});
+  const list=document.getElementById('exp-list');
+  if(!expenses.length){list.innerHTML='<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">Sin gastos registrados</div>';return;}
+  const grouped={};
+  expenses.forEach(e=>{if(!grouped[e.date])grouped[e.date]=[];grouped[e.date].push(e);});
+  list.innerHTML=Object.keys(grouped).sort().reverse().slice(0,60).map(date=>{
+    const dayTotal=grouped[date].reduce((s,e)=>s+e.amount,0);
+    const d=new Date(date+'T12:00:00');
+    const dateLabel=d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
+    return `<div class="card" style="padding:10px 13px"><div class="exp-day-header"><span style="font-size:12px;font-weight:500;color:var(--muted);text-transform:capitalize">${dateLabel}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">$${dayTotal.toLocaleString('es-AR',{minimumFractionDigits:2})}</span></div>${grouped[date].map(e=>`<div class="exp-item-row"><div style="flex:1"><div style="font-size:14px">${e.cat.split(' ')[0]} ${e.desc}</div><div style="font-size:11px;color:var(--muted)">${e.cat}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-mono);font-size:15px;font-weight:500">$${e.amount.toLocaleString('es-AR',{minimumFractionDigits:2})}</span><button class="exp-del-btn" onclick="expRemove('${e.id}')">&#215;</button></div></div>`).join('')}</div>`;
+  }).join('');
+}
+async function expSyncSheets(exp){
+  const url=localStorage.getItem('exp-webhook');
+  if(!url)return;
+  const st=document.getElementById('exp-webhook-status');
+  try{
+    await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:exp.date,amount:exp.amount,desc:exp.desc,cat:exp.cat})});
+    st.textContent='✓ Sincronizado con Sheets';st.style.color='var(--success)';
+  }catch(e){st.textContent='Error al sincronizar';st.style.color='var(--danger)';}
+}
+function expSaveWebhook(){
+  const url=document.getElementById('exp-webhook').value.trim();
+  localStorage.setItem('exp-webhook',url);
+  const st=document.getElementById('exp-webhook-status');
+  st.textContent=url?'✓ URL guardada — se usará en el próximo gasto':'';
+  st.style.color='var(--success)';
+}
+function expRemove(id){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem('expenses',JSON.stringify(expenses));expRender();}
+function expClearAll(){if(confirm('¿Borrar todos los gastos?')){expenses=[];localStorage.setItem('expenses',JSON.stringify(expenses));expRender();}}
+(function(){
+  document.getElementById('exp-date').value=new Date().toISOString().slice(0,10);
+  const url=localStorage.getItem('exp-webhook');
+  if(url)document.getElementById('exp-webhook').value=url;
+  expRender();
+})();
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
