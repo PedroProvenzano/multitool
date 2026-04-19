@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c27;--border:#2a2a3a;--text:#f0f0f5;--muted:#6b6b85;--accent:#7c6af7;--accent2:#4fc3f7;--success:#4ade80;--warn:#fbbf24;--danger:#f87171;--radius:16px;--font-body:'Outfit',sans-serif;--font-mono:'DM Mono',monospace;}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);overflow:hidden}
 #app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto}
 #header{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
@@ -34,6 +34,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #content::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .screen{display:none}
 .screen.active{display:block;animation:fadeUp .18s ease}
+#screen-home.active{display:flex;flex-direction:column}
 @keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes bump{0%{transform:scale(1)}50%{transform:scale(1.07)}100%{transform:scale(1)}}
@@ -343,6 +344,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .dolar-var{font-size:11px;margin-top:2px}
 .dolar-var.up{color:var(--success)}.dolar-var.dn{color:var(--danger)}
 
+/* HOME / CATEGORÍAS */
+#screen-home{padding:14px}
+.home-greeting{font-size:22px;font-weight:600;margin-bottom:4px}
+.home-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;cursor:pointer;transition:border-color .15s,transform .1s;display:flex;flex-direction:column;gap:8px}
+.cat-card:active{transform:scale(0.97)}
+.cat-card:hover{border-color:var(--accent)}
+.cat-icon{font-size:26px;line-height:1}
+.cat-name{font-size:14px;font-weight:600}
+.cat-count{font-size:11px;color:var(--muted)}
+
+/* TOOL LIST */
+#screen-toollist{padding:0 14px 14px}
+.toollist-header{display:flex;align-items:center;gap:10px;padding:14px 0 12px}
+.back-btn{width:34px;height:34px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .1s}
+.back-btn:active{transform:scale(0.9)}
+.toollist-cat-name{font-size:18px;font-weight:600}
+.tool-list-grid{display:flex;flex-direction:column;gap:7px}
+.tool-list-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,transform .1s}
+.tool-list-item:active{transform:scale(0.98)}
+.tool-list-item:hover{border-color:var(--accent)}
+.tool-item-icon{font-size:22px;flex-shrink:0}
+.tool-item-name{font-size:15px;font-weight:500}
+.tool-item-desc{font-size:12px;color:var(--muted);margin-top:1px}
+
 /* NOTICIAS */
 .news-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
 .news-card:hover{border-color:var(--accent)}
@@ -358,7 +385,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <body>
 <div id="app">
 <div id="header">
-  <div id="header-label" class="tool-name">Calculadora</div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="back-btn" id="header-back" style="display:none" onclick="navBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    <div id="header-label" class="tool-name">ToolKit</div>
+  </div>
   <button id="mode-toggle" onclick="toggleMode()"><span class="dot"></span><span id="mode-text">Offline</span></button>
 </div>
 <div id="offline-banner">Sin conexión — herramientas online no disponibles</div>
@@ -441,11 +471,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <div id="screen-fx" class="screen">
   <div style="display:grid;grid-template-columns:1fr 38px 1fr;gap:7px;align-items:center;margin-bottom:9px">
     <select class="fx-select" id="fx-from" onchange="fxConvert()">
-      <option value="USD">🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="ARS" selected>🇦🇷 ARS</option><option value="BRL">🇧🇷 BRL</option><option value="CLP">🇨🇱 CLP</option><option value="UYU">🇺🇾 UYU</option><option value="MXN">🇲🇽 MXN</option><option value="COP">🇨🇴 COP</option><option value="GBP">🇬🇧 GBP</option><option value="JPY">🇯🇵 JPY</option><option value="CNY">🇨🇳 CNY</option><option value="CAD">🇨🇦 CAD</option><option value="CHF">🇨🇭 CHF</option><option value="AUD">🇦🇺 AUD</option>
+      <option value="USD">🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="ARS" selected>🇦🇷 ARS oficial</option><option value="ARS_BLUE">🇦🇷 ARS blue</option><option value="ARS_MEP">🇦🇷 ARS MEP</option><option value="ARS_CCL">🇦🇷 ARS CCL</option><option value="BRL">🇧🇷 BRL</option><option value="CLP">🇨🇱 CLP</option><option value="UYU">🇺🇾 UYU</option><option value="MXN">🇲🇽 MXN</option><option value="COP">🇨🇴 COP</option><option value="GBP">🇬🇧 GBP</option><option value="JPY">🇯🇵 JPY</option><option value="CNY">🇨🇳 CNY</option><option value="CAD">🇨🇦 CAD</option><option value="CHF">🇨🇭 CHF</option><option value="AUD">🇦🇺 AUD</option>
     </select>
     <button class="fx-swap-btn" onclick="fxSwap()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></button>
     <select class="fx-select" id="fx-to" onchange="fxConvert()">
-      <option value="USD" selected>🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="ARS">🇦🇷 ARS</option><option value="BRL">🇧🇷 BRL</option><option value="CLP">🇨🇱 CLP</option><option value="UYU">🇺🇾 UYU</option><option value="MXN">🇲🇽 MXN</option><option value="COP">🇨🇴 COP</option><option value="GBP">🇬🇧 GBP</option><option value="JPY">🇯🇵 JPY</option><option value="CNY">🇨🇳 CNY</option><option value="CAD">🇨🇦 CAD</option><option value="CHF">🇨🇭 CHF</option><option value="AUD">🇦🇺 AUD</option>
+      <option value="USD" selected>🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="ARS">🇦🇷 ARS oficial</option><option value="ARS_BLUE">🇦🇷 ARS blue</option><option value="ARS_MEP">🇦🇷 ARS MEP</option><option value="ARS_CCL">🇦🇷 ARS CCL</option><option value="BRL">🇧🇷 BRL</option><option value="CLP">🇨🇱 CLP</option><option value="UYU">🇺🇾 UYU</option><option value="MXN">🇲🇽 MXN</option><option value="COP">🇨🇴 COP</option><option value="GBP">🇬🇧 GBP</option><option value="JPY">🇯🇵 JPY</option><option value="CNY">🇨🇳 CNY</option><option value="CAD">🇨🇦 CAD</option><option value="CHF">🇨🇭 CHF</option><option value="AUD">🇦🇺 AUD</option>
     </select>
   </div>
   <div class="fx-main">
@@ -615,19 +645,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <!-- TAREAS MEJORADAS -->
 <div id="screen-todo" class="screen">
   <div class="card" style="padding:12px">
-    <div class="todo-add-row">
-      <input class="sm-input" id="todo-input" placeholder="Nueva tarea..." style="flex:1" onkeydown="if(event.key==='Enter')todoAdd()">
-      <button class="btn btn-primary" style="padding:9px 14px;border-radius:10px" onclick="todoAdd()">+</button>
-    </div>
-    <div style="display:flex;gap:7px;margin-bottom:10px">
+    <input class="sm-input" id="todo-input" placeholder="Nueva tarea..." style="margin-bottom:9px" onkeydown="if(event.key==='Enter')todoAdd()">
+    <div style="display:flex;gap:7px;align-items:flex-end;margin-bottom:2px">
       <div style="flex:1"><div class="field-label">Fecha límite</div><input class="sm-input" type="date" id="todo-date"></div>
-      <div style="flex:1"><div class="field-label">Prioridad</div>
+      <div style="flex:1">
+        <div class="field-label">Prioridad</div>
         <div class="priority-btns" id="todo-prio-btns">
           <button class="prio-btn active-low" data-p="low" onclick="todoSetPrio(this)">Baja</button>
-          <button class="prio-btn" data-p="mid" onclick="todoSetPrio(this)">Media</button>
+          <button class="prio-btn" data-p="mid" onclick="todoSetPrio(this)">Med</button>
           <button class="prio-btn" data-p="high" onclick="todoSetPrio(this)">Alta</button>
         </div>
       </div>
+      <button class="btn btn-primary" style="padding:10px 18px;border-radius:10px;flex-shrink:0" onclick="todoAdd()">+</button>
     </div>
   </div>
   <div class="todo-cats" id="todo-cats">
@@ -773,6 +802,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   <div class="card">
     <div class="color-preview" id="color-preview"></div>
     <div class="color-hex-display" id="color-hex" onclick="colorCopyHex()">Tocá para copiar</div>
+    <!-- Cuentagotas cámara -->
+    <button class="btn btn-ghost" style="width:100%;margin-bottom:12px;font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px" onclick="colorOpenCamera()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Tomar color de cámara
+    </button>
+    <div id="color-camera-wrap" style="display:none;margin-bottom:12px;position:relative;border-radius:12px;overflow:hidden;cursor:crosshair">
+      <video id="color-video" autoplay playsinline style="width:100%;display:block;border-radius:12px"></video>
+      <canvas id="color-cam-canvas" style="display:none"></canvas>
+      <div id="color-crosshair" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;pointer-events:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="filter:drop-shadow(0 0 2px #000)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="2" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <div style="position:absolute;bottom:8px;left:0;right:0;display:flex;gap:7px;justify-content:center;padding:0 12px">
+        <button class="btn btn-primary" style="flex:1;padding:8px;font-size:12px" onclick="colorPickFromCamera()">📍 Capturar color del centro</button>
+        <button class="btn btn-danger" style="padding:8px 14px;font-size:12px" onclick="colorCloseCamera()">✕</button>
+      </div>
+    </div>
     <div class="color-slider-wrap">
       <div class="field-label">R — <span id="color-r-val">128</span></div>
       <input type="range" class="color-slider" id="color-r" min="0" max="255" value="128" oninput="colorUpdate()" style="background:linear-gradient(to right,#000,#f00)">
@@ -921,7 +966,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <!-- NIVEL BURBUJA -->
 <div id="screen-level" class="screen">
   <div class="card" style="text-align:center">
-    <div class="level-canvas-wrap"><canvas id="level-canvas" width="220" height="220"></canvas></div>
+    <!-- nivel circular (portrait) -->
+    <div id="level-circular" class="level-canvas-wrap"><canvas id="level-canvas" width="220" height="220"></canvas></div>
+    <!-- nivel horizontal (landscape) -->
+    <div id="level-horizontal" style="display:none;padding:20px 10px">
+      <div style="position:relative;height:48px;background:var(--surface2);border:1px solid var(--border);border-radius:24px;overflow:hidden;margin-bottom:12px">
+        <div style="position:absolute;top:50%;left:50%;transform:translateY(-50%);width:1px;height:100%;background:var(--border)"></div>
+        <div id="level-bar-bubble" style="position:absolute;top:50%;width:44px;height:44px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);transition:left .1s ease;left:50%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:0 10px;margin-bottom:4px"><span>◀</span><span>NIVEL</span><span>▶</span></div>
+    </div>
     <div class="level-angle-display" id="level-angle">0°</div>
     <div class="level-status" id="level-status" style="color:var(--muted)">Apoyá el dispositivo en una superficie</div>
     <button class="btn btn-ghost" style="width:100%;font-size:13px;border-radius:10px" onclick="levelCalibrate()">Calibrar nivel</button>
@@ -992,9 +1046,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   <button class="btn btn-ghost" style="width:100%;font-size:12px;margin-top:4px" onclick="newsFetch()">↻ Actualizar</button>
 </div>
 
+<!-- HOME -->
+<div id="screen-home" class="screen active" style="display:block">
+  <div style="padding:16px 14px 6px">
+    <div class="home-greeting">ToolKit 🧰</div>
+    <div class="home-sub">Elegí una categoría</div>
+  </div>
+  <div class="cat-grid" style="padding:0 14px 14px" id="cat-grid"></div>
+</div>
+
+<!-- TOOL LIST (categoría seleccionada) -->
+<div id="screen-toollist" class="screen">
+  <div class="toollist-header">
+    <button class="back-btn" onclick="navBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    <div class="toollist-cat-name" id="toollist-cat-name">Categoría</div>
+  </div>
+  <div class="tool-list-grid" id="tool-list-grid"></div>
+</div>
+
 </div><!-- /content -->
 
-<nav id="tabs">
+<nav id="tabs" style="display:none">
   <button class="tab-btn active" data-screen="calc" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h5M8 16h3"/></svg>Calc</button>
   <button class="tab-btn" data-screen="dice" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>Dados</button>
   <button class="tab-btn" data-screen="timer" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6M12 3v2"/></svg>Crono</button>
@@ -1028,13 +1100,107 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+// ══ NAVEGACIÓN POR CATEGORÍAS ══
+const CATEGORIES=[
+  {id:'calcs',name:'Calculadoras',icon:'🧮',tools:[
+    {id:'calc',name:'Calculadora',desc:'Operaciones básicas y avanzadas',icon:'➕'},
+    {id:'pct',name:'Porcentajes',desc:'Calcular % de cualquier valor',icon:'%'},
+    {id:'loan',name:'Préstamos',desc:'Cuotas, intereses y amortización',icon:'💳'},
+    {id:'imc',name:'IMC / Calorías',desc:'Índice de masa corporal y TDEE',icon:'⚖️'},
+    {id:'tip',name:'Propinas',desc:'Calcular propina y dividir cuenta',icon:'🍽️'},
+  ]},
+  {id:'conversiones',name:'Conversiones',icon:'🔄',tools:[
+    {id:'fx',name:'Conversor de moneda',desc:'Divisas del mundo + dólar blue',icon:'💱'},
+    {id:'units',name:'Conversor de unidades',desc:'Longitud, peso, temperatura y más',icon:'📐'},
+    {id:'crypto',name:'Cripto',desc:'Precios de Bitcoin, ETH y más',icon:'₿'},
+    {id:'dolar',name:'Dólar blue',desc:'Todas las cotizaciones del dólar',icon:'💵'},
+    {id:'dates',name:'Fechas',desc:'Diferencia, suma y calculadora de edad',icon:'📅'},
+  ]},
+  {id:'azar',name:'Azar',icon:'🎲',tools:[
+    {id:'dice',name:'Dados',desc:'D4, D6, D8, D10, D12, D20',icon:'🎲'},
+    {id:'roulette',name:'Ruleta',desc:'Girar y elegir al azar',icon:'🎡'},
+    {id:'coin',name:'Moneda',desc:'Cara o ceca',icon:'🪙'},
+    {id:'rand',name:'Números al azar',desc:'Generar números aleatorios',icon:'🔢'},
+  ]},
+  {id:'tiempo',name:'Tiempo',icon:'⏱️',tools:[
+    {id:'timer',name:'Cronómetro',desc:'Cronómetro y cuenta regresiva',icon:'⏱️'},
+    {id:'metro',name:'Metrónomo',desc:'Marcador de ritmo por BPM',icon:'🎵'},
+  ]},
+  {id:'org',name:'Organización',icon:'📋',tools:[
+    {id:'notes',name:'Notas',desc:'Bloc de notas con etiquetas',icon:'📝'},
+    {id:'todo',name:'Tareas',desc:'Lista de tareas con prioridad',icon:'✅'},
+    {id:'tally',name:'Contador',desc:'Contar con +/−',icon:'🔢'},
+    {id:'split',name:'Dividir gastos',desc:'Quién le debe a quién',icon:'🤝'},
+    {id:'games',name:'Marcador',desc:'Puntaje para juegos de mesa',icon:'🏆'},
+    {id:'recipe',name:'Recetas',desc:'Escalar ingredientes',icon:'🍳'},
+  ]},
+  {id:'utilidades',name:'Utilidades',icon:'🛠️',tools:[
+    {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷'},
+    {id:'pass',name:'Contraseñas',desc:'Generar contraseñas seguras',icon:'🔐'},
+    {id:'colors',name:'Colores',desc:'RGB, HEX, HSL + cuentagotas cámara',icon:'🎨'},
+    {id:'level',name:'Nivel de burbuja',desc:'Nivelar superficies',icon:'📏'},
+    {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐'},
+    {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅'},
+    {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰'},
+  ]},
+];
+
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias'};
+
+let navStack=[];
+
+function navRenderHome(){
+  document.getElementById('cat-grid').innerHTML=CATEGORIES.map(cat=>`<div class="cat-card" onclick="navOpenCategory('${cat.id}')"><div class="cat-icon">${cat.icon}</div><div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.tools.length} herramientas</div></div></div>`).join('');
+}
+
+function navOpenCategory(catId){
+  const cat=CATEGORIES.find(c=>c.id===catId);if(!cat)return;
+  navStack=['home'];
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-toollist').classList.add('active');
+  document.getElementById('toollist-cat-name').textContent=cat.icon+' '+cat.name;
+  document.getElementById('tool-list-grid').innerHTML=cat.tools.map(t=>`<div class="tool-list-item" onclick="navOpenTool('${t.id}','${catId}')"><div class="tool-item-icon">${t.icon}</div><div><div class="tool-item-name">${t.name}</div><div class="tool-item-desc">${t.desc}</div></div></div>`).join('');
+  document.getElementById('header-label').textContent=cat.name;
+  document.getElementById('header-back').style.display='flex';
+}
+
+function navOpenTool(toolId,catId){
+  navStack=['home','category:'+catId];
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const screen=document.getElementById('screen-'+toolId);
+  if(screen)screen.classList.add('active');
+  document.getElementById('header-label').textContent=toolNames[toolId]||toolId;
+  document.getElementById('header-back').style.display='flex';
+}
+
+function navBack(){
+  if(!navStack.length)return;
+  const prev=navStack.pop();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  if(prev==='home'||!navStack.length){
+    document.getElementById('screen-home').classList.add('active');
+    document.getElementById('header-label').textContent='ToolKit';
+    document.getElementById('header-back').style.display='none';
+    navStack=[];
+  }else if(prev.startsWith('category:')){
+    const catId=prev.split(':')[1];
+    const cat=CATEGORIES.find(c=>c.id===catId);
+    if(cat){navStack=['home'];navOpenCategory(catId);}
+  }
+}
+
+// mantener switchTab para compatibilidad interna
+function switchTab(btn){navOpenTool(btn.dataset.screen,'');}
+
+navRenderHome();
+
 // ══ MODO / TABS ══
-let isOnline=false;
-function toggleMode(){isOnline=!isOnline;const b=document.getElementById('mode-toggle');b.className=isOnline?'online':'';document.getElementById('mode-text').textContent=isOnline?'Online':'Offline';document.getElementById('offline-banner').classList.toggle('show',!isOnline&&!navigator.onLine);}
-window.addEventListener('offline',()=>document.getElementById('offline-banner').classList.add('show'));
-window.addEventListener('online',()=>{if(isOnline)document.getElementById('offline-banner').classList.remove('show');});
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Tirar moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Generador de números',notes:'Bloc de notas',todo:'Lista de tareas',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Juegos de mesa',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel de burbuja',trans:'Traductor',dolar:'Dólar blue',news:'Noticias'};
-function switchTab(btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));btn.classList.add('active');const s=btn.dataset.screen;document.getElementById('screen-'+s).classList.add('active');document.getElementById('header-label').textContent=toolNames[s];btn.scrollIntoView({block:'nearest',inline:'center'});}
+function updateOnlineUI(){const online=navigator.onLine;const b=document.getElementById('mode-toggle');b.className=online?'online':'';document.getElementById('mode-text').textContent=online?'Online':'Offline';document.getElementById('offline-banner').classList.toggle('show',!online);}
+function toggleMode(){if(navigator.onLine){fxFetchRates();if(typeof cryptoFetch==='function')cryptoFetch();if(typeof dolarFetch==='function')dolarFetch();}updateOnlineUI();}
+window.addEventListener('offline',updateOnlineUI);
+window.addEventListener('online',()=>{updateOnlineUI();fxFetchRates();if(typeof cryptoFetch==='function')cryptoFetch();if(typeof dolarFetch==='function')dolarFetch();});
+updateOnlineUI();
+// toolNames y switchTab ahora definidos en el bloque de navegación arriba
 
 // ══ SHARE ══
 function shareResult(type){
@@ -1085,13 +1251,51 @@ function renderLaps(){const c=document.getElementById('laps-card'),l=document.ge
 
 // ══ FX ══
 let fxRates=JSON.parse(localStorage.getItem('fx-rates')||'null'),fxRatesTs=parseInt(localStorage.getItem('fx-rates-ts')||'0');
-const FX_FLAGS={USD:'🇺🇸',EUR:'🇪🇺',ARS:'🇦🇷',BRL:'🇧🇷',CLP:'🇨🇱',UYU:'🇺🇾',MXN:'🇲🇽',COP:'🇨🇴',GBP:'🇬🇧',JPY:'🇯🇵',CNY:'🇨🇳',CAD:'🇨🇦',CHF:'🇨🇭',AUD:'🇦🇺'};
-async function fxFetchRates(){const s=document.getElementById('fx-status');s.textContent='Actualizando...';s.className='fx-status loading';try{const r=await fetch('https://open.er-api.com/v6/latest/USD');const d=await r.json();if(d.rates){fxRates=d.rates;fxRatesTs=Date.now();localStorage.setItem('fx-rates',JSON.stringify(fxRates));localStorage.setItem('fx-rates-ts',fxRatesTs);s.textContent='✓ Ok';s.className='fx-status ok';fxConvert();}}catch(e){s.textContent=fxRates?'Caché':'Sin conexión';s.className='fx-status err';}}
-function fxGetRate(f,t){if(!fxRates)return null;return(f==='USD'?1:(1/fxRates[f]))*fxRates[t];}
-function fxConvert(){const from=document.getElementById('fx-from').value,to=document.getElementById('fx-to').value,amount=parseFloat(document.getElementById('fx-amount').value)||0;document.getElementById('fx-from-label').textContent=(FX_FLAGS[from]||'')+' '+from;document.getElementById('fx-to-label').textContent=(FX_FLAGS[to]||'')+' '+to;const rate=fxGetRate(from,to);if(!rate){document.getElementById('fx-result').value='';document.getElementById('fx-rate-val').textContent='—';fxRenderQuick(from,to,null);return;}document.getElementById('fx-result').value=(amount*rate).toLocaleString('es-AR',{maximumFractionDigits:4});document.getElementById('fx-rate-text').textContent=`1 ${from} =`;document.getElementById('fx-rate-val').textContent=rate.toLocaleString('es-AR',{maximumFractionDigits:4})+' '+to;fxRenderQuick(from,to,rate);if(fxRatesTs){const mins=Math.floor((Date.now()-fxRatesTs)/60000);const s=document.getElementById('fx-status');s.textContent=mins<60?`Hace ${mins}min`:`Hace ${Math.floor(mins/60)}h`;s.className='fx-status ok';}}
-function fxRenderQuick(from,to,rate){const c=document.getElementById('fx-quick');if(!rate){c.innerHTML='';return;}c.innerHTML=[1,10,100,500,1000,5000].map(a=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:8px 11px"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">${a} ${from}</div><div style="font-family:var(--font-mono);font-size:12px">${(a*rate).toLocaleString('es-AR',{maximumFractionDigits:2})} <span style="color:var(--muted);font-size:10px">${to}</span></div></div>`).join('');}
+let fxDolarRates=JSON.parse(localStorage.getItem('fx-dolar-rates')||'null');
+const FX_FLAGS={USD:'🇺🇸',EUR:'🇪🇺',ARS:'🇦🇷',ARS_BLUE:'🇦🇷',ARS_MEP:'🇦🇷',ARS_CCL:'🇦🇷',BRL:'🇧🇷',CLP:'🇨🇱',UYU:'🇺🇾',MXN:'🇲🇽',COP:'🇨🇴',GBP:'🇬🇧',JPY:'🇯🇵',CNY:'🇨🇳',CAD:'🇨🇦',CHF:'🇨🇭',AUD:'🇦🇺'};
+const FX_LABELS={ARS:'ARS oficial',ARS_BLUE:'ARS blue',ARS_MEP:'ARS MEP',ARS_CCL:'ARS CCL'};
+async function fxFetchRates(){const s=document.getElementById('fx-status');s.textContent='Actualizando...';s.className='fx-status loading';
+  try{
+    const [r1,r2]=await Promise.allSettled([
+      fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json'),
+      fetch('https://dolarapi.com/v1/dolares')
+    ]);
+    if(r1.status==='fulfilled'){const d=await r1.value.json();if(d.usd){fxRates=d.usd;fxRatesTs=Date.now();localStorage.setItem('fx-rates',JSON.stringify(fxRates));localStorage.setItem('fx-rates-ts',fxRatesTs);}}
+    if(r2.status==='fulfilled'){const d=await r2.value.json();if(Array.isArray(d)){fxDolarRates={};d.forEach(x=>{fxDolarRates[x.casa]=x;});localStorage.setItem('fx-dolar-rates',JSON.stringify(fxDolarRates));}}
+    s.textContent='✓ Ok';s.className='fx-status ok';fxConvert();
+  }catch(e){s.textContent=fxRates?'Caché':'Sin conexión';s.className='fx-status err';}}
+function fxGetUsdRate(code){
+  if(code==='USD')return 1;
+  if(code==='ARS_BLUE'&&fxDolarRates?.blue)return fxDolarRates.blue.venta;
+  if(code==='ARS_MEP'&&fxDolarRates?.mep)return fxDolarRates.mep.venta;
+  if(code==='ARS_CCL'&&fxDolarRates?.ccl)return fxDolarRates.ccl.venta;
+  if(!fxRates)return null;
+  const key=code.toLowerCase();
+  return fxRates[key]?1/fxRates[key]:null;}
+function fxGetRate(f,t){
+  const rateF=fxGetUsdRate(f),rateT=fxGetUsdRate(t);
+  if(!rateF||!rateT)return null;
+  // rateF = ARS per USD for currency f (or 1 if USD)
+  // We want: how many T per 1 F
+  // 1 F = (1/rateF) USD (if rateF is ARS/USD) ... need careful handling
+  // fawazahmed returns: fxRates[currency] = how many of that currency per 1 USD
+  // So fxRates['ars'] = 1200 means 1 USD = 1200 ARS
+  // fxGetUsdRate returns fxRates[key] for normal currencies (units of currency per USD)
+  // except for ARS_* which return venta (ARS per USD)
+  const fromPerUsd = fxGetUsdRateRaw(f), toPerUsd = fxGetUsdRateRaw(t);
+  if(!fromPerUsd||!toPerUsd)return null;
+  return toPerUsd/fromPerUsd;}
+function fxGetUsdRateRaw(code){
+  if(code==='USD')return 1;
+  if(code==='ARS_BLUE'&&fxDolarRates?.blue)return fxDolarRates.blue.venta;
+  if(code==='ARS_MEP'&&fxDolarRates?.mep)return fxDolarRates.mep.venta;
+  if(code==='ARS_CCL'&&fxDolarRates?.ccl)return fxDolarRates.ccl.venta;
+  if(!fxRates)return null;
+  return fxRates[code.toLowerCase()]||null;}
+function fxConvert(){const from=document.getElementById('fx-from').value,to=document.getElementById('fx-to').value,amount=parseFloat(document.getElementById('fx-amount').value)||0;const fromLabel=FX_LABELS[from]||from,toLabel=FX_LABELS[to]||to;document.getElementById('fx-from-label').textContent=(FX_FLAGS[from]||'')+' '+fromLabel;document.getElementById('fx-to-label').textContent=(FX_FLAGS[to]||'')+' '+toLabel;const rate=fxGetRate(from,to);if(!rate){document.getElementById('fx-result').value='';document.getElementById('fx-rate-val').textContent='—';fxRenderQuick(from,to,null,fromLabel,toLabel);return;}document.getElementById('fx-result').value=(amount*rate).toLocaleString('es-AR',{maximumFractionDigits:4});document.getElementById('fx-rate-text').textContent=`1 ${fromLabel} =`;document.getElementById('fx-rate-val').textContent=rate.toLocaleString('es-AR',{maximumFractionDigits:4})+' '+toLabel;fxRenderQuick(from,to,rate,fromLabel,toLabel);if(fxRatesTs){const mins=Math.floor((Date.now()-fxRatesTs)/60000);const s=document.getElementById('fx-status');s.textContent=mins<60?`Hace ${mins}min`:`Hace ${Math.floor(mins/60)}h`;s.className='fx-status ok';}}
+function fxRenderQuick(from,to,rate,fromLabel,toLabel){const c=document.getElementById('fx-quick');if(!rate){c.innerHTML='';return;}c.innerHTML=[1,10,100,500,1000,5000].map(a=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:8px 11px"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">${a} ${fromLabel||from}</div><div style="font-family:var(--font-mono);font-size:12px">${(a*rate).toLocaleString('es-AR',{maximumFractionDigits:2})} <span style="color:var(--muted);font-size:10px">${toLabel||to}</span></div></div>`).join('');}
 function fxSwap(){const f=document.getElementById('fx-from'),t=document.getElementById('fx-to');[f.value,t.value]=[t.value,f.value];fxConvert();}
-(function(){const age=Date.now()-fxRatesTs;if(!fxRates||age>3600000){if(navigator.onLine)fxFetchRates();else fxConvert();}else fxConvert();})();
+(function(){const age=Date.now()-fxRatesTs;if(!fxRates||age>3600000){if(navigator.onLine)fxFetchRates();else fxConvert();}else{if(navigator.onLine&&!fxDolarRates)fxFetchRates();else fxConvert();}})();
 
 // ══ UNIDADES ══
 const UNIT_CATS={Longitud:{units:['mm','cm','m','km','in','ft','mi'],toBase:[0.001,0.01,1,1000,0.0254,0.3048,1609.344]},Peso:{units:['mg','g','kg','t','oz','lb'],toBase:[1e-6,0.001,1,1000,0.028349,0.453592]},Temperatura:{units:['°C','°F','K'],toBase:null},Volumen:{units:['ml','l','m³','tsp','tbsp','cup','gal'],toBase:[0.001,1,1000,0.004929,0.014787,0.236588,3.785412]},Velocidad:{units:['m/s','km/h','mph','kn'],toBase:[1,0.277778,0.44704,0.514444]},Área:{units:['cm²','m²','km²','ha','ft²','ac'],toBase:[0.0001,1,1e6,10000,0.092903,4046.856]},Datos:{units:['B','KB','MB','GB','TB'],toBase:[1,1024,1048576,1073741824,1099511627776]}};
@@ -1222,6 +1426,34 @@ function gamesReset(){gamePlayers.forEach(p=>p.score=0);gameLog=[];localStorage.
 gamesRender();
 
 // ══ COLORES ══
+let colorCameraStream=null;
+async function colorOpenCamera(){
+  const wrap=document.getElementById('color-camera-wrap');
+  const video=document.getElementById('color-video');
+  try{
+    colorCameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    video.srcObject=colorCameraStream;
+    wrap.style.display='block';
+  }catch(e){alert('No se pudo acceder a la cámara: '+e.message);}
+}
+function colorPickFromCamera(){
+  const video=document.getElementById('color-video');
+  const canvas=document.getElementById('color-cam-canvas');
+  canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+  const ctx=canvas.getContext('2d');
+  ctx.drawImage(video,0,0);
+  const cx=Math.floor(canvas.width/2),cy=Math.floor(canvas.height/2);
+  const px=ctx.getImageData(cx,cy,1,1).data;
+  document.getElementById('color-r').value=px[0];
+  document.getElementById('color-g').value=px[1];
+  document.getElementById('color-b').value=px[2];
+  colorUpdate();
+  colorCloseCamera();
+}
+function colorCloseCamera(){
+  if(colorCameraStream){colorCameraStream.getTracks().forEach(t=>t.stop());colorCameraStream=null;}
+  document.getElementById('color-camera-wrap').style.display='none';
+}
 function colorUpdate(){const r=parseInt(document.getElementById('color-r').value),g=parseInt(document.getElementById('color-g').value),b=parseInt(document.getElementById('color-b').value);document.getElementById('color-r-val').textContent=r;document.getElementById('color-g-val').textContent=g;document.getElementById('color-b-val').textContent=b;const hex='#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();document.getElementById('color-preview').style.background=hex;document.getElementById('color-hex').textContent=hex;document.getElementById('cv-hex').textContent=hex;document.getElementById('cv-rgb').textContent=`${r},${g},${b}`;const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,l=(max+min)/2;let h=0,s=0;if(max!==min){const d=max-min;s=l>.5?d/(2-max-min):d/(max+min);switch(Math.max(r,g,b)){case r:h=((g-b)/255/d+(g<b?6:0))/6;break;case g:h=((b-r)/255/d+2)/6;break;case b:h=((r-g)/255/d+4)/6;break;}}document.getElementById('cv-hsl').textContent=`${Math.round(h*360)},${Math.round(s*100)}%,${Math.round(l*100)}%`;const comp=[(r+128)%256,(g+128)%256,(b+128)%256];const palette=[`rgb(${r},${g},${b})`,`rgb(${comp[0]},${comp[1]},${comp[2]})`,`rgb(${g},${b},${r})`,`rgb(${b},${r},${g})`,`rgb(${Math.min(r+60,255)},${Math.min(g+60,255)},${Math.min(b+60,255)})`,`rgb(${Math.max(r-60,0)},${Math.max(g-60,0)},${Math.max(b-60,0)})`];document.getElementById('color-palette').innerHTML=palette.map(c=>`<div style="width:40px;height:40px;border-radius:10px;background:${c};cursor:pointer;border:1px solid var(--border)" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c}')"></div>`).join('');}
 function colorCopyHex(){const h=document.getElementById('color-hex').textContent;if(navigator.clipboard)navigator.clipboard.writeText(h).then(()=>{document.getElementById('color-hex').textContent='¡Copiado!';setTimeout(()=>colorUpdate(),1000);});}
 colorUpdate();
@@ -1260,16 +1492,35 @@ function metroToggle(){metroRunning=!metroRunning;const btn=document.getElementB
 
 // ══ NIVEL BURBUJA ══
 let levelCalibration={x:0,y:0},levelActive=false,levelGamma=0,levelBeta=0;
-function levelDraw(){const canvas=document.getElementById('level-canvas'),ctx=canvas.getContext('2d'),W=canvas.width,cx=W/2;ctx.clearRect(0,0,W,W);ctx.beginPath();ctx.arc(cx,cx,cx-4,0,Math.PI*2);ctx.strokeStyle='#2a2a3a';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#1c1c27';ctx.fill();ctx.beginPath();ctx.arc(cx,cx,2,0,Math.PI*2);ctx.strokeStyle='#2a2a3a';ctx.lineWidth=1;ctx.stroke();const adjX=levelGamma-levelCalibration.x,adjY=levelBeta-levelCalibration.y;const bx=cx+Math.min(adjX/45,1)*(cx-20);const by=cx+Math.min(adjY/45,1)*(cx-20);const isLevel=Math.abs(adjX)<2&&Math.abs(adjY)<2;ctx.beginPath();ctx.arc(bx,by,16,0,Math.PI*2);ctx.fillStyle=isLevel?'#4ade80':'#7c6af7';ctx.fill();ctx.strokeStyle=isLevel?'#4ade8060':'#7c6af760';ctx.lineWidth=3;ctx.stroke();}
+function levelIsLandscape(){return window.innerWidth>window.innerHeight;}
+function levelDraw(){
+  const isLandscape=levelIsLandscape();
+  document.getElementById('level-circular').style.display=isLandscape?'none':'flex';
+  document.getElementById('level-horizontal').style.display=isLandscape?'block':'none';
+  const adjX=levelGamma-levelCalibration.x,adjY=levelBeta-levelCalibration.y;
+  const isLevel=Math.abs(adjX)<2&&Math.abs(adjY)<2;
+  if(isLandscape){
+    const pct=50+Math.max(-45,Math.min(45,adjX))/45*45;
+    const bubble=document.getElementById('level-bar-bubble');
+    if(bubble){bubble.style.left=pct+'%';bubble.style.background=isLevel?'#4ade80':'#7c6af7';}
+  }else{
+    const canvas=document.getElementById('level-canvas'),ctx=canvas.getContext('2d'),W=canvas.width,cx=W/2;
+    ctx.clearRect(0,0,W,W);ctx.beginPath();ctx.arc(cx,cx,cx-4,0,Math.PI*2);ctx.strokeStyle='#2a2a3a';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#1c1c27';ctx.fill();ctx.beginPath();ctx.arc(cx,cx,2,0,Math.PI*2);ctx.strokeStyle='#2a2a3a';ctx.lineWidth=1;ctx.stroke();
+    const bx=cx+Math.min(adjX/45,1)*(cx-20),by=cx+Math.min(adjY/45,1)*(cx-20);
+    ctx.beginPath();ctx.arc(bx,by,16,0,Math.PI*2);ctx.fillStyle=isLevel?'#4ade80':'#7c6af7';ctx.fill();ctx.strokeStyle=isLevel?'#4ade8060':'#7c6af760';ctx.lineWidth=3;ctx.stroke();
+  }
+}
 function levelStart(){if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){DeviceOrientationEvent.requestPermission().then(state=>{if(state==='granted')window.addEventListener('deviceorientation',levelHandler);}).catch(()=>{document.getElementById('level-status').textContent='Permiso denegado';});}else{window.addEventListener('deviceorientation',levelHandler);}levelActive=true;}
-function levelHandler(e){levelGamma=e.gamma||0;levelBeta=e.beta||0;const adjX=levelGamma-levelCalibration.x,adjY=levelBeta-levelCalibration.y;const isLevel=Math.abs(adjX)<2&&Math.abs(adjY)<2;document.getElementById('level-angle').textContent=Math.abs(adjX).toFixed(1)+'°';document.getElementById('level-x').textContent=adjX.toFixed(1)+'°';document.getElementById('level-y').textContent=adjY.toFixed(1)+'°';document.getElementById('level-status').textContent=isLevel?'✓ Nivelado':'Ajustá la posición';document.getElementById('level-status').style.color=isLevel?'var(--success)':'var(--muted)';levelDraw();}
+function levelHandler(e){levelGamma=e.gamma||0;levelBeta=e.beta||0;const adjX=levelGamma-levelCalibration.x,adjY=levelBeta-levelCalibration.y;const isLevel=Math.abs(adjX)<2&&Math.abs(adjY)<2;document.getElementById('level-angle').textContent=Math.abs(levelIsLandscape()?adjX:adjY).toFixed(1)+'°';document.getElementById('level-x').textContent=adjX.toFixed(1)+'°';document.getElementById('level-y').textContent=adjY.toFixed(1)+'°';document.getElementById('level-status').textContent=isLevel?'✓ Nivelado':'Ajustá la posición';document.getElementById('level-status').style.color=isLevel?'var(--success)':'var(--muted)';levelDraw();}
 function levelCalibrate(){levelCalibration={x:levelGamma,y:levelBeta};if(!levelActive)levelStart();}
+window.addEventListener('resize',()=>{if(document.getElementById('screen-level').classList.contains('active'))levelDraw();});
 levelDraw();
 document.getElementById('screen-level').addEventListener('transitionend',()=>{if(!levelActive)levelStart();});
 
 // ══ TRADUCTOR ══
 async function transTranslate(){const text=document.getElementById('trans-input').value.trim();if(!text)return;const from=document.getElementById('trans-from').value,to=document.getElementById('trans-to').value;const result=document.getElementById('trans-result');result.style.display='block';result.textContent='Traduciendo...';try{const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);const d=await r.json();if(d.responseStatus===200){result.textContent=d.responseData.translatedText;document.getElementById('trans-share-btn').style.display='flex';}else{result.textContent='Error al traducir';}}catch(e){result.textContent='Sin conexión';}}
 function transSwap(){const f=document.getElementById('trans-from'),t=document.getElementById('trans-to');[f.value,t.value]=[t.value,f.value];const inp=document.getElementById('trans-input'),res=document.getElementById('trans-result');if(res.textContent&&res.textContent!=='Traduciendo...'){const tmp=inp.value;inp.value=res.textContent;res.textContent=tmp;}}
+function transShare(){const r=document.getElementById('trans-result').textContent;window.open('https://wa.me/?text='+encodeURIComponent(r),'_blank');}
 
 // ══ DÓLAR BLUE ══
 let dolarData={};
