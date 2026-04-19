@@ -17,8 +17,8 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);overflow:hidden}
 #app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;overflow-x:hidden}
 #header{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-#header .tool-name{font-size:19px;font-weight:600;letter-spacing:-.02em}
-#mode-toggle{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 11px;cursor:pointer;font-size:12px;font-family:var(--font-body);color:var(--muted);transition:all .2s}
+#header .tool-name{font-size:19px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mode-toggle{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 11px;cursor:pointer;font-size:12px;font-family:var(--font-body);color:var(--muted);transition:all .2s;flex-shrink:0;white-space:nowrap}
 #mode-toggle.online{color:var(--success);border-color:var(--success)40}
 #mode-toggle .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .2s}
 #mode-toggle.online .dot{background:var(--success)}
@@ -392,8 +392,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <body>
 <div id="app">
 <div id="header">
-  <div style="display:flex;align-items:center;gap:8px">
-    <button class="back-btn" id="header-back" style="display:none" onclick="navBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+  <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;overflow:hidden">
+    <button class="back-btn" id="header-back" style="display:none;flex-shrink:0" onclick="navBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
     <div id="header-label" class="tool-name">ToolKit</div>
   </div>
   <button id="mode-toggle" onclick="toggleMode()"><span class="dot"></span><span id="mode-text">Offline</span></button>
@@ -490,7 +490,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <input class="fx-input" id="fx-amount" type="number" inputmode="decimal" value="1000" oninput="fxConvert()">
     <div style="height:1px;background:var(--border);margin:12px 0"></div>
     <div class="fx-code" id="fx-to-label">USD</div>
-    <input class="fx-input" id="fx-result" type="number" readonly style="color:var(--accent)">
+    <input class="fx-input" id="fx-result" type="text" readonly style="color:var(--accent)">
   </div>
   <div class="card" style="padding:13px 15px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
@@ -1594,7 +1594,29 @@ levelDraw();
 document.getElementById('screen-level').addEventListener('transitionend',()=>{if(!levelActive)levelStart();});
 
 // ══ TRADUCTOR ══
-async function transTranslate(){const text=document.getElementById('trans-input').value.trim();if(!text)return;const from=document.getElementById('trans-from').value,to=document.getElementById('trans-to').value;const result=document.getElementById('trans-result');result.style.display='block';result.textContent='Traduciendo...';try{const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);const d=await r.json();if(d.responseStatus===200){result.textContent=d.responseData.translatedText;document.getElementById('trans-share-btn').style.display='flex';}else{result.textContent='Error al traducir';}}catch(e){result.textContent='Sin conexión';}}
+async function transTranslate(){
+  const text=document.getElementById('trans-input').value.trim();
+  if(!text)return;
+  const from=document.getElementById('trans-from').value,to=document.getElementById('trans-to').value;
+  const result=document.getElementById('trans-result');
+  result.style.display='block';
+  result.textContent='Traduciendo...';
+  try{
+    const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+    const r=await fetch(url);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const translated=d[0].map(x=>x[0]).join('');
+    if(translated){
+      result.textContent=translated;
+      document.getElementById('trans-share-btn').style.display='flex';
+    }else{
+      result.textContent='No se pudo obtener la traducción.';
+    }
+  }catch(e){
+    result.textContent='Error al traducir. Verificá tu conexión.';
+  }
+}
 function transSwap(){const f=document.getElementById('trans-from'),t=document.getElementById('trans-to');[f.value,t.value]=[t.value,f.value];const inp=document.getElementById('trans-input'),res=document.getElementById('trans-result');if(res.textContent&&res.textContent!=='Traduciendo...'){const tmp=inp.value;inp.value=res.textContent;res.textContent=tmp;}}
 function transShare(){const r=document.getElementById('trans-result').textContent;window.open('https://wa.me/?text='+encodeURIComponent(r),'_blank');}
 
