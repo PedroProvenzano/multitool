@@ -410,6 +410,54 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .cat-card:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
 .tool-list-item:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
 
+/* ── TEMPORIZADOR DE TURNOS ── */
+.turn-player-active{background:oklch(44% 0.13 155 / 0.12);border:2px solid var(--accent);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+.turn-player-row{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;transition:all .3s}
+.turn-timer-big{font-family:var(--font-mono);font-size:64px;font-weight:400;text-align:center;line-height:1;color:var(--accent);padding:16px 0 8px;letter-spacing:.04em}
+.turn-timer-name{font-size:18px;font-weight:600;text-align:center;margin-bottom:4px}
+.turn-timer-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px}
+.turn-bar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.turn-bar-fill{height:100%;background:var(--accent);border-radius:4px;transition:width 1s linear}
+
+/* ── PALETA DE COLORES ── */
+.palette-swatch{width:52px;height:52px;border-radius:12px;border:2px solid var(--border);cursor:pointer;flex-shrink:0;transition:transform .15s}
+.palette-swatch:active{transform:scale(0.92)}
+.palette-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.palette-row:last-child{border-bottom:none}
+.palette-label{font-size:12px;color:var(--muted);min-width:70px}
+.palette-hex{font-family:var(--font-mono);font-size:13px}
+.palette-harmony-btn{flex:1;padding:8px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:11px;font-family:var(--font-body);color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap}
+.palette-harmony-btn.active{background:oklch(44% 0.13 155 / 0.12);border-color:var(--accent);color:var(--accent)}
+
+/* ── GENERADOR DE NOMBRES ── */
+.namegen-result{font-family:var(--font-body);font-size:28px;font-weight:700;color:var(--accent);text-align:center;padding:20px 0 8px;letter-spacing:-.01em;min-height:72px;display:flex;align-items:center;justify-content:center}
+.namegen-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:12px;min-height:18px}
+.namegen-cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px}
+
+/* ── CONVERSOR DE TALLAS ── */
+.sizes-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.sizes-table th{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:6px 8px;text-align:left;border-bottom:2px solid var(--border)}
+.sizes-table td{padding:8px;border-bottom:1px solid var(--border);font-family:var(--font-mono)}
+.sizes-table tr.highlight td{background:oklch(44% 0.13 155 / 0.12);color:var(--accent);font-weight:700;border-radius:6px}
+
+/* ── EXCUSAS ── */
+.excusa-result{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:10px;font-size:16px;line-height:1.55;min-height:80px;display:flex;align-items:center}
+.excusa-cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px}
+
+/* ── CÍRCULO DE QUINTAS ── */
+.quintas-svg-wrap{display:flex;justify-content:center;margin-bottom:10px}
+.quintas-note-btn{position:absolute;transform:translate(-50%,-50%);cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;font-weight:600;border:2px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;-webkit-user-select:none}
+.quintas-note-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;transform:translate(-50%,-50%) scale(1.15)}
+.quintas-note-btn.related{background:oklch(44% 0.13 155 / 0.18);border-color:var(--accent);color:var(--accent)}
+.quintas-chord-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border)}
+.quintas-chord-row:last-child{border-bottom:none}
+.quintas-degree{font-family:var(--font-mono);font-size:12px;color:var(--muted);width:32px;flex-shrink:0}
+.quintas-chord-name{font-size:15px;font-weight:600;min-width:48px}
+.quintas-chord-notes{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:1}
+.quintas-quality-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.quintas-mod-pill{display:inline-block;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-family:var(--font-mono);font-size:13px;margin:4px;cursor:pointer;transition:all .15s}
+.quintas-mod-pill:hover{border-color:var(--accent);color:var(--accent)}
+
 /* ── POMODORO ── */
 .pomo-ring{position:relative;width:190px;height:190px;margin:0 auto 14px}
 .pomo-ring svg{transform:rotate(-90deg)}
@@ -1218,6 +1266,192 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:10px;font-size:12px;margin-top:4px" onclick="expClearAll()">Borrar todos los gastos</button>
 </div>
 
+<!-- TEMPORIZADOR DE TURNOS -->
+<div id="screen-turns" class="screen">
+  <div id="turns-timer-view" style="display:none">
+    <div class="turn-timer-name" id="turns-current-name">Jugador</div>
+    <div class="turn-timer-sub" id="turns-current-sub">Turno 1 de 3</div>
+    <div class="turn-timer-big" id="turns-display">00:30</div>
+    <div class="turn-bar"><div class="turn-bar-fill" id="turns-bar" style="width:100%"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px">
+      <button class="btn btn-primary" style="padding:14px;font-size:15px" id="turns-play-btn" onclick="turnsToggle()">Iniciar</button>
+      <button class="btn btn-ghost" onclick="turnsNext()">Siguiente →</button>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;font-size:13px" onclick="turnsReset()">↩ Volver a configurar</button>
+    <div class="card" style="margin-top:10px;padding:10px 14px">
+      <div class="card-label">Cola</div>
+      <div id="turns-queue"></div>
+    </div>
+  </div>
+  <div id="turns-setup-view">
+    <div class="card">
+      <div class="card-label">Tiempo por turno</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <button class="count-btn" onclick="turnsAdjTime(-10)">−10s</button>
+        <div style="flex:1;text-align:center;font-family:var(--font-mono);font-size:24px" id="turns-time-display">0:30</div>
+        <button class="count-btn" onclick="turnsAdjTime(10)">+10s</button>
+      </div>
+      <input type="range" min="10" max="600" value="30" id="turns-time-slider" oninput="turnsSliderChange()" style="width:100%;accent-color:var(--accent)">
+    </div>
+    <div class="card">
+      <div class="card-label">Participantes</div>
+      <div id="turns-players-list" style="margin-bottom:10px"></div>
+      <div style="display:flex;gap:8px">
+        <input class="sm-input" type="text" id="turns-new-player" placeholder="Nombre del jugador..." style="flex:1" onkeydown="if(event.key==='Enter')turnsAddPlayer()">
+        <button class="btn btn-primary" style="width:auto;padding:10px 16px;font-size:14px" onclick="turnsAddPlayer()">+</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="turnsStart()">▶ Iniciar turnos</button>
+  </div>
+</div>
+
+<!-- PALETA DE COLORES -->
+<div id="screen-palette" class="screen">
+  <div class="card">
+    <div class="card-label">Color base</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <input type="color" id="palette-base" value="#7c6af7" oninput="paletteUpdate()" style="width:56px;height:56px;border-radius:12px;border:2px solid var(--border);cursor:pointer;padding:2px;background:none;-webkit-appearance:none">
+      <div>
+        <div style="font-family:var(--font-mono);font-size:18px;font-weight:500" id="palette-base-hex">#7C6AF7</div>
+        <div style="font-size:12px;color:var(--muted)" id="palette-base-hsl"></div>
+      </div>
+    </div>
+    <div class="card-label">Armonía</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="palette-harmony-btn active" data-harmony="complementary" onclick="paletteSetHarmony(this)">Complementaria</button>
+      <button class="palette-harmony-btn" data-harmony="triadic" onclick="paletteSetHarmony(this)">Triádica</button>
+      <button class="palette-harmony-btn" data-harmony="analogous" onclick="paletteSetHarmony(this)">Análoga</button>
+      <button class="palette-harmony-btn" data-harmony="split" onclick="paletteSetHarmony(this)">Split-comp.</button>
+      <button class="palette-harmony-btn" data-harmony="square" onclick="paletteSetHarmony(this)">Cuadrada</button>
+      <button class="palette-harmony-btn" data-harmony="shades" onclick="paletteSetHarmony(this)">Tonos</button>
+    </div>
+  </div>
+  <div class="card" id="palette-result">
+    <div class="card-label">Paleta generada</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap" id="palette-swatches"></div>
+    <div id="palette-list"></div>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px;font-size:13px" onclick="paletteCopyAll()">Copiar todos los HEX</button>
+  </div>
+</div>
+
+<!-- GENERADOR DE NOMBRES -->
+<div id="screen-namegen" class="screen">
+  <div class="card" style="text-align:center">
+    <div class="namegen-result" id="namegen-result">—</div>
+    <div class="namegen-sub" id="namegen-sub"></div>
+    <button class="btn btn-primary" onclick="namegenGenerate()" style="margin-bottom:8px">↻ Generar nombre</button>
+    <button class="share-btn" onclick="namegenCopy()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copiar nombre
+    </button>
+  </div>
+  <div class="card">
+    <div class="card-label">Categoría</div>
+    <div class="namegen-cat-grid" id="namegen-cats"></div>
+  </div>
+  <div class="card" id="namegen-history-card" style="display:none">
+    <div class="card-label">Historial</div>
+    <div id="namegen-history"></div>
+    <button class="btn btn-danger" style="font-size:12px;padding:7px 12px;margin-top:8px" onclick="namegenClearHistory()">Limpiar historial</button>
+  </div>
+</div>
+
+<!-- CONVERSOR DE TALLAS -->
+<div id="screen-sizes" class="screen">
+  <div class="card">
+    <div class="card-label">Tipo</div>
+    <div class="mode-pills" style="margin-bottom:10px">
+      <button class="mode-pill active" data-type="clothing-f" onclick="sizesSetType(this)">👗 Ropa mujer</button>
+      <button class="mode-pill" data-type="clothing-m" onclick="sizesSetType(this)">👔 Ropa hombre</button>
+      <button class="mode-pill" data-type="shoes-f" onclick="sizesSetType(this)">👠 Zapatos mujer</button>
+      <button class="mode-pill" data-type="shoes-m" onclick="sizesSetType(this)">👟 Zapatos hombre</button>
+    </div>
+    <div class="card-label">Tu talla</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select class="sm-input" id="sizes-system" onchange="sizesRender()" style="width:120px">
+        <option value="0">AR / EU</option>
+        <option value="1">US</option>
+        <option value="2">UK</option>
+      </select>
+      <select class="sm-input" id="sizes-val" onchange="sizesRender()" style="flex:1"></select>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Equivalencias</div>
+    <table class="sizes-table" id="sizes-table"></table>
+  </div>
+</div>
+
+<!-- GENERADOR DE EXCUSAS -->
+<div id="screen-excusas" class="screen">
+  <div class="excusa-result" id="excusa-result">
+    <span style="color:var(--muted);font-size:14px">Elegí una categoría y generá tu excusa</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <button class="btn btn-primary" onclick="excusaGenerate()">↻ Nueva excusa</button>
+    <button class="btn btn-ghost" onclick="excusaCopy()">Copiar</button>
+  </div>
+  <div class="card">
+    <div class="card-label">Categoría</div>
+    <div class="excusa-cat-grid" id="excusa-cats"></div>
+  </div>
+  <div class="card" id="excusa-share-card" style="display:none">
+    <button class="share-btn" onclick="excusaShare()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Compartir por WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- CÍRCULO DE QUINTAS -->
+<div id="screen-quintas" class="screen">
+  <div class="card" style="padding:12px">
+    <div class="row-2">
+      <div>
+        <div class="field-label">Nota raíz</div>
+        <select class="sm-input" id="quintas-root" onchange="quintasUpdate()">
+          <option value="0">C</option><option value="1">C# / Db</option><option value="2">D</option>
+          <option value="3">D# / Eb</option><option value="4">E</option><option value="5">F</option>
+          <option value="6">F# / Gb</option><option value="7">G</option><option value="8">G# / Ab</option>
+          <option value="9">A</option><option value="10">A# / Bb</option><option value="11">B</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Escala</div>
+        <select class="sm-input" id="quintas-scale" onchange="quintasUpdate()">
+          <option value="major">Mayor</option>
+          <option value="minor">Menor natural</option>
+          <option value="harmonicMinor">Menor armónica</option>
+          <option value="melodicMinor">Menor melódica</option>
+          <option value="dorian">Dórica</option>
+          <option value="phrygian">Frigia</option>
+          <option value="lydian">Lidia</option>
+          <option value="mixolydian">Mixolidia</option>
+          <option value="pentatonicMajor">Pentatónica mayor</option>
+          <option value="pentatonicMinor">Pentatónica menor</option>
+          <option value="blues">Blues</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="padding:12px">
+    <div class="card-label">Círculo de quintas</div>
+    <div class="quintas-svg-wrap"><div id="quintas-circle" style="position:relative;width:260px;height:260px"></div></div>
+  </div>
+  <div class="card" style="padding:12px">
+    <div class="card-label">Notas de la escala</div>
+    <div id="quintas-notes" style="font-family:var(--font-mono);font-size:18px;letter-spacing:.1em;padding:8px 0;color:var(--accent)"></div>
+  </div>
+  <div class="card" style="padding:12px" id="quintas-chords-card">
+    <div class="card-label">Acordes por grado</div>
+    <div id="quintas-chords"></div>
+  </div>
+  <div class="card" style="padding:12px">
+    <div class="card-label">Modulaciones cercanas</div>
+    <div id="quintas-modulations" style="padding:4px 0"></div>
+  </div>
+</div>
+
 <!-- HOME -->
 <!-- POMODORO -->
 <div id="screen-pomodoro" class="screen">
@@ -1468,6 +1702,12 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="gradient" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Gradiente</button>
   <button class="tab-btn" data-screen="periodic" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Tabla Per.</button>
   <button class="tab-btn" data-screen="teams" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Equipos</button>
+  <button class="tab-btn" data-screen="turns" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/><path d="M16.24 7.76a6 6 0 010 8.49"/></svg>Turnos</button>
+  <button class="tab-btn" data-screen="palette" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/><circle cx="9" cy="15" r="1.5" fill="currentColor"/><circle cx="15" cy="15" r="1.5" fill="currentColor"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/></svg>Paleta</button>
+  <button class="tab-btn" data-screen="namegen" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Nombres</button>
+  <button class="tab-btn" data-screen="sizes" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M7 7v10M12 7v5M17 7v10"/></svg>Tallas</button>
+  <button class="tab-btn" data-screen="excusas" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M12 8v4M12 16h.01"/></svg>Excusas</button>
+  <button class="tab-btn" data-screen="quintas" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Quintas</button>
 </nav>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1511,6 +1751,9 @@ const CATEGORIES=[
     {id:'recipe',name:'Recetas',desc:'Escalar ingredientes',icon:'🍳'},
     {id:'habits',name:'Hábitos',desc:'Rastreá hábitos diarios con racha',icon:'🔥'},
     {id:'teams',name:'Equipos',desc:'Sortear personas en equipos al azar',icon:'👥'},
+    {id:'turns',name:'Turnos',desc:'Temporizador de turnos para juegos',icon:'⏳'},
+    {id:'namegen',name:'Generador de nombres',desc:'Nombres para personas, bandas, proyectos',icon:'✨'},
+    {id:'excusas',name:'Excusas',desc:'Generador de excusas para toda ocasión',icon:'😅'},
   ]},
   {id:'utilidades',name:'Utilidades',icon:'🛠️',tools:[
     {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷'},
@@ -1522,10 +1765,13 @@ const CATEGORIES=[
     {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰'},
     {id:'gradient',name:'Gradientes',desc:'Generar gradientes CSS copiables',icon:'🌈'},
     {id:'periodic',name:'Tabla periódica',desc:'Referencia de todos los elementos',icon:'⚗️'},
+    {id:'palette',name:'Paleta de colores',desc:'Generar paletas armónicas desde un color',icon:'🎨'},
+    {id:'sizes',name:'Conversor de tallas',desc:'Ropa y zapatos entre AR/EU/US/UK',icon:'👗'},
+    {id:'quintas',name:'Círculo de quintas',desc:'Notas, acordes y modulaciones por escala',icon:'🎵'},
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas'};
 
 let navStack=[];
 
@@ -2044,6 +2290,7 @@ function pomoRender(){
   pomoRender();
 })();
 
+
 // ══ RELOJ MUNDIAL ══
 const WC_CITIES=[
   {name:'Buenos Aires',tz:'America/Argentina/Buenos_Aires',flag:'\uD83C\uDDE6\uD83C\uDDF7'},
@@ -2095,7 +2342,7 @@ function habitRender(){
   document.getElementById('habits-date').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
   const list=document.getElementById('habits-list');
   if(!habits.length){list.innerHTML='<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">Agregá tu primer hábito abajo</div>';document.getElementById('habits-summary').innerHTML='';return;}
-  list.innerHTML=habits.map(h=>{const done=!!h.checks[today];const streak=habitCalcStreak(h);return `<div class="habit-row"><div class="habit-check ${done?'done':''}" onclick="habitToggle('${h.id}')">${done?'✓':''}</div><div class="habit-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${h.name}</div><div class="habit-streak">\uD83D\uDD25 ${streak}</div><button class="habit-del" onclick="habitRemove('${h.id}')">×</button></div>`;}).join('');
+  list.innerHTML=habits.map(h=>{const done=!!h.checks[today];const streak=habitCalcStreak(h);return `<div class="habit-row"><div class="habit-check ${done?'done':''}" onclick="habitToggle('${h.id}')">${done?'v':''}</div><div class="habit-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${h.name}</div><div class="habit-streak">\uD83D\uDD25 ${streak}</div><button class="habit-del" onclick="habitRemove('${h.id}')">x</button></div>`;}).join('');
   const doneCount=habits.filter(h=>h.checks[today]).length;
   document.getElementById('habits-summary').innerHTML=`<div style="display:flex;justify-content:space-between"><span>Hoy completados</span><span style="font-family:var(--font-mono);color:var(--accent)">${doneCount} / ${habits.length}</span></div><div style="height:6px;background:var(--surface2);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:${habits.length?doneCount/habits.length*100:0}%;background:var(--accent);border-radius:3px;transition:width .4s"></div></div>`;
 }
@@ -2112,7 +2359,7 @@ function fuelCalc(){
   const liters=dist/100*cons;const total=liters*price;const perPerson=total/people;
   res.style.display='block';empty.style.display='none';
   document.getElementById('fuel-total').textContent='$'+total.toLocaleString('es-AR',{maximumFractionDigits:0});
-  document.getElementById('fuel-sub').textContent=`${dist} km · ${cons} L/100km · $${price}/L`;
+  document.getElementById('fuel-sub').textContent=`${dist} km - ${cons} L/100km - $${price}/L`;
   document.getElementById('fuel-liters').textContent=liters.toFixed(1)+' L';
   const ppRow=document.getElementById('fuel-per-person-row');
   if(people>1){ppRow.style.display='flex';document.getElementById('fuel-per-person').textContent='$'+perPerson.toLocaleString('es-AR',{maximumFractionDigits:0});}
@@ -2135,11 +2382,11 @@ function savCalc(){
   const label=freq==='weekly'?'Por semana':'Por mes';
   res.style.display='block';empty.style.display='none';
   document.getElementById('sav-bar').style.width=pct+'%';
-  document.getElementById('sav-pct').textContent=pct.toFixed(1)+'% completado · $'+current.toLocaleString('es-AR',{maximumFractionDigits:0})+' de $'+goal.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('sav-pct').textContent=pct.toFixed(1)+'% completado - $'+current.toLocaleString('es-AR',{maximumFractionDigits:0})+' de $'+goal.toLocaleString('es-AR',{maximumFractionDigits:0});
   document.getElementById('sav-amount').textContent='$'+perPeriod.toLocaleString('es-AR',{maximumFractionDigits:0});
   document.getElementById('sav-period-label').textContent=label+' para llegar a la meta';
   document.getElementById('sav-remaining').textContent='$'+remaining.toLocaleString('es-AR',{maximumFractionDigits:0});
-  document.getElementById('sav-days').textContent=diffDays>0?`${diffDays} días (${freq==='weekly'?weeks.toFixed(0)+' semanas':months.toFixed(1)+' meses'})`:'¡Fecha pasada!';
+  document.getElementById('sav-days').textContent=diffDays>0?`${diffDays} dias (${freq==='weekly'?weeks.toFixed(0)+' semanas':months.toFixed(1)+' meses'})`:'Fecha pasada';
 }
 (function(){document.getElementById('sav-date').min=new Date().toISOString().slice(0,10);})();
 
@@ -2152,7 +2399,7 @@ function gradUpdate(){
   document.getElementById('grad-css-box').textContent=`background: ${css};`;
 }
 function gradSetDir(btn){document.querySelectorAll('.grad-dir-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');gradDir=btn.dataset.deg;gradUpdate();}
-function gradCopy(){const css=document.getElementById('grad-css-box').textContent;navigator.clipboard.writeText(css).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent=orig,1500);}).catch(()=>{});}
+function gradCopy(){const css=document.getElementById('grad-css-box').textContent;navigator.clipboard.writeText(css).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='v Copiado';setTimeout(()=>btn.textContent=orig,1500);}).catch(()=>{});}
 (function(){
   const presets=[['#7c6af7','#4fc3c8'],['#ff6b6b','#ffd93d'],['#6bcb77','#4d96ff'],['#f7971e','#ffd200'],['#ee0979','#ff6a00'],['#614385','#516395'],['#4facfe','#00f2fe'],['#43e97b','#38f9d7']];
   document.getElementById('grad-presets').innerHTML=presets.map(([a,b])=>`<div onclick="gradApplyPreset('${a}','${b}')" style="width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,${a},${b});cursor:pointer;border:2px solid var(--border);flex-shrink:0;transition:transform .1s" onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform=''"></div>`).join('');
@@ -2173,54 +2420,165 @@ const PT_CATS={
   'lanthanide':{label:'Lantánido',bg:'oklch(50% 0.14 22 / 0.2)',text:'oklch(38% 0.14 22)'},
   'actinide':{label:'Actínido',bg:'oklch(50% 0.14 340 / 0.2)',text:'oklch(38% 0.14 340)'},
 };
-const PT_DATA=[
-  [1,'H','Hidrógeno','1.008','no-metal'],[2,'He','Helio','4.003','noble-gas'],
-  [3,'Li','Litio','6.941','alkali'],[4,'Be','Berilio','9.012','alkaline'],[5,'B','Boro','10.811','metalloid'],[6,'C','Carbono','12.011','no-metal'],[7,'N','Nitrógeno','14.007','no-metal'],[8,'O','Oxígeno','15.999','no-metal'],[9,'F','Flúor','18.998','halogen'],[10,'Ne','Neón','20.180','noble-gas'],
-  [11,'Na','Sodio','22.990','alkali'],[12,'Mg','Magnesio','24.305','alkaline'],[13,'Al','Aluminio','26.982','post-transition'],[14,'Si','Silicio','28.086','metalloid'],[15,'P','Fósforo','30.974','no-metal'],[16,'S','Azufre','32.065','no-metal'],[17,'Cl','Cloro','35.453','halogen'],[18,'Ar','Argón','39.948','noble-gas'],
-  [19,'K','Potasio','39.098','alkali'],[20,'Ca','Calcio','40.078','alkaline'],[21,'Sc','Escandio','44.956','transition'],[22,'Ti','Titanio','47.867','transition'],[23,'V','Vanadio','50.942','transition'],[24,'Cr','Cromo','51.996','transition'],[25,'Mn','Manganeso','54.938','transition'],[26,'Fe','Hierro','55.845','transition'],[27,'Co','Cobalto','58.933','transition'],[28,'Ni','Níquel','58.693','transition'],[29,'Cu','Cobre','63.546','transition'],[30,'Zn','Zinc','65.38','transition'],[31,'Ga','Galio','69.723','post-transition'],[32,'Ge','Germanio','72.630','metalloid'],[33,'As','Arsénico','74.922','metalloid'],[34,'Se','Selenio','78.971','no-metal'],[35,'Br','Bromo','79.904','halogen'],[36,'Kr','Kriptón','83.798','noble-gas'],
-  [37,'Rb','Rubidio','85.468','alkali'],[38,'Sr','Estroncio','87.62','alkaline'],[39,'Y','Itrio','88.906','transition'],[40,'Zr','Circonio','91.224','transition'],[41,'Nb','Niobio','92.906','transition'],[42,'Mo','Molibdeno','95.95','transition'],[43,'Tc','Tecnecio','98','transition'],[44,'Ru','Rutenio','101.07','transition'],[45,'Rh','Rodio','102.906','transition'],[46,'Pd','Paladio','106.42','transition'],[47,'Ag','Plata','107.868','transition'],[48,'Cd','Cadmio','112.411','transition'],[49,'In','Indio','114.818','post-transition'],[50,'Sn','Estaño','118.710','post-transition'],[51,'Sb','Antimonio','121.760','metalloid'],[52,'Te','Telurio','127.60','metalloid'],[53,'I','Yodo','126.904','halogen'],[54,'Xe','Xenón','131.293','noble-gas'],
-  [55,'Cs','Cesio','132.905','alkali'],[56,'Ba','Bario','137.327','alkaline'],[57,'La','Lantano','138.905','lanthanide'],[58,'Ce','Cerio','140.116','lanthanide'],[59,'Pr','Praseodimio','140.908','lanthanide'],[60,'Nd','Neodimio','144.242','lanthanide'],[61,'Pm','Prometio','145','lanthanide'],[62,'Sm','Samario','150.36','lanthanide'],[63,'Eu','Europio','151.964','lanthanide'],[64,'Gd','Gadolinio','157.25','lanthanide'],[65,'Tb','Terbio','158.925','lanthanide'],[66,'Dy','Disprosio','162.500','lanthanide'],[67,'Ho','Holmio','164.930','lanthanide'],[68,'Er','Erbio','167.259','lanthanide'],[69,'Tm','Tulio','168.934','lanthanide'],[70,'Yb','Iterbio','173.054','lanthanide'],[71,'Lu','Lutecio','174.967','lanthanide'],
-  [72,'Hf','Hafnio','178.49','transition'],[73,'Ta','Tántalo','180.948','transition'],[74,'W','Wolframio','183.84','transition'],[75,'Re','Renio','186.207','transition'],[76,'Os','Osmio','190.23','transition'],[77,'Ir','Iridio','192.217','transition'],[78,'Pt','Platino','195.084','transition'],[79,'Au','Oro','196.967','transition'],[80,'Hg','Mercurio','200.592','transition'],[81,'Tl','Talio','204.38','post-transition'],[82,'Pb','Plomo','207.2','post-transition'],[83,'Bi','Bismuto','208.980','post-transition'],[84,'Po','Polonio','209','post-transition'],[85,'At','Ástato','210','halogen'],[86,'Rn','Radón','222','noble-gas'],
-  [87,'Fr','Francio','223','alkali'],[88,'Ra','Radio','226','alkaline'],[89,'Ac','Actinio','227','actinide'],[90,'Th','Torio','232.038','actinide'],[91,'Pa','Protactinio','231.036','actinide'],[92,'U','Uranio','238.029','actinide'],[93,'Np','Neptunio','237','actinide'],[94,'Pu','Plutonio','244','actinide'],[95,'Am','Americio','243','actinide'],[96,'Cm','Curio','247','actinide'],[97,'Bk','Berkelio','247','actinide'],[98,'Cf','Californio','251','actinide'],[99,'Es','Einstenio','252','actinide'],[100,'Fm','Fermio','257','actinide'],[101,'Md','Mendelevio','258','actinide'],[102,'No','Nobelio','259','actinide'],[103,'Lr','Laurencio','262','actinide'],
-  [104,'Rf','Rutherfordio','267','transition'],[105,'Db','Dubnio','268','transition'],[106,'Sg','Seaborgio','271','transition'],[107,'Bh','Bohrio','272','transition'],[108,'Hs','Hasio','270','transition'],[109,'Mt','Meitnerio','278','transition'],[110,'Ds','Darmstadtio','281','transition'],[111,'Rg','Roentgenio','282','transition'],[112,'Cn','Copernicio','285','transition'],[113,'Nh','Nihonio','286','post-transition'],[114,'Fl','Flerovio','289','post-transition'],[115,'Mc','Moscovio','290','post-transition'],[116,'Lv','Livermorio','293','post-transition'],[117,'Ts','Teneso','294','halogen'],[118,'Og','Oganesón','294','noble-gas'],
-];
+const PT_DATA=[[1,'H','Hidrógeno','1.008','no-metal'],[2,'He','Helio','4.003','noble-gas'],[3,'Li','Litio','6.941','alkali'],[4,'Be','Berilio','9.012','alkaline'],[5,'B','Boro','10.811','metalloid'],[6,'C','Carbono','12.011','no-metal'],[7,'N','Nitrógeno','14.007','no-metal'],[8,'O','Oxígeno','15.999','no-metal'],[9,'F','Flúor','18.998','halogen'],[10,'Ne','Neón','20.180','noble-gas'],[11,'Na','Sodio','22.990','alkali'],[12,'Mg','Magnesio','24.305','alkaline'],[13,'Al','Aluminio','26.982','post-transition'],[14,'Si','Silicio','28.086','metalloid'],[15,'P','Fósforo','30.974','no-metal'],[16,'S','Azufre','32.065','no-metal'],[17,'Cl','Cloro','35.453','halogen'],[18,'Ar','Argón','39.948','noble-gas'],[19,'K','Potasio','39.098','alkali'],[20,'Ca','Calcio','40.078','alkaline'],[21,'Sc','Escandio','44.956','transition'],[22,'Ti','Titanio','47.867','transition'],[23,'V','Vanadio','50.942','transition'],[24,'Cr','Cromo','51.996','transition'],[25,'Mn','Manganeso','54.938','transition'],[26,'Fe','Hierro','55.845','transition'],[27,'Co','Cobalto','58.933','transition'],[28,'Ni','Níquel','58.693','transition'],[29,'Cu','Cobre','63.546','transition'],[30,'Zn','Zinc','65.38','transition'],[31,'Ga','Galio','69.723','post-transition'],[32,'Ge','Germanio','72.630','metalloid'],[33,'As','Arsénico','74.922','metalloid'],[34,'Se','Selenio','78.971','no-metal'],[35,'Br','Bromo','79.904','halogen'],[36,'Kr','Kriptón','83.798','noble-gas'],[37,'Rb','Rubidio','85.468','alkali'],[38,'Sr','Estroncio','87.62','alkaline'],[39,'Y','Itrio','88.906','transition'],[40,'Zr','Circonio','91.224','transition'],[41,'Nb','Niobio','92.906','transition'],[42,'Mo','Molibdeno','95.95','transition'],[43,'Tc','Tecnecio','98','transition'],[44,'Ru','Rutenio','101.07','transition'],[45,'Rh','Rodio','102.906','transition'],[46,'Pd','Paladio','106.42','transition'],[47,'Ag','Plata','107.868','transition'],[48,'Cd','Cadmio','112.411','transition'],[49,'In','Indio','114.818','post-transition'],[50,'Sn','Estaño','118.710','post-transition'],[51,'Sb','Antimonio','121.760','metalloid'],[52,'Te','Telurio','127.60','metalloid'],[53,'I','Yodo','126.904','halogen'],[54,'Xe','Xenón','131.293','noble-gas'],[55,'Cs','Cesio','132.905','alkali'],[56,'Ba','Bario','137.327','alkaline'],[57,'La','Lantano','138.905','lanthanide'],[58,'Ce','Cerio','140.116','lanthanide'],[59,'Pr','Praseodimio','140.908','lanthanide'],[60,'Nd','Neodimio','144.242','lanthanide'],[61,'Pm','Prometio','145','lanthanide'],[62,'Sm','Samario','150.36','lanthanide'],[63,'Eu','Europio','151.964','lanthanide'],[64,'Gd','Gadolinio','157.25','lanthanide'],[65,'Tb','Terbio','158.925','lanthanide'],[66,'Dy','Disprosio','162.500','lanthanide'],[67,'Ho','Holmio','164.930','lanthanide'],[68,'Er','Erbio','167.259','lanthanide'],[69,'Tm','Tulio','168.934','lanthanide'],[70,'Yb','Iterbio','173.054','lanthanide'],[71,'Lu','Lutecio','174.967','lanthanide'],[72,'Hf','Hafnio','178.49','transition'],[73,'Ta','Tántalo','180.948','transition'],[74,'W','Wolframio','183.84','transition'],[75,'Re','Renio','186.207','transition'],[76,'Os','Osmio','190.23','transition'],[77,'Ir','Iridio','192.217','transition'],[78,'Pt','Platino','195.084','transition'],[79,'Au','Oro','196.967','transition'],[80,'Hg','Mercurio','200.592','transition'],[81,'Tl','Talio','204.38','post-transition'],[82,'Pb','Plomo','207.2','post-transition'],[83,'Bi','Bismuto','208.980','post-transition'],[84,'Po','Polonio','209','post-transition'],[85,'At','Ástato','210','halogen'],[86,'Rn','Radón','222','noble-gas'],[87,'Fr','Francio','223','alkali'],[88,'Ra','Radio','226','alkaline'],[89,'Ac','Actinio','227','actinide'],[90,'Th','Torio','232.038','actinide'],[91,'Pa','Protactinio','231.036','actinide'],[92,'U','Uranio','238.029','actinide'],[93,'Np','Neptunio','237','actinide'],[94,'Pu','Plutonio','244','actinide'],[95,'Am','Americio','243','actinide'],[96,'Cm','Curio','247','actinide'],[97,'Bk','Berkelio','247','actinide'],[98,'Cf','Californio','251','actinide'],[99,'Es','Einstenio','252','actinide'],[100,'Fm','Fermio','257','actinide'],[101,'Md','Mendelevio','258','actinide'],[102,'No','Nobelio','259','actinide'],[103,'Lr','Laurencio','262','actinide'],[104,'Rf','Rutherfordio','267','transition'],[105,'Db','Dubnio','268','transition'],[106,'Sg','Seaborgio','271','transition'],[107,'Bh','Bohrio','272','transition'],[108,'Hs','Hasio','270','transition'],[109,'Mt','Meitnerio','278','transition'],[110,'Ds','Darmstadtio','281','transition'],[111,'Rg','Roentgenio','282','transition'],[112,'Cn','Copernicio','285','transition'],[113,'Nh','Nihonio','286','post-transition'],[114,'Fl','Flerovio','289','post-transition'],[115,'Mc','Moscovio','290','post-transition'],[116,'Lv','Livermorio','293','post-transition'],[117,'Ts','Teneso','294','halogen'],[118,'Og','Oganesón','294','noble-gas']];
 let ptFiltered=PT_DATA;
 function ptSearch(){const q=document.getElementById('pt-search').value.trim().toLowerCase();ptFiltered=q?PT_DATA.filter(([n,sym,name])=>sym.toLowerCase().startsWith(q)||name.toLowerCase().includes(q)||String(n).startsWith(q)):PT_DATA;ptRenderList();}
-function ptRenderList(){
-  const list=document.getElementById('pt-list');
-  list.innerHTML=ptFiltered.slice(0,50).map(([n,sym,name,mass,cat])=>{
-    const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)'};
-    return `<div class="pt-item" onclick="ptShowDetail(${n})"><div class="pt-badge" style="background:${c.bg}"><div class="pt-badge-sym" style="color:${c.text}">${sym}</div><div class="pt-badge-num" style="color:${c.text}">${n}</div></div><div class="pt-item-info"><div class="pt-item-name">${name}</div><div class="pt-item-detail">${c.label||cat} · ${mass} u</div></div></div>`;
-  }).join('');
-  if(ptFiltered.length>50)list.innerHTML+=`<div style="text-align:center;padding:10px;color:var(--muted);font-size:12px">+${ptFiltered.length-50} más — refiná la búsqueda</div>`;
-}
-function ptShowDetail(n){
-  const el=PT_DATA.find(e=>e[0]===n);if(!el)return;
-  const [num,sym,name,mass,cat]=el;const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)',label:cat};
-  const card=document.getElementById('pt-detail');card.classList.add('show');
-  document.getElementById('pt-d-sym').textContent=sym;document.getElementById('pt-d-sym').style.color=c.text;
-  document.getElementById('pt-d-name').textContent=name;
-  document.getElementById('pt-d-num').textContent=num;
-  document.getElementById('pt-d-mass').textContent=mass+' u';
-  const pill=document.getElementById('pt-d-cat');pill.textContent=c.label;pill.style.background=c.bg;pill.style.color=c.text;
-  card.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
+function ptRenderList(){const list=document.getElementById('pt-list');list.innerHTML=ptFiltered.slice(0,50).map(([n,sym,name,mass,cat])=>{const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)'};return `<div class="pt-item" onclick="ptShowDetail(${n})"><div class="pt-badge" style="background:${c.bg}"><div class="pt-badge-sym" style="color:${c.text}">${sym}</div><div class="pt-badge-num" style="color:${c.text}">${n}</div></div><div class="pt-item-info"><div class="pt-item-name">${name}</div><div class="pt-item-detail">${c.label||cat} - ${mass} u</div></div></div>`;}).join('');if(ptFiltered.length>50)list.innerHTML+=`<div style="text-align:center;padding:10px;color:var(--muted);font-size:12px">+${ptFiltered.length-50} más — refiná la búsqueda</div>`;}
+function ptShowDetail(n){const el=PT_DATA.find(e=>e[0]===n);if(!el)return;const [num,sym,name,mass,cat]=el;const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)',label:cat};const card=document.getElementById('pt-detail');card.classList.add('show');document.getElementById('pt-d-sym').textContent=sym;document.getElementById('pt-d-sym').style.color=c.text;document.getElementById('pt-d-name').textContent=name;document.getElementById('pt-d-num').textContent=num;document.getElementById('pt-d-mass').textContent=mass+' u';const pill=document.getElementById('pt-d-cat');pill.textContent=c.label;pill.style.background=c.bg;pill.style.color=c.text;card.scrollIntoView({behavior:'smooth',block:'nearest'});}
 ptRenderList();
 
 // ══ EQUIPOS ══
-function teamsShuffle(){
-  const raw=document.getElementById('teams-names').value;
-  const names=raw.split('\n').map(n=>n.trim()).filter(Boolean);
-  const count=parseInt(document.getElementById('teams-count').value)||2;
-  if(names.length<2){alert('Agregá al menos 2 participantes');return;}
-  if(count<2||count>names.length){alert('El número de equipos debe ser entre 2 y '+names.length);return;}
-  const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
-  const teams=Array.from({length:count},()=>[]);
-  shuffled.forEach((name,i)=>teams[i%count].push(name));
-  const colors=['var(--accent)','var(--accent2)','var(--warn)','var(--danger)','oklch(44% 0.13 300)','oklch(44% 0.11 180)'];
-  document.getElementById('teams-result').innerHTML=teams.map((t,i)=>`<div class="team-card" style="border-left:3px solid ${colors[i%colors.length]}"><div class="team-card-title" style="color:${colors[i%colors.length]}">Equipo ${i+1}</div>${t.map(n=>`<div class="team-member">\uD83D\uDC64 ${n}</div>`).join('')}</div>`).join('');
-  document.getElementById('teams-reshuf').style.display='block';
+function teamsShuffle(){const raw=document.getElementById('teams-names').value;const names=raw.split('\n').map(n=>n.trim()).filter(Boolean);const count=parseInt(document.getElementById('teams-count').value)||2;if(names.length<2){alert('Agregá al menos 2 participantes');return;}if(count<2||count>names.length){alert('El número de equipos debe ser entre 2 y '+names.length);return;}const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}const teams=Array.from({length:count},()=>[]);shuffled.forEach((name,i)=>teams[i%count].push(name));const colors=['var(--accent)','var(--accent2)','var(--warn)','var(--danger)','oklch(44% 0.13 300)','oklch(44% 0.11 180)'];document.getElementById('teams-result').innerHTML=teams.map((t,i)=>`<div class="team-card" style="border-left:3px solid ${colors[i%colors.length]}"><div class="team-card-title" style="color:${colors[i%colors.length]}">Equipo ${i+1}</div>${t.map(n=>`<div class="team-member">\uD83D\uDC64 ${n}</div>`).join('')}</div>`).join('');document.getElementById('teams-reshuf').style.display='block';}
+
+// ══ TURNOS ══
+let turnsSeconds=30,turnsPlayers=[],turnsCurrentIdx=0,turnsTurnNum=0,turnsRunning=false,turnsInterval=null,turnsRemaining=0;
+function turnsAdjTime(d){turnsSeconds=Math.max(10,Math.min(600,turnsSeconds+d));document.getElementById('turns-time-slider').value=turnsSeconds;turnsDisplayTime();}
+function turnsSliderChange(){turnsSeconds=parseInt(document.getElementById('turns-time-slider').value);turnsDisplayTime();}
+function turnsDisplayTime(){const m=Math.floor(turnsSeconds/60),s=turnsSeconds%60;document.getElementById('turns-time-display').textContent=(m?m+':':'0:')+String(s).padStart(2,'0');}
+function turnsAddPlayer(){const inp=document.getElementById('turns-new-player');const name=inp.value.trim();if(!name)return;turnsPlayers.push(name);inp.value='';turnsRenderPlayers();}
+function turnsRenderPlayers(){document.getElementById('turns-players-list').innerHTML=turnsPlayers.length?turnsPlayers.map((p,i)=>`<div class="turn-player-row"><span style="flex:1">${p}</span><button onclick="turnsRemovePlayer(${i})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">x</button></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:6px 0">Sin jugadores</div>';}
+function turnsRemovePlayer(i){turnsPlayers.splice(i,1);turnsRenderPlayers();}
+function turnsStart(){if(!turnsPlayers.length){alert('Agregá al menos un jugador');return;}turnsCurrentIdx=0;turnsTurnNum=1;turnsRemaining=turnsSeconds;document.getElementById('turns-setup-view').style.display='none';document.getElementById('turns-timer-view').style.display='block';turnsUpdateDisplay();turnsRenderQueue();}
+function turnsToggle(){if(turnsRunning){clearInterval(turnsInterval);turnsRunning=false;document.getElementById('turns-play-btn').textContent='Continuar';}else{turnsRunning=true;document.getElementById('turns-play-btn').textContent='Pausar';turnsInterval=setInterval(turnsTick,1000);}}
+function turnsTick(){turnsRemaining--;turnsUpdateDisplay();if(turnsRemaining<=0){clearInterval(turnsInterval);turnsRunning=false;document.getElementById('turns-play-btn').textContent='Iniciar';setTimeout(()=>{if(confirm(turnsPlayers[turnsCurrentIdx]+' — Tiempo agotado. Siguiente turno?'))turnsNext();},100);}}
+function turnsNext(){clearInterval(turnsInterval);turnsRunning=false;document.getElementById('turns-play-btn').textContent='Iniciar';turnsCurrentIdx=(turnsCurrentIdx+1)%turnsPlayers.length;turnsTurnNum++;turnsRemaining=turnsSeconds;turnsUpdateDisplay();turnsRenderQueue();}
+function turnsUpdateDisplay(){const m=Math.floor(turnsRemaining/60),s=turnsRemaining%60;document.getElementById('turns-display').textContent=(m?m+':':'0:')+String(s).padStart(2,'0');document.getElementById('turns-current-name').textContent=turnsPlayers[turnsCurrentIdx]||'—';document.getElementById('turns-current-sub').textContent='Turno '+turnsTurnNum+' - Jugador '+(turnsCurrentIdx+1)+' de '+turnsPlayers.length;const pct=turnsRemaining/turnsSeconds*100;document.getElementById('turns-bar').style.width=pct+'%';document.getElementById('turns-display').style.color=pct<20?'var(--danger)':pct<50?'var(--warn)':'var(--accent)';}
+function turnsRenderQueue(){const q=document.getElementById('turns-queue');const remaining=turnsPlayers.slice(turnsCurrentIdx+1).concat(turnsPlayers.slice(0,turnsCurrentIdx));q.innerHTML=remaining.length?remaining.map((p,i)=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)">${i+1}. ${p}</div>`).join(''):'<div style="color:var(--muted);font-size:12px">Última ronda</div>';}
+function turnsReset(){clearInterval(turnsInterval);turnsRunning=false;turnsCurrentIdx=0;document.getElementById('turns-setup-view').style.display='block';document.getElementById('turns-timer-view').style.display='none';}
+(function(){turnsDisplayTime();turnsPlayers=['Jugador 1','Jugador 2','Jugador 3'];turnsRenderPlayers();})();
+
+// ══ PALETA DE COLORES ══
+let paletteHarmony='complementary';
+function hexToHsl(hex){let r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;if(max===min){h=s=0;}else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break;}h/=6;}return[Math.round(h*360),Math.round(s*100),Math.round(l*100)];}
+function hslToHex(h,s,l){s/=100;l/=100;const a=s*Math.min(l,1-l);const f=n=>{const k=(n+h/30)%12;const color=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*color).toString(16).padStart(2,'0');};return '#'+f(0)+f(8)+f(4);}
+function paletteSetHarmony(btn){document.querySelectorAll('.palette-harmony-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');paletteHarmony=btn.dataset.harmony;paletteUpdate();}
+function paletteGetColors(h,s,l){switch(paletteHarmony){case'complementary':return[[h,s,l],[h+180,s,l],[h,s,Math.max(20,l-25)],[h+180,s,Math.max(20,l-25)]];case'triadic':return[[h,s,l],[h+120,s,l],[h+240,s,l],[h,s,Math.max(20,l-20)]];case'analogous':return[[h,s,l],[h+30,s,l],[h-30,s,l],[h+60,s,l],[h-60,s,l]];case'split':return[[h,s,l],[h+150,s,l],[h+210,s,l],[h,s,Math.min(90,l+20)]];case'square':return[[h,s,l],[h+90,s,l],[h+180,s,l],[h+270,s,l]];case'shades':return[[h,s,Math.min(90,l+30)],[h,s,Math.min(90,l+15)],[h,s,l],[h,s,Math.max(10,l-15)],[h,s,Math.max(10,l-30)]];default:return[[h,s,l]];}}
+function paletteUpdate(){const hex=document.getElementById('palette-base').value;const [h,s,l]=hexToHsl(hex);document.getElementById('palette-base-hex').textContent=hex.toUpperCase();document.getElementById('palette-base-hsl').textContent=`HSL(${h}, ${s}%, ${l}%)`;const colors=paletteGetColors(h,s,l).map(([hh,ss,ll])=>hslToHex(((hh%360)+360)%360,Math.min(100,Math.max(0,ss)),Math.min(100,Math.max(0,ll))));const labels={complementary:['Base','Complementario','Oscuro','Comp. oscuro'],triadic:['Base','Triádico 1','Triádico 2','Oscuro'],analogous:['Base','Análogo +','Análogo -','Análogo ++','Análogo --'],split:['Base','Split 1','Split 2','Claro'],square:['Base','Cuadrado 1','Cuadrado 2','Cuadrado 3'],shades:['Muy claro','Claro','Base','Oscuro','Muy oscuro']};const lbls=labels[paletteHarmony]||colors.map((_,i)=>'Color '+(i+1));document.getElementById('palette-swatches').innerHTML=colors.map(c=>`<div style="width:44px;height:44px;border-radius:10px;background:${c};border:2px solid var(--border);cursor:pointer;flex-shrink:0;transition:transform .1s" title="${c.toUpperCase()}" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.toUpperCase()}')" onmousedown="this.style.transform='scale(0.9)'" onmouseup="this.style.transform=''"></div>`).join('');document.getElementById('palette-list').innerHTML=colors.map((c,i)=>`<div class="palette-row"><div style="width:28px;height:28px;border-radius:7px;background:${c};border:1.5px solid var(--border);flex-shrink:0"></div><span class="palette-label">${lbls[i]||''}</span><span class="palette-hex">${c.toUpperCase()}</span><button onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.toUpperCase()}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:4px 8px">Copiar</button></div>`).join('');}
+function paletteCopyAll(){const hexes=document.querySelectorAll('.palette-hex');const text=Array.from(hexes).map(el=>el.textContent).join(', ');navigator.clipboard&&navigator.clipboard.writeText(text);}
+paletteUpdate();
+
+// ══ GENERADOR DE NOMBRES ══
+const NAMEGEN_DATA={
+  personas:{label:'\uD83D\uDC64 Personas',items:['Mateo Villalba','Sofia Iturriaga','Lucas Pereyra','Valentina Rocca','Nicolás Funes','Camila Astrada','Tomás Beltrán','Juliana Heredia','Santiago Quiroga','Florencia Parada','Ignacio Zelaya','Martina Borda','Agustín Serrano','Luciana Palma','Facundo Ríos','Renata Vidal','Gonzalo Pizarro','Ana Luz Torres','Emiliano Bravo','Nadia Correa']},
+  proyectos:{label:'\uD83D\uDE80 Proyectos',items:['NexaFlow','Orbita Studio','Vortex Labs','PulseKit','Zenna App','CloudBridge','Axiom Digital','Lumis Tech','Novacraft','Synapse Hub','Prism Works','Kova Systems','Helix Build','Aura Platform','Strata Core','Zenith API','Motif Engine','Cascade IO','Vertex Labs','Stellar Base']},
+  bandas:{label:'\uD83C\uDFB8 Bandas',items:['Los Fantasmas del Río','Neon Cactus','Fuerza Bruta Ensemble','The Ragged Wolves','Cemento Vegetal','Plasma Social','La Grieta','Viento Rojo','Eco Salvaje','Electric Gaucho','Niebla Total','Los Perpetuos','Corriente Oscura','Polvo Estelar','La Última Vuelta','Dead Pampas','Moto Perpetua','Los Insurgentes','Señales de Humo','Karma Club']},
+  fantasy:{label:'\u2694\uFE0F Fantasy',items:['Aelindra la Forjada','Valdric de Ironmoor','Syrea Noctivaga','Brom el Cenizo','Thessaly Voss','Kael Umbrán','Mira Estrellacueva','Draven sin Nombre','Lyris del Pantano','Gorak Sangre Fría','Sylvana la Errante','Corin Maldito','Tessara de las Nieblas','Vorund el Eterno','Isha Velonara','Brennan el Roto','Zara de Abismos','Theron Oscuridad','Nalara sin Clan','Edric el Olvidado']},
+  empresas:{label:'\uD83C\uDFE2 Empresas',items:['Nexus Comercial SA','Grupo Horizonte','Austral Ventures','Meridian Global','Altavista Holdings','Conexia Partners','Strata Consulting','Summit Group','Vanguard Capital','Pacífico Digital','Plataforma Sur','Arco Inversiones','Cenit Soluciones','Delta Comercio','Espiga Corp','Fénix Desarrollo','Galaxia Tech','Helix Partners','Iridium SA','Kronos Digital']},
+};
+let namegenCat='personas',namegenHistory=[];
+function namegenSetCat(cat){namegenCat=cat;document.querySelectorAll('.namegen-cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));}
+function namegenGenerate(){const items=NAMEGEN_DATA[namegenCat].items;const name=items[Math.floor(Math.random()*items.length)];document.getElementById('namegen-result').textContent=name;document.getElementById('namegen-sub').textContent=NAMEGEN_DATA[namegenCat].label;namegenHistory.unshift({name,cat:NAMEGEN_DATA[namegenCat].label,ts:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})});if(namegenHistory.length>20)namegenHistory.pop();namegenRenderHistory();}
+function namegenCopy(){const name=document.getElementById('namegen-result').textContent;if(name&&name!=='—')navigator.clipboard&&navigator.clipboard.writeText(name);}
+function namegenRenderHistory(){const card=document.getElementById('namegen-history-card');const hist=document.getElementById('namegen-history');if(!namegenHistory.length){card.style.display='none';return;}card.style.display='block';hist.innerHTML=namegenHistory.slice(0,10).map(h=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${h.name}</span><span style="color:var(--muted);font-size:11px">${h.ts}</span></div>`).join('');}
+function namegenClearHistory(){namegenHistory=[];namegenRenderHistory();}
+(function(){const grid=document.getElementById('namegen-cats');grid.innerHTML=Object.entries(NAMEGEN_DATA).map(([k,v])=>`<button class="mode-pill namegen-cat-btn${k===namegenCat?' active':''}" data-cat="${k}" onclick="namegenSetCat('${k}')">${v.label}</button>`).join('');})();
+
+// ══ TALLAS ══
+const SIZES_DATA={'clothing-f':{headers:['AR/EU','US','UK','IT'],rows:[['32','0','4','36'],['34','2','6','38'],['36','4','8','40'],['38','6','10','42'],['40','8','12','44'],['42','10','14','46'],['44','12','16','48'],['46','14','18','50'],['48','16','20','52']]},'clothing-m':{headers:['AR/EU','US/UK','INT','Pecho (cm)'],rows:[['44','34','XS','86-89'],['46','36','S','90-93'],['48','38','M','94-97'],['50','40','L','98-101'],['52','42','XL','102-107'],['54','44','XXL','108-113'],['56','46','XXXL','114-119'],['58','48','4XL','120-125']]},'shoes-f':{headers:['EU','US','UK','CM'],rows:[['35','5','2.5','22'],['36','6','3.5','23'],['37','6.5','4','23.5'],['37.5','7','4.5','24'],['38','7.5','5','24.5'],['39','8','5.5','25'],['40','9','6.5','26'],['41','10','7.5','27'],['42','11','8','27.5']]},'shoes-m':{headers:['EU','US','UK','CM'],rows:[['38','6','5','24'],['39','7','6','25'],['40','7.5','6.5','25.5'],['41','8','7','26'],['42','9','8','27'],['43','10','9','28'],['44','11','10','29'],['45','12','11','30'],['46','13','12','31']]}};
+let sizesType='clothing-f';
+function sizesSetType(btn){document.querySelectorAll('[data-type]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');sizesType=btn.dataset.type;sizesPopulateSelect();sizesRender();}
+function sizesPopulateSelect(){const data=SIZES_DATA[sizesType];const sys=document.getElementById('sizes-system');sys.innerHTML=data.headers.slice(0,3).map((h,i)=>`<option value="${i}">${h}</option>`).join('');sizesUpdateVal();}
+function sizesUpdateVal(){const data=SIZES_DATA[sizesType];const sysIdx=parseInt(document.getElementById('sizes-system').value)||0;const sel=document.getElementById('sizes-val');sel.innerHTML=data.rows.map((r,i)=>`<option value="${i}">${r[sysIdx]}</option>`).join('');sizesRender();}
+function sizesRender(){const data=SIZES_DATA[sizesType];const sysIdx=parseInt(document.getElementById('sizes-system').value)||0;const rowIdx=parseInt(document.getElementById('sizes-val').value)||0;const table=document.getElementById('sizes-table');table.innerHTML=`<tr>${data.headers.map(h=>`<th>${h}</th>`).join('')}</tr>`+data.rows.map((r,i)=>`<tr class="${i===rowIdx?'highlight':''}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('');}
+(function(){sizesPopulateSelect();document.getElementById('sizes-system').onchange=sizesUpdateVal;document.getElementById('sizes-val').onchange=sizesRender;})();
+
+// ══ EXCUSAS ══
+const EXCUSAS_DATA={trabajo:{label:'\uD83D\uDCBC Trabajo',items:['Se me fue la luz justo antes de la reunión.','Tuve una emergencia familiar que no pude prever.','Mi internet estuvo cortado toda la mañana.','El sistema me cerró la sesión y no encontraba la contraseña.','Tuve una visita inesperada del médico que no podía postergar.','Me quedé sin batería en el teléfono.','Estuve en otra reunión que se extendió mucho más de lo esperado.','Tuve que llevar urgente a mi mascota al veterinario.','El ascensor estuvo parado y llegué tarde al edificio.','Estuve con una jaqueca terrible que me dejó fuera de combate.']},social:{label:'\uD83C\uDF89 Social',items:['Justo esa noche no me siento muy bien, creo que estoy agripado.','Tengo a mi familia de visita, llegaron sin avisar.','Se me superpuso con algo que había olvidado completamente.','Mañana tengo algo muy temprano y necesito descansar.','Estoy esperando a un técnico en casa que puede venir a cualquier hora.','Me quedé sin efectivo y el cajero de mi barrio está roto.','Tenía que terminar algo urgente del trabajo que no puede esperar.','Prometí ayudar a un amigo con una mudanza.','Me quedé a cargo de los chicos sin haberlo planeado.','Tengo que hacer unos trámites que solo puedo hacer hoy.']},familia:{label:'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67 Familia',items:['Tengo una cosa del colegio de los chicos que no puedo mover.','Mi mamá no se siente bien y necesita que la acompañe.','Tenemos un asunto familiar que resolver urgente.','Me olvidé completamente que ese día teníamos algo en familia.','Mi pareja tiene un compromiso y yo me quedo con los chicos.','Se festeja el cumpleaños de mi abuela, no puedo faltar.','Tenemos que resolver un tema de papeles familiares que vence hoy.','Vino mi cuñado de sorpresa desde el interior.','Estoy ayudando a organizar una cosa familiar muy importante.','Se enfermó uno de mis hijos y no tengo con quién dejarlo.']},fitness:{label:'\uD83C\uDFC3 Gym',items:['Me lesioné la rodilla corriendo ayer, el médico me mandó a reposar.','Tengo una contractura en el hombro que me imposibilita entrenar.','Estoy resfriado y el entrenador me dijo que descanse.','Me quedé dormido después del trabajo, estaba agotado.','Tengo una reunión hasta tarde y llego a deshora.','Olvidé el bolso en casa y no tengo ropa de entrenamiento.','Está lloviendo a cántaros y vine caminando.','Me duele la cabeza desde la mañana, hoy no puedo.','Comí algo que no me cayó bien.','Tengo que esperar al plomero, me dijo que venía de 6 a 10.']},citas:{label:'\uD83D\uDC94 Citas',items:['Justo ese día tengo un compromiso que no puedo mover.','Me salió algo del trabajo de último momento, qué mala onda.','No me siento muy bien, no quiero contagiarte nada.','Se superpuso con algo de mi familia que ya tenía agendado.','Mi perro se enfermó y tengo que llevarlo al veterinario.','Necesito tiempo para mí esta semana, nada personal.','Un amigo me necesita, está pasando un momento difícil.','Me quedé sin batería y recién vi tu mensaje.','Tuve un día muy pesado y prefiero que sea otro día para estar al 100%.','Mi ex me llamó justo ahora y... ya sé, mala excusa, perdón.']}};
+let excusaCat='trabajo',excusaCurrent='';
+function excusaSetCat(cat){excusaCat=cat;document.querySelectorAll('.excusa-cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));}
+function excusaGenerate(){const items=EXCUSAS_DATA[excusaCat].items;const excusa=items[Math.floor(Math.random()*items.length)];excusaCurrent=excusa;document.getElementById('excusa-result').textContent=excusa;document.getElementById('excusa-share-card').style.display='block';}
+function excusaCopy(){if(excusaCurrent)navigator.clipboard&&navigator.clipboard.writeText(excusaCurrent);}
+function excusaShare(){if(excusaCurrent)window.open('https://wa.me/?text='+encodeURIComponent(excusaCurrent),'_blank');}
+(function(){const grid=document.getElementById('excusa-cats');grid.innerHTML=Object.entries(EXCUSAS_DATA).map(([k,v])=>`<button class="mode-pill excusa-cat-btn${k===excusaCat?' active':''}" data-cat="${k}" onclick="excusaSetCat('${k}')">${v.label}</button>`).join('');})();
+
+// ══ CÍRCULO DE QUINTAS ══
+const Q_NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const Q_NOTES_FLAT=['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+const Q_NOTE_DISPLAY=n=>Q_NOTES[n]+(Q_NOTES[n]!==Q_NOTES_FLAT[n]?'/'+Q_NOTES_FLAT[n]:'');
+const Q_CIRCLE_ORDER=[0,7,2,9,4,11,6,1,8,3,10,5];
+const Q_SCALES={
+  major:{name:'Mayor',intervals:[0,2,4,5,7,9,11],chords:[['M','maj7'],['m','m7'],['m','m7'],['M','maj7'],['M','7'],['m','m7'],['dim','m7b5']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'minor',relativeOffset:9},
+  minor:{name:'Menor natural',intervals:[0,2,3,5,7,8,10],chords:[['m','m7'],['dim','m7b5'],['M','maj7'],['m','m7'],['m','m7'],['M','maj7'],['M','7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:3},
+  harmonicMinor:{name:'Menor armónica',intervals:[0,2,3,5,7,8,11],chords:[['m','mM7'],['dim','m7b5'],['aug','maj7#5'],['m','m7'],['M','7'],['M','maj7'],['dim','dim7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:3},
+  melodicMinor:{name:'Menor melódica',intervals:[0,2,3,5,7,9,11],chords:[['m','mM7'],['m','m7'],['aug','maj7#5'],['M','7'],['M','7'],['dim','m7b5'],['dim','m7b5']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:3},
+  dorian:{name:'Dórica',intervals:[0,2,3,5,7,9,10],chords:[['m','m7'],['m','m7'],['M','maj7'],['M','7'],['m','m7'],['dim','m7b5'],['M','maj7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:10},
+  phrygian:{name:'Frigia',intervals:[0,1,3,5,7,8,10],chords:[['m','m7'],['M','maj7'],['M','7'],['m','m7'],['dim','m7b5'],['M','maj7'],['m','m7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:8},
+  lydian:{name:'Lidia',intervals:[0,2,4,6,7,9,11],chords:[['M','maj7'],['M','7'],['m','m7'],['dim','m7b5'],['M','maj7'],['m','m7'],['m','m7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'major',relativeOffset:5},
+  mixolydian:{name:'Mixolidia',intervals:[0,2,4,5,7,9,10],chords:[['M','7'],['m','m7'],['dim','m7b5'],['M','maj7'],['m','m7'],['m','m7'],['M','maj7']],degrees:['I','II','III','IV','V','VI','VII'],relativeMode:'minor',relativeOffset:2},
+  pentatonicMajor:{name:'Pentatónica mayor',intervals:[0,2,4,7,9],chords:[],degrees:['I','II','III','V','VI'],relativeMode:'minor',relativeOffset:9},
+  pentatonicMinor:{name:'Pentatónica menor',intervals:[0,3,5,7,10],chords:[],degrees:['I','III','IV','V','VII'],relativeMode:'major',relativeOffset:3},
+  blues:{name:'Blues',intervals:[0,3,5,6,7,10],chords:[],degrees:['I','III','IV','#IV','V','VII'],relativeMode:'major',relativeOffset:3},
+};
+const Q_CHORD_TRIADS={M:[0,4,7],m:[0,3,7],dim:[0,3,6],aug:[0,4,8]};
+const Q_QUALITY_COLORS={M:'oklch(44% 0.13 155)',m:'oklch(44% 0.13 240)',dim:'oklch(50% 0.14 22)',aug:'oklch(44% 0.11 185)'};
+
+function quintasNoteNames(root,intervals){return intervals.map(i=>Q_NOTES[(root+i)%12]);}
+function quintasChordNotes(root,quality){const ivs=Q_CHORD_TRIADS[quality]||Q_CHORD_TRIADS.M;return ivs.map(i=>Q_NOTES[(root+i)%12]).join('-');}
+function quintasUpdate(){
+  const root=parseInt(document.getElementById('quintas-root').value);
+  const scaleKey=document.getElementById('quintas-scale').value;
+  const scale=Q_SCALES[scaleKey];if(!scale)return;
+  const notes=quintasNoteNames(root,scale.intervals);
+  document.getElementById('quintas-notes').textContent=notes.join('  ·  ');
+  const chordsEl=document.getElementById('quintas-chords');
+  const chordsCard=document.getElementById('quintas-chords-card');
+  if(scale.chords&&scale.chords.length){
+    chordsCard.style.display='block';
+    chordsEl.innerHTML=scale.chords.map(([q,ext],i)=>{
+      const noteRoot=(root+scale.intervals[i])%12;
+      const chordName=Q_NOTES[noteRoot]+(q==='M'?'':q==='m'?'m':q==='dim'?'°':q==='aug'?'+':(q||''));
+      const chordNotes=quintasChordNotes(noteRoot,q);
+      const col=Q_QUALITY_COLORS[q]||'var(--text)';
+      const badge=q==='M'?'Mayor':q==='m'?'menor':q==='dim'?'dism.':q==='aug'?'aum.':q;
+      return `<div class="quintas-chord-row"><span class="quintas-degree">${scale.degrees[i]}</span><span class="quintas-chord-name" style="color:${col}">${chordName}</span><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:${col}20;color:${col};margin-right:6px">${badge}</span><span class="quintas-chord-notes">${chordNotes}</span></div>`;
+    }).join('');
+  }else{chordsCard.style.display='none';}
+  quintasDrawCircle(root,scale,notes);
+  quintasModulations(root,scaleKey,scale);
 }
+function quintasDrawCircle(root,scale,scaleNotes){
+  const wrap=document.getElementById('quintas-circle');wrap.innerHTML='';
+  const W=260,cx=130,cy=130;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width',W);svg.setAttribute('height',W);svg.style.position='absolute';svg.style.top='0';svg.style.left='0';
+  [115,75].forEach(r=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill','none');c.setAttribute('stroke','var(--border)');c.setAttribute('stroke-width','1');svg.appendChild(c);});
+  wrap.appendChild(svg);
+  const majorR=90,minorR=52;
+  Q_CIRCLE_ORDER.forEach((noteIdx,pos)=>{
+    const angle=(pos/12)*2*Math.PI-Math.PI/2;
+    const bx=cx+majorR*Math.cos(angle),by=cy+majorR*Math.sin(angle);
+    const btn=document.createElement('button');btn.className='quintas-note-btn';btn.style.left=bx+'px';btn.style.top=by+'px';
+    const noteName=Q_NOTES[noteIdx],flatName=Q_NOTES_FLAT[noteIdx];
+    btn.textContent=noteName+(noteName!==flatName?'/'+flatName:'');
+    btn.style.fontSize=noteName!==flatName?'8px':'11px';
+    if(noteIdx===root){btn.classList.add('active');}
+    else if(scaleNotes.includes(noteName)){btn.classList.add('related');}
+    btn.onclick=()=>{document.getElementById('quintas-root').value=noteIdx;quintasUpdate();};
+    wrap.appendChild(btn);
+    const relNote=(noteIdx+9)%12;
+    const bxi=cx+minorR*Math.cos(angle),byi=cy+minorR*Math.sin(angle);
+    const relBtn=document.createElement('button');relBtn.className='quintas-note-btn';relBtn.style.left=bxi+'px';relBtn.style.top=byi+'px';
+    relBtn.style.width='28px';relBtn.style.height='28px';relBtn.style.fontSize='9px';
+    relBtn.textContent=Q_NOTES[relNote]+'m';relBtn.style.color='var(--muted)';relBtn.style.borderColor='var(--border)';relBtn.style.background='var(--surface)';
+    wrap.appendChild(relBtn);
+  });
+}
+function quintasModulations(root,scaleKey,scale){
+  const el=document.getElementById('quintas-modulations');const mods=[];
+  if(scaleKey==='major'||scaleKey==='minor'){
+    mods.push({label:'Dominante (V)',root:(root+7)%12,mode:scaleKey,rel:'1 accidental'});
+    mods.push({label:'Subdominante (IV)',root:(root+5)%12,mode:scaleKey,rel:'1 accidental'});
+    mods.push({label:'Relativa '+Q_SCALES[scale.relativeMode].name,root:(root+scale.relativeOffset)%12,mode:scale.relativeMode,rel:'Mismas notas'});
+    mods.push({label:'Paralela '+Q_SCALES[scaleKey==='major'?'minor':'major'].name,root:root,mode:scaleKey==='major'?'minor':'major',rel:'Mismo tónico'});
+  }else{
+    mods.push({label:'Mayor relacionada',root:(root+scale.relativeOffset)%12,mode:'major',rel:'Escala madre'});
+    mods.push({label:'Mayor paralela',root:root,mode:'major',rel:'Mismo tónico'});
+    mods.push({label:'Menor paralela',root:root,mode:'minor',rel:'Mismo tónico'});
+  }
+  el.innerHTML=mods.map(m=>`<span class="quintas-mod-pill" onclick="quintasJumpTo(${m.root},'${m.mode}')">${Q_NOTE_DISPLAY(m.root)} ${Q_SCALES[m.mode]?Q_SCALES[m.mode].name:''}<span style="display:block;font-size:10px;color:var(--muted)">${m.rel}</span></span>`).join('');
+}
+function quintasJumpTo(root,mode){document.getElementById('quintas-root').value=root;document.getElementById('quintas-scale').value=mode;quintasUpdate();}
+quintasUpdate();
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
