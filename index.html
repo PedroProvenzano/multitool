@@ -409,6 +409,88 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .cat-card{transition:border-color .15s, transform .1s, box-shadow .15s;}
 .cat-card:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
 .tool-list-item:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
+
+/* ── POMODORO ── */
+.pomo-ring{position:relative;width:190px;height:190px;margin:0 auto 14px}
+.pomo-ring svg{transform:rotate(-90deg)}
+.pomo-ring-bg{fill:none;stroke:var(--surface2);stroke-width:10}
+.pomo-ring-fg{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .4s}
+.pomo-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.pomo-time-val{font-family:var(--font-mono);font-size:40px;font-weight:400;line-height:1;letter-spacing:.02em}
+.pomo-phase-label{font-size:11px;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.1em}
+.pomo-dots{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.pomo-dot{width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border);transition:all .3s}
+.pomo-dot.done{background:var(--accent);border-color:var(--accent)}
+.pomo-dot.current{background:oklch(44% 0.13 155 / 0.3);border-color:var(--accent)}
+.pomo-settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+
+/* ── WORLD CLOCK ── */
+.wc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.wc-row:last-child{border-bottom:none}
+.wc-left-city{font-size:14px;font-weight:500}
+.wc-left-tz{font-size:11px;color:var(--muted);margin-top:1px}
+.wc-right-time{font-family:var(--font-mono);font-size:22px;text-align:right}
+.wc-right-date{font-size:10px;color:var(--muted);text-align:right;margin-top:1px}
+.wc-remove{width:24px;height:24px;border-radius:6px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;margin-left:8px;flex-shrink:0}
+.wc-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.wc-add-btn{padding:9px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:12px;font-family:var(--font-body);color:var(--text);cursor:pointer;text-align:left;transition:all .15s}
+.wc-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.wc-add-btn:active{transform:scale(0.97)}
+
+/* ── HABITS ── */
+.habit-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.habit-row:last-child{border-bottom:none}
+.habit-check{width:30px;height:30px;border-radius:9px;border:2px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:16px}
+.habit-check.done{background:var(--accent);border-color:var(--accent);animation:bump .2s ease}
+.habit-name{flex:1;font-size:14px;font-weight:500}
+.habit-streak{font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.habit-del{width:22px;height:22px;border-radius:6px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;opacity:.5}
+.habit-del:hover{opacity:1;color:var(--danger)}
+.habit-add-row{display:flex;gap:8px;margin-top:10px}
+
+/* ── FUEL CALCULATOR ── */
+.fuel-result-big{font-family:var(--font-mono);font-size:38px;font-weight:400;color:var(--accent);text-align:center;padding:10px 0 4px}
+.fuel-result-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:10px}
+
+/* ── SAVINGS GOAL ── */
+.savings-bar{height:14px;background:var(--surface2);border-radius:7px;overflow:hidden;margin:10px 0 4px}
+.savings-bar-fill{height:100%;background:var(--accent);border-radius:7px;transition:width .5s ease}
+.savings-big{font-family:var(--font-mono);font-size:32px;color:var(--accent);text-align:center;padding:8px 0 2px}
+.savings-pct{font-size:13px;color:var(--muted);text-align:center}
+
+/* ── GRADIENT GENERATOR ── */
+.grad-preview{height:130px;border-radius:var(--radius);margin-bottom:12px;border:1px solid var(--border);transition:all .2s}
+.grad-css-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font-mono);font-size:11px;color:var(--muted);word-break:break-all;margin-bottom:8px;line-height:1.5}
+.grad-swatch{width:36px;height:36px;border-radius:8px;border:2px solid var(--border);cursor:pointer;flex-shrink:0;-webkit-appearance:none;appearance:none;padding:0;background:none}
+.grad-dir-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.grad-dir-btn{padding:8px 4px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;font-size:18px;cursor:pointer;text-align:center;transition:all .15s}
+.grad-dir-btn.active{background:oklch(44% 0.13 155 / 0.12);border-color:var(--accent)}
+
+/* ── PERIODIC TABLE ── */
+.pt-search{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-family:var(--font-body);font-size:15px;color:var(--text);outline:none;margin-bottom:10px;-webkit-appearance:none}
+.pt-search:focus{border-color:var(--accent)}
+.pt-list{display:flex;flex-direction:column;gap:0}
+.pt-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .1s}
+.pt-item:last-child{border-bottom:none}
+.pt-item:active{background:var(--surface2);margin:0 -4px;padding-left:4px;padding-right:4px;border-radius:8px}
+.pt-badge{width:42px;height:42px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;font-weight:500}
+.pt-badge-sym{font-family:var(--font-mono);font-size:16px;line-height:1}
+.pt-badge-num{font-size:9px;opacity:.7}
+.pt-item-info{flex:1}
+.pt-item-name{font-size:14px;font-weight:500}
+.pt-item-detail{font-size:11px;color:var(--muted);margin-top:1px}
+.pt-detail-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;display:none}
+.pt-detail-card.show{display:block;animation:fadeUp .18s ease}
+.pt-detail-sym{font-family:var(--font-mono);font-size:52px;font-weight:400;line-height:1}
+.pt-cat-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-top:6px;margin-bottom:10px}
+
+/* ── TEAM PICKER ── */
+.teams-textarea{width:100%;min-height:90px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--text);resize:vertical;outline:none;-webkit-appearance:none}
+.teams-textarea:focus{border-color:var(--accent)}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.team-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.team-member{padding:5px 0;border-bottom:1px solid var(--border);font-size:14px}
+.team-member:last-child{border-bottom:none}
 </style>
 </head>
 <body>
@@ -1137,6 +1219,198 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 </div>
 
 <!-- HOME -->
+<!-- POMODORO -->
+<div id="screen-pomodoro" class="screen">
+  <div class="pomo-ring">
+    <svg width="190" height="190" viewBox="0 0 190 190">
+      <circle class="pomo-ring-bg" cx="95" cy="95" r="80"/>
+      <circle class="pomo-ring-fg" id="pomo-fg" cx="95" cy="95" r="80" stroke-dasharray="502" stroke-dashoffset="0"/>
+    </svg>
+    <div class="pomo-center">
+      <div class="pomo-time-val" id="pomo-display">25:00</div>
+      <div class="pomo-phase-label" id="pomo-phase">Trabajo</div>
+    </div>
+  </div>
+  <div class="pomo-dots" id="pomo-dots"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px">
+    <button class="timer-btn btn" id="pomo-startstop" style="background:var(--accent);color:#fff;padding:15px;border-radius:12px;font-size:15px;font-weight:500" onclick="pomoToggle()">Iniciar</button>
+    <button class="timer-btn btn btn-ghost" onclick="pomoReset()">Reiniciar</button>
+  </div>
+  <div class="card">
+    <div class="card-label">Configuración (min)</div>
+    <div class="pomo-settings">
+      <div><div class="field-label">Trabajo</div><input class="sm-input" type="number" id="pomo-work" value="25" min="1" max="60" onchange="pomoReset()"></div>
+      <div><div class="field-label">Descanso</div><input class="sm-input" type="number" id="pomo-short" value="5" min="1" max="30" onchange="pomoReset()"></div>
+      <div><div class="field-label">Largo</div><input class="sm-input" type="number" id="pomo-long" value="15" min="1" max="60" onchange="pomoReset()"></div>
+    </div>
+  </div>
+  <div class="card" style="text-align:center">
+    <div class="card-label">Sesiones completadas hoy</div>
+    <div style="font-family:var(--font-mono);font-size:28px;color:var(--accent);margin-top:4px" id="pomo-sessions-today">0</div>
+  </div>
+</div>
+
+<!-- RELOJ MUNDIAL -->
+<div id="screen-worldclock" class="screen">
+  <div class="card" id="wc-list-card">
+    <div id="wc-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Agregar ciudad</div>
+    <div class="wc-add-grid" id="wc-add-grid"></div>
+  </div>
+</div>
+
+<!-- RASTREADOR DE HÁBITOS -->
+<div id="screen-habits" class="screen">
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+      <div class="card-label" style="margin:0">Hoy</div>
+      <div style="font-size:12px;color:var(--muted)" id="habits-date"></div>
+    </div>
+    <div id="habits-list" style="margin-top:8px"></div>
+    <div class="habit-add-row">
+      <input class="sm-input" type="text" id="habit-new-name" placeholder="Nuevo hábito..." style="flex:1">
+      <button class="btn btn-primary" style="width:auto;padding:9px 16px;font-size:14px" onclick="habitAdd()">+ Agregar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Resumen semanal</div>
+    <div id="habits-summary" style="font-size:13px;color:var(--muted);padding:4px 0"></div>
+  </div>
+</div>
+
+<!-- CALCULADORA DE COMBUSTIBLE -->
+<div id="screen-fuel" class="screen">
+  <div class="card">
+    <div class="card-label">Viaje</div>
+    <div class="row-2">
+      <div><div class="field-label">Distancia (km)</div><input class="sm-input" type="number" id="fuel-dist" placeholder="300" oninput="fuelCalc()"></div>
+      <div><div class="field-label">Consumo (L/100km)</div><input class="sm-input" type="number" id="fuel-cons" placeholder="8.5" step="0.1" oninput="fuelCalc()"></div>
+    </div>
+    <div class="row-2">
+      <div><div class="field-label">Precio combustible ($/L)</div><input class="sm-input" type="number" id="fuel-price" placeholder="1200" oninput="fuelCalc()"></div>
+      <div><div class="field-label">Personas (para dividir)</div><input class="sm-input" type="number" id="fuel-people" placeholder="1" min="1" value="1" oninput="fuelCalc()"></div>
+    </div>
+  </div>
+  <div class="card" id="fuel-result" style="display:none">
+    <div class="card-label">Resultado</div>
+    <div class="fuel-result-big" id="fuel-total">$0</div>
+    <div class="fuel-result-sub" id="fuel-sub"></div>
+    <div class="divider"></div>
+    <div class="row-between"><span style="font-size:13px;color:var(--muted)">Litros necesarios</span><span class="count-val" id="fuel-liters" style="font-size:16px"></span></div>
+    <div class="row-between" id="fuel-per-person-row"><span style="font-size:13px;color:var(--muted)">Por persona</span><span class="count-val" id="fuel-per-person" style="font-size:16px"></span></div>
+  </div>
+  <div class="card" style="text-align:center;color:var(--muted);font-size:13px" id="fuel-empty">
+    Completá los datos para calcular el costo del viaje
+  </div>
+</div>
+
+<!-- META DE AHORRO -->
+<div id="screen-savings" class="screen">
+  <div class="card">
+    <div class="card-label">Mi meta</div>
+    <div class="row-2">
+      <div><div class="field-label">Meta total ($)</div><input class="sm-input" type="number" id="sav-goal" placeholder="100000" oninput="savCalc()"></div>
+      <div><div class="field-label">Ahorrado hasta ahora ($)</div><input class="sm-input" type="number" id="sav-current" placeholder="0" oninput="savCalc()"></div>
+    </div>
+    <div class="row-2">
+      <div>
+        <div class="field-label">Fecha objetivo</div>
+        <input class="sm-input" type="date" id="sav-date" oninput="savCalc()" style="max-width:none">
+      </div>
+      <div><div class="field-label">Frecuencia de ahorro</div>
+        <select class="sm-input" id="sav-freq" onchange="savCalc()">
+          <option value="weekly">Semanal</option>
+          <option value="monthly" selected>Mensual</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="sav-result" style="display:none">
+    <div class="card-label">Progreso</div>
+    <div class="savings-bar"><div class="savings-bar-fill" id="sav-bar" style="width:0%"></div></div>
+    <div class="savings-pct" id="sav-pct"></div>
+    <div class="divider"></div>
+    <div class="savings-big" id="sav-amount"></div>
+    <div class="savings-pct" id="sav-period-label"></div>
+    <div class="divider"></div>
+    <div class="row-between"><span style="font-size:13px;color:var(--muted)">Faltan</span><span class="count-val" id="sav-remaining" style="font-size:15px"></span></div>
+    <div class="row-between"><span style="font-size:13px;color:var(--muted)">Tiempo restante</span><span class="count-val" id="sav-days" style="font-size:15px"></span></div>
+  </div>
+  <div class="card" style="text-align:center;color:var(--muted);font-size:13px" id="sav-empty">
+    Completá tu meta y fecha objetivo para calcular cuánto ahorrar
+  </div>
+</div>
+
+<!-- GENERADOR DE GRADIENTES -->
+<div id="screen-gradient" class="screen">
+  <div class="grad-preview" id="grad-preview"></div>
+  <div class="card">
+    <div class="card-label">Dirección</div>
+    <div class="grad-dir-grid" id="grad-dir-grid">
+      <button class="grad-dir-btn active" data-deg="to right" onclick="gradSetDir(this)">→</button>
+      <button class="grad-dir-btn" data-deg="to bottom" onclick="gradSetDir(this)">↓</button>
+      <button class="grad-dir-btn" data-deg="to bottom right" onclick="gradSetDir(this)">↘</button>
+      <button class="grad-dir-btn" data-deg="135deg" onclick="gradSetDir(this)">↗</button>
+    </div>
+    <div class="card-label">Colores</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <input type="color" class="grad-swatch" id="grad-c1" value="#7c6af7" oninput="gradUpdate()">
+      <div style="flex:1;height:2px;background:var(--border);border-radius:1px"></div>
+      <input type="color" class="grad-swatch" id="grad-c2" value="#4fc3c8" oninput="gradUpdate()">
+    </div>
+    <div class="grad-css-box" id="grad-css-box">background: linear-gradient(to right, #7c6af7, #4fc3c8);</div>
+    <button class="btn btn-primary" onclick="gradCopy()">Copiar CSS</button>
+  </div>
+  <div class="card">
+    <div class="card-label">Colores sugeridos</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap" id="grad-presets"></div>
+  </div>
+</div>
+
+<!-- TABLA PERIÓDICA -->
+<div id="screen-periodic" class="screen">
+  <input class="pt-search" type="text" id="pt-search" placeholder="Buscar elemento, símbolo o número..." oninput="ptSearch()">
+  <div class="pt-detail-card" id="pt-detail">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="pt-detail-sym" id="pt-d-sym"></div>
+        <div style="font-size:20px;font-weight:600;margin-top:2px" id="pt-d-name"></div>
+        <div class="pt-cat-pill" id="pt-d-cat"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:12px;color:var(--muted)">Número atómico</div>
+        <div style="font-family:var(--font-mono);font-size:28px;font-weight:400" id="pt-d-num"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Masa atómica</div>
+        <div style="font-family:var(--font-mono);font-size:18px" id="pt-d-mass"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="padding:10px">
+    <div class="pt-list" id="pt-list"></div>
+  </div>
+</div>
+
+<!-- ELEGIDOR DE EQUIPO -->
+<div id="screen-teams" class="screen">
+  <div class="card">
+    <div class="card-label">Participantes (uno por línea)</div>
+    <textarea class="teams-textarea" id="teams-names" placeholder="Pedro&#10;Ana&#10;Carlos&#10;María&#10;..."></textarea>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+      <div style="flex:1">
+        <div class="field-label">Número de equipos</div>
+        <input class="sm-input" type="number" id="teams-count" value="2" min="2" max="20">
+      </div>
+      <button class="btn btn-primary" style="margin-top:14px;width:auto;padding:10px 20px" onclick="teamsShuffle()">Sortear</button>
+    </div>
+  </div>
+  <div id="teams-result"></div>
+  <div style="display:none" id="teams-reshuf">
+    <button class="btn btn-ghost" style="width:100%;margin-top:2px" onclick="teamsShuffle()">🔀 Volver a sortear</button>
+  </div>
+</div>
+
 <div id="screen-home" class="screen active">
   <div style="padding:16px 14px 6px">
     <div class="home-greeting">ToolKit 🧰</div>
@@ -1186,6 +1460,14 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="trans" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 5h12M9 3v2m1.5 11l-4.5-4.5M5 11l4 4"/><path d="M11 19h10M17 17v4"/><rect x="11" y="11" width="10" height="8" rx="1" style="display:none"/></svg>Traducir</button>
   <button class="tab-btn" data-screen="dolar" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Dólar</button>
   <button class="tab-btn" data-screen="news" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2zM13 4v6h6M7 10h4M7 14h8M7 18h5"/></svg>Noticias</button>
+  <button class="tab-btn" data-screen="pomodoro" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/><path d="M9 3h6"/></svg>Pomodoro</button>
+  <button class="tab-btn" data-screen="worldclock" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 2.5-2.5 13.5 0 18M12 3c2.5 2.5 2.5 13.5 0 18M3 12h18"/></svg>Ciudades</button>
+  <button class="tab-btn" data-screen="habits" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3c1.27 0 2.49.26 3.59.73"/></svg>Hábitos</button>
+  <button class="tab-btn" data-screen="fuel" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v4h1a2 2 0 012 2v6a1 1 0 001 1 1 1 0 001-1v-7l-3-3"/><path d="M3 11h12"/></svg>Combustible</button>
+  <button class="tab-btn" data-screen="savings" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/><path d="M20 16.5c0 1.93-1.57 3.5-3.5 3.5"/></svg>Ahorro</button>
+  <button class="tab-btn" data-screen="gradient" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Gradiente</button>
+  <button class="tab-btn" data-screen="periodic" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Tabla Per.</button>
+  <button class="tab-btn" data-screen="teams" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Equipos</button>
 </nav>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1198,6 +1480,8 @@ const CATEGORIES=[
     {id:'loan',name:'Préstamos',desc:'Cuotas, intereses y amortización',icon:'💳'},
     {id:'imc',name:'IMC / Calorías',desc:'Índice de masa corporal y TDEE',icon:'⚖️'},
     {id:'tip',name:'Propinas',desc:'Calcular propina y dividir cuenta',icon:'🍽️'},
+    {id:'fuel',name:'Combustible',desc:'Costo de viaje por distancia y consumo',icon:'⛽'},
+    {id:'savings',name:'Meta de ahorro',desc:'Cuánto ahorrar para llegar a tu meta',icon:'🎯'},
   ]},
   {id:'conversiones',name:'Conversiones',icon:'🔄',tools:[
     {id:'fx',name:'Conversor de moneda',desc:'Divisas + dólar blue, MEP y CCL',icon:'💱'},
@@ -1214,6 +1498,8 @@ const CATEGORIES=[
   {id:'tiempo',name:'Tiempo',icon:'⏱️',tools:[
     {id:'timer',name:'Cronómetro',desc:'Cronómetro y cuenta regresiva',icon:'⏱️'},
     {id:'metro',name:'Metrónomo',desc:'Marcador de ritmo por BPM',icon:'🎵'},
+    {id:'pomodoro',name:'Pomodoro',desc:'Timer de trabajo y descanso con ciclos',icon:'🍅'},
+    {id:'worldclock',name:'Reloj mundial',desc:'Hora actual en múltiples ciudades',icon:'🌍'},
   ]},
   {id:'org',name:'Organización',icon:'📋',tools:[
     {id:'notes',name:'Notas',desc:'Bloc de notas con etiquetas',icon:'📝'},
@@ -1223,6 +1509,8 @@ const CATEGORIES=[
     {id:'split',name:'Dividir gastos',desc:'Quién le debe a quién',icon:'🤝'},
     {id:'games',name:'Marcador',desc:'Puntaje para juegos de mesa',icon:'🏆'},
     {id:'recipe',name:'Recetas',desc:'Escalar ingredientes',icon:'🍳'},
+    {id:'habits',name:'Hábitos',desc:'Rastreá hábitos diarios con racha',icon:'🔥'},
+    {id:'teams',name:'Equipos',desc:'Sortear personas en equipos al azar',icon:'👥'},
   ]},
   {id:'utilidades',name:'Utilidades',icon:'🛠️',tools:[
     {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷'},
@@ -1232,10 +1520,12 @@ const CATEGORIES=[
     {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐'},
     {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅'},
     {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰'},
+    {id:'gradient',name:'Gradientes',desc:'Generar gradientes CSS copiables',icon:'🌈'},
+    {id:'periodic',name:'Tabla periódica',desc:'Referencia de todos los elementos',icon:'⚗️'},
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos'};
 
 let navStack=[];
 
@@ -1561,39 +1851,45 @@ function colorCopyHex(){const h=document.getElementById('color-hex').textContent
 colorUpdate();
 
 // ══ IMC ══
-function calcIMC(){const peso=parseFloat(document.getElementById('imc-peso').value)||0,altura=parseFloat(document.getElementById('imc-altura').value)||0,edad=parseInt(document.getElementById('imc-edad').value)||25,sexo=document.getElementById('imc-sexo').value;if(!peso||!altura){document.getElementById('imc-result').style.display='none';return;}const altM=altura/100,imc=peso/(altM*altM);document.getElementById('imc-result').style.display='block';document.getElementById('imc-val').textContent=imc.toFixed(1);let cat,desc,color,pct;if(imc<18.5){cat='Bajo peso';desc='Considerá consultar a un médico';color='var(--accent2)';pct=Math.max(5,(imc-16)/2.5*25);}else if(imc<25){cat='Peso normal';desc='¡Excelente! Mantené tus hábitos';color='var(--success)';pct=25+(imc-18.5)/6.5*25;}else if(imc<30){cat='Sobrepeso';desc='Actividad física y alimentación equilibrada';color='var(--warn)';pct=50+(imc-25)/5*25;}else{cat='Obesidad';desc='Consultá con un profesional de salud';color='var(--danger)';pct=Math.min(95,75+(imc-30)/10*20);}document.getElementById('imc-cat').textContent=cat;document.getElementById('imc-cat').style.color=color;document.getElementById('imc-desc-txt').textContent=desc;document.getElementById('imc-pointer').style.left=pct+'%';const bmr=sexo==='m'?10*peso+6.25*altura-5*edad+5:10*peso+6.25*altura-5*edad-161;const actLevels=[{label:'Sedentario',mult:1.2},{label:'Ligero (1-3/sem)',mult:1.375},{label:'Moderado (3-5/sem)',mult:1.55},{label:'Activo (6-7/sem)',mult:1.725}];document.getElementById('imc-tdee').innerHTML=actLevels.map(a=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-family:var(--font-mono);font-size:16px;font-weight:500;color:var(--accent);margin-bottom:2px">${Math.round(bmr*a.mult)}</div><div style="font-size:10px;color:var(--muted)">${a.label}</div></div>`).join('');}
+function calcIMC(){const peso=parseFloat(document.getElementById('imc-peso').value)||0,altura=parseFloat(document.getElementById('imc-altura').value)||0,edad=parseInt(document.getElementById('imc-edad').value)||25,sexo=document.getElementById('imc-sexo').value;if(!peso||!altura){document.getElementById('imc-result').style.display='none';return;}const altM=altura/100,imc=peso/(altM*altM);document.getElementById('imc-result').style.display='block';document.getElementById('imc-val').textContent=imc.toFixed(1);let cat,desc,color,pct;if(imc<18.5){cat='Bajo peso';desc='Considerá consultar a un médico';color='var(--accent2)';pct=Math.max(5,(imc-16)/2.5*25);}else if(imc<25){cat='Peso normal';desc='¡Excelente! Mantené tus hábitos';color='var(--success)';pct=25+(imc-18.5)/6.5*25;}else if(imc<30){cat='Sobrepeso';desc='Actividad física y alimentación equilibrada';color='var(--warn)';pct=50+(imc-25)/5*25;}else{cat='Obesidad';desc='Consultá con un profesional de salud';color='var(--danger)';pct=Math.min(95,75+(imc-30)/10*20);}document.getElementById('imc-cat').textContent=cat;document.getElementById('imc-cat').style.color=color;document.getElementById('imc-desc-txt').textContent=desc;document.getElementById('imc-pointer').style.left=pct+'%';const bmr=sexo==='m'?10*peso+6.25*altura-5*edad+5:10*peso+6.25*altura-5*edad-161;const actLevels=[{label:'Sedentario',mult:1.2},{label:'Ligero (1-3/sem)',mult:1.375},{label:'Moderado (3-5/sem)',mult:1.55},{label:'Activo (6-7/sem)',mult:1.725}];document.getElementById('imc-tdee').innerHTML=actLevels.map(a=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:9px;text-align:center"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">${a.label}</div><div style="font-family:var(--font-mono);font-size:16px">${Math.round(bmr*a.mult)}</div><div style="font-size:10px;color:var(--muted)">kcal</div></div>`).join('');}
 
 // ══ CONTRASEÑAS ══
 let passOpts={upper:true,lower:true,numbers:true,symbols:true,noambig:false};
 function passToggleOpt(btn){const opt=btn.dataset.opt;passOpts[opt]=!passOpts[opt];btn.classList.toggle('active',passOpts[opt]);generatePass();}
-function generatePass(){const len=parseInt(document.getElementById('pass-len').value)||16;let chars='';if(passOpts.upper)chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';if(passOpts.lower)chars+='abcdefghijklmnopqrstuvwxyz';if(passOpts.numbers)chars+='0123456789';if(passOpts.symbols)chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';if(passOpts.noambig)chars=chars.replace(/[0O1lI]/g,'');if(!chars)chars='abcdefghijklmnopqrstuvwxyz';let pass='';for(let i=0;i<len;i++)pass+=chars[Math.floor(Math.random()*chars.length)];document.getElementById('pass-output').textContent=pass;let strength=0;if(len>=12)strength++;if(len>=20)strength++;if(passOpts.upper&&passOpts.lower)strength++;if(passOpts.numbers)strength++;if(passOpts.symbols)strength++;const labels=['','Muy débil','Débil','Regular','Fuerte','Muy fuerte'];const colors=['','var(--danger)','var(--warn)','var(--warn)','var(--success)','var(--success)'];document.getElementById('pass-strength').style.width=(strength/5*100)+'%';document.getElementById('pass-strength').style.background=colors[strength]||'var(--muted)';document.getElementById('pass-strength-label').textContent=labels[strength]||'';}
+function generatePass(){const len=parseInt(document.getElementById('pass-len').value)||16;let chars='';if(passOpts.upper)chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';if(passOpts.lower)chars+='abcdefghijklmnopqrstuvwxyz';if(passOpts.numbers)chars+='0123456789';if(passOpts.symbols)chars+='!@#$%^&*()-_=+[]{}|;:,.<>?';if(passOpts.noambig){chars=chars.replace(/[0OIl1]/g,'');}if(!chars){document.getElementById('pass-output').textContent='Seleccioná al menos una opción';return;}let pass='';const arr=new Uint32Array(len);crypto.getRandomValues(arr);for(let i=0;i<len;i++)pass+=chars[arr[i]%chars.length];document.getElementById('pass-output').textContent=pass;const ent=Math.log2(Math.pow(chars.length,len));let strength,color;if(ent<28){strength='Muy débil';color='var(--danger)'}else if(ent<36){strength='Débil';color='var(--warn)'}else if(ent<60){strength='Moderada';color='oklch(55% 0.13 75)'}else if(ent<80){strength='Fuerte';color='var(--success)'}else{strength='Muy fuerte';color='var(--success)';}document.getElementById('pass-strength').style.width=Math.min(100,ent/128*100)+'%';document.getElementById('pass-strength').style.background=color;document.getElementById('pass-strength-label').textContent=`${strength} · ${Math.round(ent)} bits`;if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(()=>{});}
+function passShare(){const p=document.getElementById('pass-output').textContent;window.open('https://wa.me/?text='+encodeURIComponent(p),'_blank');}
 generatePass();
 
 // ══ PORCENTAJES ══
 let pctMode='xofy';
 function pctSetMode(btn){document.querySelectorAll('.pct-mode-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');pctMode=btn.dataset.pm;document.getElementById('pct-xofy').style.display=pctMode==='xofy'?'block':'none';document.getElementById('pct-whatpct').style.display=pctMode==='whatpct'?'block':'none';document.getElementById('pct-change').style.display=pctMode==='change'?'block':'none';}
-function calcPct(){const x=parseFloat(document.getElementById('pct-x').value)||0,y=parseFloat(document.getElementById('pct-y').value)||0,r=y*x/100;document.getElementById('pct-res1').textContent=parseFloat(r.toFixed(4));document.getElementById('pct-res1-sub').textContent=`${x}% de ${y} = ${r.toFixed(4)}`;}
-function calcPct2(){const a=parseFloat(document.getElementById('pct-a').value)||0,b=parseFloat(document.getElementById('pct-b').value)||0;if(!b){document.getElementById('pct-res2').textContent='—';return;}const r=a/b*100;document.getElementById('pct-res2').textContent=parseFloat(r.toFixed(2))+'%';document.getElementById('pct-res2-sub').textContent=`${a} es el ${r.toFixed(2)}% de ${b}`;}
-function calcPct3(){const c=parseFloat(document.getElementById('pct-c').value)||0,d=parseFloat(document.getElementById('pct-d').value)||0;if(!c){document.getElementById('pct-res3').textContent='—';return;}const r=(d-c)/c*100;document.getElementById('pct-res3').textContent=(r>=0?'+':'')+r.toFixed(2)+'%';document.getElementById('pct-res3').style.color=r>=0?'var(--success)':'var(--danger)';document.getElementById('pct-res3-sub').textContent=`De ${c} a ${d}: ${r>=0?'+':''}${r.toFixed(2)}%`;}
+function calcPct(){const x=parseFloat(document.getElementById('pct-x').value),y=parseFloat(document.getElementById('pct-y').value);if(isNaN(x)||isNaN(y)){document.getElementById('pct-res1').textContent='—';return;}const r=x/100*y;document.getElementById('pct-res1').textContent=r.toLocaleString('es-AR',{maximumFractionDigits:4});document.getElementById('pct-res1-sub').textContent=`El ${x}% de ${y} es ${r.toLocaleString('es-AR',{maximumFractionDigits:4})}`;}
+function calcPct2(){const a=parseFloat(document.getElementById('pct-a').value),b=parseFloat(document.getElementById('pct-b').value);if(isNaN(a)||isNaN(b)||!b){document.getElementById('pct-res2').textContent='—';return;}const r=a/b*100;document.getElementById('pct-res2').textContent=r.toFixed(2)+'%';document.getElementById('pct-res2-sub').textContent=`${a} es el ${r.toFixed(2)}% de ${b}`;}
+function calcPct3(){const c=parseFloat(document.getElementById('pct-c').value),d=parseFloat(document.getElementById('pct-d').value);if(isNaN(c)||isNaN(d)||!c){document.getElementById('pct-res3').textContent='—';return;}const r=(d-c)/c*100;document.getElementById('pct-res3').textContent=(r>=0?'+':'')+r.toFixed(2)+'%';document.getElementById('pct-res3-sub').textContent=`Variación de ${c} a ${d}: ${r>=0?'aumento':'disminución'} del ${Math.abs(r).toFixed(2)}%`;}
 
 // ══ RECETAS ══
-let recipeIngredients=[{name:'Harina',amount:200,unit:'g'},{name:'Azúcar',amount:100,unit:'g'},{name:'Manteca',amount:100,unit:'g'},{name:'Huevos',amount:2,unit:'u'}];
-function recipeRender(){document.getElementById('recipe-ingredients').innerHTML=recipeIngredients.map((ing,i)=>{const orig=parseFloat(document.getElementById('recipe-orig').value)||4;const nuevo=parseFloat(document.getElementById('recipe-new').value)||4;const factor=nuevo/orig;const scaled=ing.amount*factor;return`<div class="recipe-ingredient"><div style="flex:1"><div style="font-size:14px;font-weight:500">${ing.name}</div><div class="recipe-original">${ing.amount} ${ing.unit} (original)</div></div><div style="text-align:right"><div class="recipe-scaled">${parseFloat(scaled.toFixed(2))}</div><div style="font-size:11px;color:var(--muted)">${ing.unit}</div></div><button class="option-remove" style="margin-left:6px" onclick="recipeRemove(${i})">×</button></div>`;}).join('');}
+let recipeIngredients=[{qty:200,unit:'g',name:'Harina'},{qty:2,unit:'un.',name:'Huevos'},{qty:100,unit:'ml',name:'Leche'}];
+function recipeRender(){const orig=parseFloat(document.getElementById('recipe-orig').value)||4,nw=parseFloat(document.getElementById('recipe-new').value)||4;const ratio=nw/orig;document.getElementById('recipe-ingredients').innerHTML=recipeIngredients.map((ing,i)=>{const scaled=ing.qty*ratio;return `<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><input class="sm-input" type="number" step="any" value="${ing.qty}" style="width:70px;font-family:var(--font-mono)" oninput="recipeUpdateQty(${i},this.value)"><input class="sm-input" value="${ing.unit}" style="width:50px;text-align:center" oninput="recipeUpdateUnit(${i},this.value)"><input class="sm-input" value="${ing.name}" style="flex:1" oninput="recipeUpdateName(${i},this.value)"><span style="font-family:var(--font-mono);font-size:15px;color:var(--accent);min-width:60px;text-align:right">${scaled%1===0?scaled:scaled.toFixed(1)} ${ing.unit}</span><button onclick="recipeRemove(${i})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer">×</button></div>`;}).join('');}
 function recipeScale(){recipeRender();}
-function recipeAddIngredient(){const name=prompt('Nombre del ingrediente:');if(!name)return;const amount=parseFloat(prompt('Cantidad:')||'0');const unit=prompt('Unidad (g, ml, u, taza...):') ||'u';if(name&&amount)recipeIngredients.push({name,amount,unit});recipeRender();}
+function recipeAddIngredient(){recipeIngredients.push({qty:100,unit:'g',name:'Ingrediente'});recipeRender();}
+function recipeUpdateQty(i,v){recipeIngredients[i].qty=parseFloat(v)||0;recipeRender();}
+function recipeUpdateUnit(i,v){recipeIngredients[i].unit=v;recipeRender();}
+function recipeUpdateName(i,v){recipeIngredients[i].name=v;}
 function recipeRemove(i){recipeIngredients.splice(i,1);recipeRender();}
 recipeRender();
 
 // ══ METRÓNOMO ══
-let metroBPM=120,metroRunning=false,metroInterval=null,metroBeat=false;
-const metroCtx=window.AudioContext?new AudioContext():null;
-function metroSetBPM(bpm){metroBPM=Math.max(20,Math.min(300,parseInt(bpm)));document.getElementById('metro-bpm-display').textContent=metroBPM;document.getElementById('metro-slider').value=metroBPM;if(metroRunning){clearInterval(metroInterval);metroInterval=setInterval(metroTick,60000/metroBPM);}}
-function metroBpmChange(d){metroSetBPM(metroBPM+d);}
-function metroTick(){metroBeat=!metroBeat;const beat=document.getElementById('metro-beat');beat.classList.toggle('active',metroBeat);if(metroCtx){const osc=metroCtx.createOscillator();const gain=metroCtx.createGain();osc.connect(gain);gain.connect(metroCtx.destination);osc.frequency.value=metroBeat?880:660;gain.gain.setValueAtTime(0.3,metroCtx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,metroCtx.currentTime+0.05);osc.start(metroCtx.currentTime);osc.stop(metroCtx.currentTime+0.05);}}
-function metroToggle(){metroRunning=!metroRunning;const btn=document.getElementById('metro-play-btn');if(metroRunning){if(metroCtx&&metroCtx.state==='suspended')metroCtx.resume();metroInterval=setInterval(metroTick,60000/metroBPM);btn.textContent='⏸ Pausar';btn.style.background='oklch(50% 0.14 22 / 0.12)';btn.style.color='var(--danger)';}else{clearInterval(metroInterval);document.getElementById('metro-beat').classList.remove('active');btn.textContent='▶ Iniciar';btn.style.background='var(--accent)';btn.style.color='#fff';}}
+let metroBpm=120,metroRunning=false,metroInterval=null,metroBeat=0;
+let metroCtx=null;
+function metroGetCtx(){if(!metroCtx)metroCtx=new(window.AudioContext||window.webkitAudioContext)();return metroCtx;}
+function metroClick(accent){try{const ctx=metroGetCtx();const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=accent?1000:800;g.gain.setValueAtTime(0.4,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.05);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.06);}catch(e){}}
+function metroSetBPM(bpm){metroBpm=Math.max(20,Math.min(300,parseInt(bpm)));document.getElementById('metro-bpm-display').textContent=metroBpm;document.getElementById('metro-slider').value=metroBpm;if(metroRunning){clearInterval(metroInterval);metroInterval=setInterval(metroBeatFn,60000/metroBpm);}}
+function metroBpmChange(d){metroSetBPM(metroBpm+d);}
+function metroBeatFn(){metroBeat=(metroBeat+1)%4;metroClick(metroBeat===0);const b=document.getElementById('metro-beat');b.classList.remove('active');void b.offsetWidth;b.classList.add('active');}
+function metroToggle(){if(metroRunning){clearInterval(metroInterval);metroRunning=false;document.getElementById('metro-play-btn').textContent='▶ Iniciar';}else{metroBeat=-1;metroRunning=true;document.getElementById('metro-play-btn').textContent='■ Detener';document.getElementById('metro-play-btn').style.background='oklch(50% 0.14 22 / 0.12)';document.getElementById('metro-play-btn').style.color='var(--danger)';metroInterval=setInterval(metroBeatFn,60000/metroBpm);}}
 
-// ══ NIVEL BURBUJA ══
-let levelCalibration={x:0,y:0},levelActive=false,levelGamma=0,levelBeta=0;
+// ══ NIVEL ══
+let levelGamma=0,levelBeta=0,levelCalibration={x:0,y:0},levelActive=false;
 function levelIsLandscape(){return window.innerWidth>window.innerHeight;}
 function levelDraw(){
   const isLandscape=levelIsLandscape();
@@ -1698,6 +1994,233 @@ function expClearAll(){if(confirm('¿Borrar todos los gastos?')){expenses=[];loc
   if(url)document.getElementById('exp-webhook').value=url;
   expRender();
 })();
+
+// ══ POMODORO ══
+let pomoState={running:false,phase:'work',cycle:0,totalCycles:4,seconds:0,interval:null,sessionsToday:0,lastDate:''};
+function pomoGetDurations(){return{work:parseInt(document.getElementById('pomo-work').value)||25,short:parseInt(document.getElementById('pomo-short').value)||5,long:parseInt(document.getElementById('pomo-long').value)||15};}
+function pomoPhaseDuration(ph){const d=pomoGetDurations();return ph==='work'?d.work*60:ph==='long'?d.long*60:d.short*60;}
+function pomoReset(){if(pomoState.interval)clearInterval(pomoState.interval);pomoState.running=false;pomoState.phase='work';pomoState.cycle=0;pomoState.seconds=0;pomoRender();const btn=document.getElementById('pomo-startstop');btn.textContent='Iniciar';btn.style.cssText='background:var(--accent);color:#fff;padding:15px;border-radius:12px;font-size:15px;font-weight:500';}
+function pomoToggle(){
+  if(pomoState.running){clearInterval(pomoState.interval);pomoState.running=false;const btn=document.getElementById('pomo-startstop');btn.textContent='Continuar';btn.style.cssText='background:var(--accent);color:#fff;padding:15px;border-radius:12px;font-size:15px;font-weight:500';}
+  else{pomoState.running=true;const btn=document.getElementById('pomo-startstop');btn.textContent='Pausar';btn.style.cssText='background:oklch(50% 0.14 22 / 0.12);color:var(--danger);border:1px solid oklch(50% 0.14 22 / 0.2);padding:15px;border-radius:12px;font-size:15px;font-weight:500';
+    if(pomoState.seconds===0)pomoState.seconds=pomoPhaseDuration(pomoState.phase);
+    pomoState.interval=setInterval(pomoTick,1000);}
+}
+function pomoTick(){
+  pomoState.seconds--;
+  if(pomoState.seconds<=0){
+    clearInterval(pomoState.interval);pomoState.running=false;
+    if(pomoState.phase==='work'){
+      const today=new Date().toDateString();if(pomoState.lastDate!==today){pomoState.sessionsToday=0;pomoState.lastDate=today;}
+      pomoState.sessionsToday++;localStorage.setItem('pomo-sessions',JSON.stringify({count:pomoState.sessionsToday,date:today}));
+      document.getElementById('pomo-sessions-today').textContent=pomoState.sessionsToday;
+      pomoState.cycle++;
+      if(pomoState.cycle>=pomoState.totalCycles){pomoState.phase='long';pomoState.cycle=0;}else{pomoState.phase='short';}
+    }else{pomoState.phase='work';}
+    pomoState.seconds=pomoPhaseDuration(pomoState.phase);
+    const btn=document.getElementById('pomo-startstop');btn.textContent='Iniciar';btn.style.cssText='background:var(--accent);color:#fff;padding:15px;border-radius:12px;font-size:15px;font-weight:500';
+    const msg=pomoState.phase==='work'?'¡A trabajar! 🍅':'¡Descansá! ☕';
+    alert(msg);
+    return;
+  }
+  pomoRender();
+}
+function pomoRender(){
+  const total=pomoPhaseDuration(pomoState.phase);const rem=pomoState.seconds||total;
+  const m=Math.floor(rem/60),s=rem%60;
+  document.getElementById('pomo-display').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  document.getElementById('pomo-phase').textContent=pomoState.phase==='work'?'Trabajo':pomoState.phase==='short'?'Descanso corto':'Descanso largo';
+  const r=80,circ=2*Math.PI*r,offset=circ*(1-rem/total);
+  const fg=document.getElementById('pomo-fg');
+  if(fg){fg.style.stroke=pomoState.phase==='work'?'var(--accent)':pomoState.phase==='short'?'var(--success)':'var(--accent2)';fg.style.strokeDashoffset=offset;}
+  const dots=document.getElementById('pomo-dots');
+  let html='';for(let i=0;i<pomoState.totalCycles;i++){const cls=i<pomoState.cycle?'done':i===pomoState.cycle&&pomoState.phase==='work'?'current':'';html+=`<div class="pomo-dot ${cls}"></div>`;}
+  dots.innerHTML=html;
+}
+(function(){
+  const fg=document.getElementById('pomo-fg');if(fg){const r=80,circ=2*Math.PI*r;fg.style.strokeDasharray=circ;fg.style.strokeDashoffset=0;}
+  const saved=JSON.parse(localStorage.getItem('pomo-sessions')||'null');
+  if(saved&&saved.date===new Date().toDateString()){pomoState.sessionsToday=saved.count;pomoState.lastDate=saved.date;document.getElementById('pomo-sessions-today').textContent=saved.count;}
+  pomoRender();
+})();
+
+// ══ RELOJ MUNDIAL ══
+const WC_CITIES=[
+  {name:'Buenos Aires',tz:'America/Argentina/Buenos_Aires',flag:'\uD83C\uDDE6\uD83C\uDDF7'},
+  {name:'Nueva York',tz:'America/New_York',flag:'\uD83C\uDDFA\uD83C\uDDF8'},
+  {name:'Londres',tz:'Europe/London',flag:'\uD83C\uDDEC\uD83C\uDDE7'},
+  {name:'Madrid',tz:'Europe/Madrid',flag:'\uD83C\uDDEA\uD83C\uDDF8'},
+  {name:'París',tz:'Europe/Paris',flag:'\uD83C\uDDEB\uD83C\uDDF7'},
+  {name:'Berlín',tz:'Europe/Berlin',flag:'\uD83C\uDDE9\uD83C\uDDEA'},
+  {name:'Dubai',tz:'Asia/Dubai',flag:'\uD83C\uDDE6\uD83C\uDDEA'},
+  {name:'Tokio',tz:'Asia/Tokyo',flag:'\uD83C\uDDEF\uD83C\uDDF5'},
+  {name:'Sídney',tz:'Australia/Sydney',flag:'\uD83C\uDDE6\uD83C\uDDFA'},
+  {name:'Ciudad de México',tz:'America/Mexico_City',flag:'\uD83C\uDDF2\uD83C\uDDFD'},
+  {name:'São Paulo',tz:'America/Sao_Paulo',flag:'\uD83C\uDDE7\uD83C\uDDF7'},
+  {name:'Los Ángeles',tz:'America/Los_Angeles',flag:'\uD83C\uDDFA\uD83C\uDDF8'},
+  {name:'Singapur',tz:'Asia/Singapore',flag:'\uD83C\uDDF8\uD83C\uDDEC'},
+  {name:'Moscú',tz:'Europe/Moscow',flag:'\uD83C\uDDF7\uD83C\uDDFA'},
+  {name:'Shanghái',tz:'Asia/Shanghai',flag:'\uD83C\uDDE8\uD83C\uDDF3'},
+  {name:'Mumbai',tz:'Asia/Kolkata',flag:'\uD83C\uDDEE\uD83C\uDDF3'},
+];
+let wcActive=JSON.parse(localStorage.getItem('wc-cities')||'["America/Argentina/Buenos_Aires","America/New_York","Europe/London","Asia/Tokyo"]');
+function wcRender(){
+  const list=document.getElementById('wc-list');
+  const now=new Date();
+  list.innerHTML=wcActive.map(tz=>{
+    const city=WC_CITIES.find(c=>c.tz===tz)||{name:tz,flag:'\uD83C\uDF0D'};
+    const time=now.toLocaleTimeString('es-AR',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+    const date=now.toLocaleDateString('es-AR',{timeZone:tz,weekday:'short',day:'numeric',month:'short'});
+    return `<div class="wc-row"><div><div class="wc-left-city">${city.flag} ${city.name}</div><div class="wc-left-tz">${tz.split('/').pop().replace(/_/g,' ')}</div></div><div style="display:flex;align-items:center;gap:6px"><div><div class="wc-right-time">${time}</div><div class="wc-right-date">${date}</div></div><button class="wc-remove" onclick="wcRemove('${tz}')">×</button></div></div>`;
+  }).join('');
+  const grid=document.getElementById('wc-add-grid');
+  const available=WC_CITIES.filter(c=>!wcActive.includes(c.tz));
+  grid.innerHTML=available.map(c=>`<button class="wc-add-btn" onclick="wcAdd('${c.tz}')">+ ${c.flag} ${c.name}</button>`).join('');
+}
+function wcAdd(tz){if(!wcActive.includes(tz)){wcActive.push(tz);localStorage.setItem('wc-cities',JSON.stringify(wcActive));wcRender();}}
+function wcRemove(tz){wcActive=wcActive.filter(t=>t!==tz);localStorage.setItem('wc-cities',JSON.stringify(wcActive));wcRender();}
+(function(){wcRender();setInterval(wcRender,1000);})();
+
+// ══ HÁBITOS ══
+let habits=JSON.parse(localStorage.getItem('habits-v2')||'[]');
+function habitTodayKey(){return new Date().toISOString().slice(0,10);}
+function habitAdd(){const inp=document.getElementById('habit-new-name');const name=inp.value.trim();if(!name)return;habits.push({id:Date.now()+'',name,checks:{}});habitSave();inp.value='';habitRender();}
+function habitToggle(id){const h=habits.find(x=>x.id===id);if(!h)return;const today=habitTodayKey();if(h.checks[today]){delete h.checks[today];}else{h.checks[today]=true;}habitSave();habitRender();}
+function habitCalcStreak(h){let streak=0,d=new Date();for(let i=0;i<365;i++){const key=d.toISOString().slice(0,10);if(h.checks[key]){streak++;}else if(i>0){break;}d.setDate(d.getDate()-1);}return streak;}
+function habitRemove(id){habits=habits.filter(h=>h.id!==id);habitSave();habitRender();}
+function habitSave(){localStorage.setItem('habits-v2',JSON.stringify(habits));}
+function habitRender(){
+  const today=habitTodayKey();
+  const d=new Date();
+  document.getElementById('habits-date').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  const list=document.getElementById('habits-list');
+  if(!habits.length){list.innerHTML='<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">Agregá tu primer hábito abajo</div>';document.getElementById('habits-summary').innerHTML='';return;}
+  list.innerHTML=habits.map(h=>{const done=!!h.checks[today];const streak=habitCalcStreak(h);return `<div class="habit-row"><div class="habit-check ${done?'done':''}" onclick="habitToggle('${h.id}')">${done?'✓':''}</div><div class="habit-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${h.name}</div><div class="habit-streak">\uD83D\uDD25 ${streak}</div><button class="habit-del" onclick="habitRemove('${h.id}')">×</button></div>`;}).join('');
+  const doneCount=habits.filter(h=>h.checks[today]).length;
+  document.getElementById('habits-summary').innerHTML=`<div style="display:flex;justify-content:space-between"><span>Hoy completados</span><span style="font-family:var(--font-mono);color:var(--accent)">${doneCount} / ${habits.length}</span></div><div style="height:6px;background:var(--surface2);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:${habits.length?doneCount/habits.length*100:0}%;background:var(--accent);border-radius:3px;transition:width .4s"></div></div>`;
+}
+habitRender();
+
+// ══ COMBUSTIBLE ══
+function fuelCalc(){
+  const dist=parseFloat(document.getElementById('fuel-dist').value);
+  const cons=parseFloat(document.getElementById('fuel-cons').value);
+  const price=parseFloat(document.getElementById('fuel-price').value);
+  const people=parseInt(document.getElementById('fuel-people').value)||1;
+  const res=document.getElementById('fuel-result');const empty=document.getElementById('fuel-empty');
+  if(!dist||!cons||!price){res.style.display='none';empty.style.display='block';return;}
+  const liters=dist/100*cons;const total=liters*price;const perPerson=total/people;
+  res.style.display='block';empty.style.display='none';
+  document.getElementById('fuel-total').textContent='$'+total.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('fuel-sub').textContent=`${dist} km · ${cons} L/100km · $${price}/L`;
+  document.getElementById('fuel-liters').textContent=liters.toFixed(1)+' L';
+  const ppRow=document.getElementById('fuel-per-person-row');
+  if(people>1){ppRow.style.display='flex';document.getElementById('fuel-per-person').textContent='$'+perPerson.toLocaleString('es-AR',{maximumFractionDigits:0});}
+  else{ppRow.style.display='none';}
+}
+
+// ══ META DE AHORRO ══
+function savCalc(){
+  const goal=parseFloat(document.getElementById('sav-goal').value);
+  const current=parseFloat(document.getElementById('sav-current').value)||0;
+  const date=document.getElementById('sav-date').value;
+  const freq=document.getElementById('sav-freq').value;
+  const res=document.getElementById('sav-result');const empty=document.getElementById('sav-empty');
+  if(!goal||!date){res.style.display='none';empty.style.display='block';return;}
+  const remaining=Math.max(0,goal-current);const pct=Math.min(100,current/goal*100);
+  const today=new Date();const target=new Date(date+'T12:00:00');
+  const diffMs=target-today;const diffDays=Math.max(0,Math.ceil(diffMs/(1000*60*60*24)));
+  const weeks=diffDays/7;const months=diffDays/30.44;
+  const perPeriod=freq==='weekly'?(weeks>0?remaining/weeks:remaining):(months>0?remaining/months:remaining);
+  const label=freq==='weekly'?'Por semana':'Por mes';
+  res.style.display='block';empty.style.display='none';
+  document.getElementById('sav-bar').style.width=pct+'%';
+  document.getElementById('sav-pct').textContent=pct.toFixed(1)+'% completado · $'+current.toLocaleString('es-AR',{maximumFractionDigits:0})+' de $'+goal.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('sav-amount').textContent='$'+perPeriod.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('sav-period-label').textContent=label+' para llegar a la meta';
+  document.getElementById('sav-remaining').textContent='$'+remaining.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('sav-days').textContent=diffDays>0?`${diffDays} días (${freq==='weekly'?weeks.toFixed(0)+' semanas':months.toFixed(1)+' meses'})`:'¡Fecha pasada!';
+}
+(function(){document.getElementById('sav-date').min=new Date().toISOString().slice(0,10);})();
+
+// ══ GRADIENTES ══
+let gradDir='to right';
+function gradUpdate(){
+  const c1=document.getElementById('grad-c1').value;const c2=document.getElementById('grad-c2').value;
+  const css=`linear-gradient(${gradDir}, ${c1}, ${c2})`;
+  document.getElementById('grad-preview').style.background=css;
+  document.getElementById('grad-css-box').textContent=`background: ${css};`;
+}
+function gradSetDir(btn){document.querySelectorAll('.grad-dir-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');gradDir=btn.dataset.deg;gradUpdate();}
+function gradCopy(){const css=document.getElementById('grad-css-box').textContent;navigator.clipboard.writeText(css).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent=orig,1500);}).catch(()=>{});}
+(function(){
+  const presets=[['#7c6af7','#4fc3c8'],['#ff6b6b','#ffd93d'],['#6bcb77','#4d96ff'],['#f7971e','#ffd200'],['#ee0979','#ff6a00'],['#614385','#516395'],['#4facfe','#00f2fe'],['#43e97b','#38f9d7']];
+  document.getElementById('grad-presets').innerHTML=presets.map(([a,b])=>`<div onclick="gradApplyPreset('${a}','${b}')" style="width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,${a},${b});cursor:pointer;border:2px solid var(--border);flex-shrink:0;transition:transform .1s" onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform=''"></div>`).join('');
+  gradUpdate();
+})();
+function gradApplyPreset(a,b){document.getElementById('grad-c1').value=a;document.getElementById('grad-c2').value=b;gradUpdate();}
+
+// ══ TABLA PERIÓDICA ══
+const PT_CATS={
+  'alkali':{label:'Metal alcalino',bg:'oklch(55% 0.18 35 / 0.2)',text:'oklch(40% 0.18 35)'},
+  'alkaline':{label:'Metal alcalinotérreo',bg:'oklch(55% 0.15 75 / 0.2)',text:'oklch(40% 0.15 75)'},
+  'transition':{label:'Metal de transición',bg:'oklch(44% 0.13 240 / 0.2)',text:'oklch(33% 0.13 240)'},
+  'post-transition':{label:'Metal post-transición',bg:'oklch(44% 0.11 185 / 0.2)',text:'oklch(33% 0.11 185)'},
+  'metalloid':{label:'Metaloide',bg:'oklch(44% 0.13 155 / 0.2)',text:'oklch(33% 0.13 155)'},
+  'no-metal':{label:'No metal',bg:'oklch(44% 0.13 155 / 0.15)',text:'oklch(33% 0.13 155)'},
+  'halogen':{label:'Halógeno',bg:'oklch(44% 0.13 300 / 0.2)',text:'oklch(33% 0.13 300)'},
+  'noble-gas':{label:'Gas noble',bg:'oklch(44% 0.11 260 / 0.2)',text:'oklch(33% 0.11 260)'},
+  'lanthanide':{label:'Lantánido',bg:'oklch(50% 0.14 22 / 0.2)',text:'oklch(38% 0.14 22)'},
+  'actinide':{label:'Actínido',bg:'oklch(50% 0.14 340 / 0.2)',text:'oklch(38% 0.14 340)'},
+};
+const PT_DATA=[
+  [1,'H','Hidrógeno','1.008','no-metal'],[2,'He','Helio','4.003','noble-gas'],
+  [3,'Li','Litio','6.941','alkali'],[4,'Be','Berilio','9.012','alkaline'],[5,'B','Boro','10.811','metalloid'],[6,'C','Carbono','12.011','no-metal'],[7,'N','Nitrógeno','14.007','no-metal'],[8,'O','Oxígeno','15.999','no-metal'],[9,'F','Flúor','18.998','halogen'],[10,'Ne','Neón','20.180','noble-gas'],
+  [11,'Na','Sodio','22.990','alkali'],[12,'Mg','Magnesio','24.305','alkaline'],[13,'Al','Aluminio','26.982','post-transition'],[14,'Si','Silicio','28.086','metalloid'],[15,'P','Fósforo','30.974','no-metal'],[16,'S','Azufre','32.065','no-metal'],[17,'Cl','Cloro','35.453','halogen'],[18,'Ar','Argón','39.948','noble-gas'],
+  [19,'K','Potasio','39.098','alkali'],[20,'Ca','Calcio','40.078','alkaline'],[21,'Sc','Escandio','44.956','transition'],[22,'Ti','Titanio','47.867','transition'],[23,'V','Vanadio','50.942','transition'],[24,'Cr','Cromo','51.996','transition'],[25,'Mn','Manganeso','54.938','transition'],[26,'Fe','Hierro','55.845','transition'],[27,'Co','Cobalto','58.933','transition'],[28,'Ni','Níquel','58.693','transition'],[29,'Cu','Cobre','63.546','transition'],[30,'Zn','Zinc','65.38','transition'],[31,'Ga','Galio','69.723','post-transition'],[32,'Ge','Germanio','72.630','metalloid'],[33,'As','Arsénico','74.922','metalloid'],[34,'Se','Selenio','78.971','no-metal'],[35,'Br','Bromo','79.904','halogen'],[36,'Kr','Kriptón','83.798','noble-gas'],
+  [37,'Rb','Rubidio','85.468','alkali'],[38,'Sr','Estroncio','87.62','alkaline'],[39,'Y','Itrio','88.906','transition'],[40,'Zr','Circonio','91.224','transition'],[41,'Nb','Niobio','92.906','transition'],[42,'Mo','Molibdeno','95.95','transition'],[43,'Tc','Tecnecio','98','transition'],[44,'Ru','Rutenio','101.07','transition'],[45,'Rh','Rodio','102.906','transition'],[46,'Pd','Paladio','106.42','transition'],[47,'Ag','Plata','107.868','transition'],[48,'Cd','Cadmio','112.411','transition'],[49,'In','Indio','114.818','post-transition'],[50,'Sn','Estaño','118.710','post-transition'],[51,'Sb','Antimonio','121.760','metalloid'],[52,'Te','Telurio','127.60','metalloid'],[53,'I','Yodo','126.904','halogen'],[54,'Xe','Xenón','131.293','noble-gas'],
+  [55,'Cs','Cesio','132.905','alkali'],[56,'Ba','Bario','137.327','alkaline'],[57,'La','Lantano','138.905','lanthanide'],[58,'Ce','Cerio','140.116','lanthanide'],[59,'Pr','Praseodimio','140.908','lanthanide'],[60,'Nd','Neodimio','144.242','lanthanide'],[61,'Pm','Prometio','145','lanthanide'],[62,'Sm','Samario','150.36','lanthanide'],[63,'Eu','Europio','151.964','lanthanide'],[64,'Gd','Gadolinio','157.25','lanthanide'],[65,'Tb','Terbio','158.925','lanthanide'],[66,'Dy','Disprosio','162.500','lanthanide'],[67,'Ho','Holmio','164.930','lanthanide'],[68,'Er','Erbio','167.259','lanthanide'],[69,'Tm','Tulio','168.934','lanthanide'],[70,'Yb','Iterbio','173.054','lanthanide'],[71,'Lu','Lutecio','174.967','lanthanide'],
+  [72,'Hf','Hafnio','178.49','transition'],[73,'Ta','Tántalo','180.948','transition'],[74,'W','Wolframio','183.84','transition'],[75,'Re','Renio','186.207','transition'],[76,'Os','Osmio','190.23','transition'],[77,'Ir','Iridio','192.217','transition'],[78,'Pt','Platino','195.084','transition'],[79,'Au','Oro','196.967','transition'],[80,'Hg','Mercurio','200.592','transition'],[81,'Tl','Talio','204.38','post-transition'],[82,'Pb','Plomo','207.2','post-transition'],[83,'Bi','Bismuto','208.980','post-transition'],[84,'Po','Polonio','209','post-transition'],[85,'At','Ástato','210','halogen'],[86,'Rn','Radón','222','noble-gas'],
+  [87,'Fr','Francio','223','alkali'],[88,'Ra','Radio','226','alkaline'],[89,'Ac','Actinio','227','actinide'],[90,'Th','Torio','232.038','actinide'],[91,'Pa','Protactinio','231.036','actinide'],[92,'U','Uranio','238.029','actinide'],[93,'Np','Neptunio','237','actinide'],[94,'Pu','Plutonio','244','actinide'],[95,'Am','Americio','243','actinide'],[96,'Cm','Curio','247','actinide'],[97,'Bk','Berkelio','247','actinide'],[98,'Cf','Californio','251','actinide'],[99,'Es','Einstenio','252','actinide'],[100,'Fm','Fermio','257','actinide'],[101,'Md','Mendelevio','258','actinide'],[102,'No','Nobelio','259','actinide'],[103,'Lr','Laurencio','262','actinide'],
+  [104,'Rf','Rutherfordio','267','transition'],[105,'Db','Dubnio','268','transition'],[106,'Sg','Seaborgio','271','transition'],[107,'Bh','Bohrio','272','transition'],[108,'Hs','Hasio','270','transition'],[109,'Mt','Meitnerio','278','transition'],[110,'Ds','Darmstadtio','281','transition'],[111,'Rg','Roentgenio','282','transition'],[112,'Cn','Copernicio','285','transition'],[113,'Nh','Nihonio','286','post-transition'],[114,'Fl','Flerovio','289','post-transition'],[115,'Mc','Moscovio','290','post-transition'],[116,'Lv','Livermorio','293','post-transition'],[117,'Ts','Teneso','294','halogen'],[118,'Og','Oganesón','294','noble-gas'],
+];
+let ptFiltered=PT_DATA;
+function ptSearch(){const q=document.getElementById('pt-search').value.trim().toLowerCase();ptFiltered=q?PT_DATA.filter(([n,sym,name])=>sym.toLowerCase().startsWith(q)||name.toLowerCase().includes(q)||String(n).startsWith(q)):PT_DATA;ptRenderList();}
+function ptRenderList(){
+  const list=document.getElementById('pt-list');
+  list.innerHTML=ptFiltered.slice(0,50).map(([n,sym,name,mass,cat])=>{
+    const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)'};
+    return `<div class="pt-item" onclick="ptShowDetail(${n})"><div class="pt-badge" style="background:${c.bg}"><div class="pt-badge-sym" style="color:${c.text}">${sym}</div><div class="pt-badge-num" style="color:${c.text}">${n}</div></div><div class="pt-item-info"><div class="pt-item-name">${name}</div><div class="pt-item-detail">${c.label||cat} · ${mass} u</div></div></div>`;
+  }).join('');
+  if(ptFiltered.length>50)list.innerHTML+=`<div style="text-align:center;padding:10px;color:var(--muted);font-size:12px">+${ptFiltered.length-50} más — refiná la búsqueda</div>`;
+}
+function ptShowDetail(n){
+  const el=PT_DATA.find(e=>e[0]===n);if(!el)return;
+  const [num,sym,name,mass,cat]=el;const c=PT_CATS[cat]||{bg:'var(--surface2)',text:'var(--muted)',label:cat};
+  const card=document.getElementById('pt-detail');card.classList.add('show');
+  document.getElementById('pt-d-sym').textContent=sym;document.getElementById('pt-d-sym').style.color=c.text;
+  document.getElementById('pt-d-name').textContent=name;
+  document.getElementById('pt-d-num').textContent=num;
+  document.getElementById('pt-d-mass').textContent=mass+' u';
+  const pill=document.getElementById('pt-d-cat');pill.textContent=c.label;pill.style.background=c.bg;pill.style.color=c.text;
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+ptRenderList();
+
+// ══ EQUIPOS ══
+function teamsShuffle(){
+  const raw=document.getElementById('teams-names').value;
+  const names=raw.split('\n').map(n=>n.trim()).filter(Boolean);
+  const count=parseInt(document.getElementById('teams-count').value)||2;
+  if(names.length<2){alert('Agregá al menos 2 participantes');return;}
+  if(count<2||count>names.length){alert('El número de equipos debe ser entre 2 y '+names.length);return;}
+  const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  const teams=Array.from({length:count},()=>[]);
+  shuffled.forEach((name,i)=>teams[i%count].push(name));
+  const colors=['var(--accent)','var(--accent2)','var(--warn)','var(--danger)','oklch(44% 0.13 300)','oklch(44% 0.11 180)'];
+  document.getElementById('teams-result').innerHTML=teams.map((t,i)=>`<div class="team-card" style="border-left:3px solid ${colors[i%colors.length]}"><div class="team-card-title" style="color:${colors[i%colors.length]}">Equipo ${i+1}</div>${t.map(n=>`<div class="team-member">\uD83D\uDC64 ${n}</div>`).join('')}</div>`).join('');
+  document.getElementById('teams-reshuf').style.display='block';
+}
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
