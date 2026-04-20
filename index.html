@@ -391,12 +391,12 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .news-cat-btn{flex-shrink:0;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
 .news-cat-btn.active{background:oklch(44% 0.13 155 / 0.12);border-color:var(--accent);color:var(--accent)}
 
-.cat-card[data-cat="utilidades"] .cat-icon{color:oklch(44% 0.13 155);}
-.cat-card[data-cat="finanzas"] .cat-icon{color:oklch(42% 0.13 75);}
-.cat-card[data-cat="entretenimiento"] .cat-icon{color:oklch(40% 0.14 22);}
-.cat-card[data-cat="salud"] .cat-icon{color:oklch(44% 0.11 185);}
-.cat-card[data-cat="productividad"] .cat-icon{color:oklch(44% 0.13 240);}
-.cat-card[data-cat="online"] .cat-icon{color:oklch(44% 0.12 300);}
+.cat-card[data-cat="finanzas"] .cat-icon{color:oklch(55% 0.13 75);}
+.cat-card[data-cat="tiempo"] .cat-icon{color:oklch(44% 0.11 185);}
+.cat-card[data-cat="productividad"] .cat-icon{color:oklch(44% 0.13 155);}
+.cat-card[data-cat="azar"] .cat-icon{color:oklch(50% 0.14 22);}
+.cat-card[data-cat="creatividad"] .cat-icon{color:oklch(52% 0.14 300);}
+.cat-card[data-cat="referencia"] .cat-icon{color:oklch(44% 0.13 240);}
 .cat-card:hover .cat-icon{transform:scale(1.1);transition:transform .15s;}
 .cat-icon{transition:transform .15s;}
 
@@ -409,6 +409,13 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .cat-card{transition:border-color .15s, transform .1s, box-shadow .15s;}
 .cat-card:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
 .tool-list-item:hover{box-shadow:0 2px 14px oklch(44% 0.13 155 / 0.1);}
+.home-search-wrap{padding:0 14px 12px;position:relative}
+.home-search{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px 10px 40px;font-family:var(--font-body);font-size:15px;color:var(--text);outline:none;-webkit-appearance:none;transition:border-color .15s;box-sizing:border-box}
+.home-search:focus{border-color:var(--accent)}
+.home-search-icon{position:absolute;left:26px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.subcat-header{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:16px 2px 6px}
+.subcat-header:first-child{padding-top:4px}
+#search-results .tool-list-item:first-child{margin-top:0}
 
 /* ── TEMPORIZADOR DE TURNOS ── */
 .turn-player-active{background:oklch(44% 0.13 155 / 0.12);border:2px solid var(--accent);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
@@ -1646,10 +1653,15 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 </div>
 
 <div id="screen-home" class="screen active">
-  <div style="padding:16px 14px 6px">
+  <div style="padding:16px 14px 10px">
     <div class="home-greeting">ToolKit 🧰</div>
-    <div class="home-sub">Elegí una categoría</div>
+    <div class="home-sub">Elegií una categoría o buscá una herramienta</div>
   </div>
+  <div class="home-search-wrap">
+    <svg class="home-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="home-search" type="text" placeholder="Buscar herramienta..." oninput="navSearch(this.value)" id="home-search-input">
+  </div>
+  <div id="search-results" style="padding:0 14px;display:none;flex-direction:column;gap:7px"></div>
   <div class="cat-grid" style="padding:0 14px 14px" id="cat-grid"></div>
 </div>
 
@@ -1714,60 +1726,61 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 <script>
 // ══ NAVEGACIÓN POR CATEGORÍAS ══
 const CATEGORIES=[
-  {id:'calcs',name:'Calculadoras',icon:'🧮',tools:[
-    {id:'calc',name:'Calculadora',desc:'Operaciones básicas y avanzadas',icon:'➕'},
-    {id:'pct',name:'Porcentajes',desc:'Calcular % de cualquier valor',icon:'%'},
-    {id:'loan',name:'Préstamos',desc:'Cuotas, intereses y amortización',icon:'💳'},
-    {id:'imc',name:'IMC / Calorías',desc:'Índice de masa corporal y TDEE',icon:'⚖️'},
-    {id:'tip',name:'Propinas',desc:'Calcular propina y dividir cuenta',icon:'🍽️'},
-    {id:'fuel',name:'Combustible',desc:'Costo de viaje por distancia y consumo',icon:'⛽'},
-    {id:'savings',name:'Meta de ahorro',desc:'Cuánto ahorrar para llegar a tu meta',icon:'🎯'},
-  ]},
-  {id:'conversiones',name:'Conversiones',icon:'🔄',tools:[
-    {id:'fx',name:'Conversor de moneda',desc:'Divisas + dólar blue, MEP y CCL',icon:'💱'},
-    {id:'units',name:'Conversor de unidades',desc:'Longitud, peso, temperatura y más',icon:'📐'},
-    {id:'crypto',name:'Cripto',desc:'Precios de Bitcoin, ETH y más',icon:'₿'},
-    {id:'dates',name:'Fechas',desc:'Diferencia, suma y calculadora de edad',icon:'📅'},
-  ]},
-  {id:'azar',name:'Azar',icon:'🎲',tools:[
-    {id:'dice',name:'Dados',desc:'D4, D6, D8, D10, D12, D20',icon:'🎲'},
-    {id:'roulette',name:'Ruleta',desc:'Girar y elegir al azar',icon:'🎡'},
-    {id:'coin',name:'Moneda',desc:'Cara o ceca',icon:'🪙'},
-    {id:'rand',name:'Números al azar',desc:'Generar números aleatorios',icon:'🔢'},
+  {id:'finanzas',name:'Finanzas',icon:'💰',tools:[
+    {id:'calc',name:'Calculadora',desc:'Operaciones básicas y avanzadas',icon:'➕',sub:'Calculadoras'},
+    {id:'pct',name:'Porcentajes',desc:'Calcular % de cualquier valor',icon:'%',sub:'Calculadoras'},
+    {id:'tip',name:'Propinas',desc:'Calcular propina y dividir cuenta',icon:'🍽️',sub:'Calculadoras'},
+    {id:'fuel',name:'Combustible',desc:'Costo de viaje por distancia y consumo',icon:'⛽',sub:'Calculadoras'},
+    {id:'split',name:'Dividir gastos',desc:'Quién le debe a quién',icon:'🤝',sub:'Calculadoras'},
+    {id:'loan',name:'Préstamos',desc:'Cuotas, intereses y amortización',icon:'💳',sub:'Ahorro & Crédito'},
+    {id:'savings',name:'Meta de ahorro',desc:'Cuánto ahorrar para llegar a tu meta',icon:'🎯',sub:'Ahorro & Crédito'},
+    {id:'fx',name:'Conversor de moneda',desc:'Divisas + dólar blue, MEP y CCL',icon:'💱',sub:'Divisas'},
+    {id:'crypto',name:'Cripto',desc:'Precios de Bitcoin, ETH y más',icon:'₿',sub:'Divisas'},
+    {id:'dolar',name:'Dólar blue',desc:'Cotización del dólar blue, MEP y CCL',icon:'💵',sub:'Divisas'},
   ]},
   {id:'tiempo',name:'Tiempo',icon:'⏱️',tools:[
-    {id:'timer',name:'Cronómetro',desc:'Cronómetro y cuenta regresiva',icon:'⏱️'},
-    {id:'metro',name:'Metrónomo',desc:'Marcador de ritmo por BPM',icon:'🎵'},
-    {id:'pomodoro',name:'Pomodoro',desc:'Timer de trabajo y descanso con ciclos',icon:'🍅'},
-    {id:'worldclock',name:'Reloj mundial',desc:'Hora actual en múltiples ciudades',icon:'🌍'},
+    {id:'timer',name:'Cronómetro',desc:'Cronómetro y cuenta regresiva',icon:'⏱️',sub:'Temporizadores'},
+    {id:'pomodoro',name:'Pomodoro',desc:'Timer de trabajo y descanso con ciclos',icon:'🍅',sub:'Temporizadores'},
+    {id:'turns',name:'Turnos',desc:'Temporizador de turnos para juegos',icon:'⌛',sub:'Temporizadores'},
+    {id:'metro',name:'Metrónomo',desc:'Marcador de ritmo por BPM',icon:'🎵',sub:'Temporizadores'},
+    {id:'worldclock',name:'Reloj mundial',desc:'Hora actual en múltiples ciudades',icon:'🌍',sub:'Fecha & Zona'},
+    {id:'dates',name:'Fechas',desc:'Diferencia, suma y calculadora de edad',icon:'📅',sub:'Fecha & Zona'},
   ]},
-  {id:'org',name:'Organización',icon:'📋',tools:[
-    {id:'notes',name:'Notas',desc:'Bloc de notas con etiquetas',icon:'📝'},
-    {id:'todo',name:'Tareas',desc:'Lista de tareas con prioridad',icon:'✅'},
-    {id:'expenses',name:'Gastos',desc:'Registrá gastos y sincronizá con Google Sheets',icon:'💸'},
-    {id:'tally',name:'Contador',desc:'Contar con +/−',icon:'🔢'},
-    {id:'split',name:'Dividir gastos',desc:'Quién le debe a quién',icon:'🤝'},
-    {id:'games',name:'Marcador',desc:'Puntaje para juegos de mesa',icon:'🏆'},
-    {id:'recipe',name:'Recetas',desc:'Escalar ingredientes',icon:'🍳'},
-    {id:'habits',name:'Hábitos',desc:'Rastreá hábitos diarios con racha',icon:'🔥'},
-    {id:'teams',name:'Equipos',desc:'Sortear personas en equipos al azar',icon:'👥'},
-    {id:'turns',name:'Turnos',desc:'Temporizador de turnos para juegos',icon:'⏳'},
-    {id:'namegen',name:'Generador de nombres',desc:'Nombres para personas, bandas, proyectos',icon:'✨'},
-    {id:'excusas',name:'Excusas',desc:'Generador de excusas para toda ocasión',icon:'😅'},
+  {id:'productividad',name:'Productividad',icon:'✅',tools:[
+    {id:'notes',name:'Notas',desc:'Bloc de notas con etiquetas',icon:'📝',sub:'Apuntes'},
+    {id:'todo',name:'Tareas',desc:'Lista de tareas con prioridad',icon:'✅',sub:'Apuntes'},
+    {id:'recipe',name:'Recetas',desc:'Escalar ingredientes de cualquier receta',icon:'🍳',sub:'Apuntes'},
+    {id:'habits',name:'Hábitos',desc:'Rastrear hábitos diarios con racha',icon:'🔥',sub:'Seguimiento'},
+    {id:'tally',name:'Contador',desc:'Contar con +/−',icon:'🔢',sub:'Seguimiento'},
+    {id:'expenses',name:'Gastos',desc:'Registrar gastos y sincronizar con Google Sheets',icon:'💸',sub:'Seguimiento'},
+    {id:'teams',name:'Equipos',desc:'Sortear personas en equipos al azar',icon:'👥',sub:'Grupos'},
+    {id:'namegen',name:'Generador de nombres',desc:'Nombres para personas, bandas y proyectos',icon:'✨',sub:'Grupos'},
+    {id:'excusas',name:'Excusas',desc:'Generador de excusas para toda ocasión',icon:'😅',sub:'Grupos'},
   ]},
-  {id:'utilidades',name:'Utilidades',icon:'🛠️',tools:[
-    {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷'},
-    {id:'pass',name:'Contraseñas',desc:'Generar contraseñas seguras',icon:'🔐'},
-    {id:'colors',name:'Colores',desc:'RGB, HEX, HSL + cuentagotas cámara',icon:'🎨'},
-    {id:'level',name:'Nivel de burbuja',desc:'Nivelar superficies',icon:'📏'},
-    {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐'},
-    {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅'},
-    {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰'},
-    {id:'gradient',name:'Gradientes',desc:'Generar gradientes CSS copiables',icon:'🌈'},
-    {id:'periodic',name:'Tabla periódica',desc:'Referencia de todos los elementos',icon:'⚗️'},
-    {id:'palette',name:'Paleta de colores',desc:'Generar paletas armónicas desde un color',icon:'🎨'},
-    {id:'sizes',name:'Conversor de tallas',desc:'Ropa y zapatos entre AR/EU/US/UK',icon:'👗'},
-    {id:'quintas',name:'Círculo de quintas',desc:'Notas, acordes y modulaciones por escala',icon:'🎵'},
+  {id:'azar',name:'Azar & Juegos',icon:'🎲',tools:[
+    {id:'dice',name:'Dados',desc:'D4, D6, D8, D10, D12, D20',icon:'🎲',sub:'Azar'},
+    {id:'roulette',name:'Ruleta',desc:'Girar y elegir al azar',icon:'🎡',sub:'Azar'},
+    {id:'coin',name:'Moneda',desc:'Cara o ceca',icon:'🪙',sub:'Azar'},
+    {id:'rand',name:'Números al azar',desc:'Generar números aleatorios',icon:'🔢',sub:'Azar'},
+    {id:'games',name:'Marcador',desc:'Puntaje para juegos de mesa',icon:'🏆',sub:'Juegos'},
+  ]},
+  {id:'creatividad',name:'Creatividad',icon:'🎨',tools:[
+    {id:'colors',name:'Colores',desc:'RGB, HEX, HSL + cuentagotas cámara',icon:'🎨',sub:'Color'},
+    {id:'gradient',name:'Gradientes',desc:'Generar gradientes CSS copiables',icon:'🌈',sub:'Color'},
+    {id:'palette',name:'Paleta de colores',desc:'Generar paletas armónicas desde un color',icon:'🖌️',sub:'Color'},
+    {id:'quintas',name:'Círculo de quintas',desc:'Notas, acordes y modulaciones por escala',icon:'🎵',sub:'Música'},
+    {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷',sub:'Generadores'},
+    {id:'pass',name:'Contraseñas',desc:'Generar contraseñas seguras',icon:'🔐',sub:'Generadores'},
+  ]},
+  {id:'referencia',name:'Referencia',icon:'📚',tools:[
+    {id:'imc',name:'IMC / Calorías',desc:'Índice de masa corporal y TDEE',icon:'⚖️',sub:'Salud'},
+    {id:'level',name:'Nivel de burbuja',desc:'Nivelar superficies con el acelerómetro',icon:'📏',sub:'Salud'},
+    {id:'units',name:'Conversor de unidades',desc:'Longitud, peso, temperatura y más',icon:'📐',sub:'Conversiones'},
+    {id:'sizes',name:'Conversor de tallas',desc:'Ropa y zapatos entre AR/EU/US/UK',icon:'👗',sub:'Conversiones'},
+    {id:'periodic',name:'Tabla periódica',desc:'Referencia de todos los elementos',icon:'⚗️',sub:'Ciencia'},
+    {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐',sub:'Online'},
+    {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅',sub:'Online'},
+    {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰',sub:'Online'},
   ]},
 ];
 
@@ -1786,7 +1799,7 @@ function navShow(id){
 }
 
 function navRenderHome(){
-  const CAT_COLORS={calcs:'oklch(55% 0.13 75)',conversiones:'oklch(44% 0.13 240)',azar:'oklch(50% 0.14 22)',tiempo:'oklch(44% 0.11 185)',org:'oklch(44% 0.13 155)',utilidades:'oklch(44% 0.12 300)'};
+  const CAT_COLORS={finanzas:'oklch(55% 0.13 75)',tiempo:'oklch(44% 0.11 185)',productividad:'oklch(44% 0.13 155)',azar:'oklch(50% 0.14 22)',creatividad:'oklch(52% 0.14 300)',referencia:'oklch(44% 0.13 240)'};
   document.getElementById('cat-grid').innerHTML=CATEGORIES.map(cat=>{
     const c=CAT_COLORS[cat.id]||'var(--accent)';
     return `<div class="cat-card" data-cat="${cat.id}" onclick="navOpenCategory('${cat.id}')" style="border-top:3px solid ${c}"><div class="cat-icon" style="font-size:28px;width:44px;height:44px;background:${c}20;border-radius:10px;display:flex;align-items:center;justify-content:center">${cat.icon}</div><div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.tools.length} herramientas</div></div></div>`;
@@ -1798,9 +1811,38 @@ function navOpenCategory(catId){
   navStack=['home'];
   navShow('screen-toollist');
   document.getElementById('toollist-cat-name').textContent=cat.icon+' '+cat.name;
-  document.getElementById('tool-list-grid').innerHTML=cat.tools.map(t=>`<div class="tool-list-item" onclick="navOpenTool('${t.id}','${catId}')"><div class="tool-item-icon">${t.icon}</div><div><div class="tool-item-name">${t.name}</div><div class="tool-item-desc">${t.desc}</div></div></div>`).join('');
+  // Agrupar por subcategoria
+  const grouped={};const subOrder=[];
+  cat.tools.forEach(t=>{const s=t.sub||'';if(!grouped[s]){grouped[s]=[];subOrder.push(s);}grouped[s].push(t);});
+  let html='';
+  subOrder.forEach(sub=>{
+    if(sub&&subOrder.length>1)html+=`<div class="subcat-header">${sub}</div>`;
+    html+=grouped[sub].map(t=>`<div class="tool-list-item" onclick="navOpenTool('${t.id}','${catId}')"><div class="tool-item-icon">${t.icon}</div><div><div class="tool-item-name">${t.name}</div><div class="tool-item-desc">${t.desc}</div></div></div>`).join('');
+  });
+  document.getElementById('tool-list-grid').innerHTML=html;
   document.getElementById('header-label').textContent=cat.name;
   document.getElementById('header-back').style.display='flex';
+}
+
+function navSearch(q){
+  const qL=q.trim().toLowerCase();
+  const resultsEl=document.getElementById('search-results');
+  const catGridEl=document.getElementById('cat-grid');
+  if(!qL){resultsEl.style.display='none';catGridEl.style.display='';return;}
+  const matches=[];
+  CATEGORIES.forEach(cat=>{
+    cat.tools.forEach(t=>{
+      if(t.name.toLowerCase().includes(qL)||t.desc.toLowerCase().includes(qL)||(t.sub&&t.sub.toLowerCase().includes(qL)))
+        matches.push({...t,catId:cat.id});
+    });
+  });
+  catGridEl.style.display='none';
+  if(!matches.length){
+    resultsEl.innerHTML=`<div style="text-align:center;padding:32px 14px;color:var(--muted);font-size:14px">Sin resultados para <b>"${q}"</b></div>`;
+  }else{
+    resultsEl.innerHTML=matches.map(t=>`<div class="tool-list-item" onclick="navOpenTool('${t.id}','${t.catId}')"><div class="tool-item-icon">${t.icon}</div><div><div class="tool-item-name">${t.name}</div><div class="tool-item-desc">${t.desc}</div></div></div>`).join('');
+  }
+  resultsEl.style.display='flex';
 }
 
 function navOpenTool(toolId,catId){
