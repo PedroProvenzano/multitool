@@ -417,6 +417,25 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .subcat-header:first-child{padding-top:4px}
 #search-results .tool-list-item:first-child{margin-top:0}
 
+
+/* ── HIDRATACIÓN ── */
+.hydro-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px}
+.hydro-pill{padding:7px 14px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.hydro-pill.active{background:oklch(44% 0.13 155/0.15);border-color:var(--accent);color:var(--accent);font-weight:600}
+.hydro-progress{height:14px;background:var(--surface2);border-radius:8px;overflow:hidden;margin:14px 0 5px}
+.hydro-bar{height:100%;background:var(--accent);border-radius:8px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.hydro-glasses{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.hydro-drop{font-size:24px;cursor:pointer;transition:all .2s;opacity:.25;filter:grayscale(1)}
+.hydro-drop.done{opacity:1;filter:none;transform:scale(1.05)}
+/* ── CONVERSOR DE TIEMPO ── */
+.tc-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center}
+.tc-label{font-size:13px;color:var(--muted);text-align:right;white-space:nowrap}
+.tc-input{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:16px;color:var(--text);font-family:var(--font-body);outline:none;transition:border-color .15s;-webkit-appearance:none;width:100%;box-sizing:border-box}
+.tc-input:focus{border-color:var(--accent)}
+.tc-op-wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tc-op-select{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 10px;color:var(--text);font-size:16px;font-family:var(--font-body);outline:none;cursor:pointer}
+.tc-op-result{font-size:17px;font-weight:700;color:var(--accent);min-width:90px}
+
 /* ── TEMPORIZADOR DE TURNOS ── */
 .turn-player-active{background:oklch(44% 0.13 155 / 0.12);border:2px solid var(--accent);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
 .turn-player-row{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;transition:all .3s}
@@ -1674,6 +1693,92 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <div class="tool-list-grid" id="tool-list-grid"></div>
 </div>
 
+<!-- HIDRATACIÓN DIARIA -->
+<div id="screen-hydration" class="screen">
+  <div class="screen-pad">
+    <div class="card">
+      <div class="label">Tu peso</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="sm-input" type="number" id="hydro-weight" placeholder="70" min="30" max="250" oninput="hydroCalc()" style="width:90px">
+        <span style="color:var(--muted);font-size:14px">kg</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:10px">Nivel de actividad</div>
+      <div class="hydro-pills" id="hydro-act-pills">
+        <button class="hydro-pill active" data-val="1.0" onclick="hydroSetAct(this)">Sedentario</button>
+        <button class="hydro-pill" data-val="1.2" onclick="hydroSetAct(this)">Moderado</button>
+        <button class="hydro-pill" data-val="1.4" onclick="hydroSetAct(this)">Activo</button>
+        <button class="hydro-pill" data-val="1.6" onclick="hydroSetAct(this)">Muy activo</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:10px">Clima</div>
+      <div class="hydro-pills" id="hydro-climate-pills">
+        <button class="hydro-pill active" data-val="0" onclick="hydroSetClimate(this)">🌤 Normal</button>
+        <button class="hydro-pill" data-val="400" onclick="hydroSetClimate(this)">☀️ Caluroso</button>
+        <button class="hydro-pill" data-val="700" onclick="hydroSetClimate(this)">🔥 Muy caluroso</button>
+      </div>
+    </div>
+    <div id="hydro-result" style="display:none">
+      <div class="card" style="text-align:center">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Meta diaria</div>
+        <div style="font-size:36px;font-weight:700;color:var(--accent)" id="hydro-goal-txt">—</div>
+        <div style="font-size:13px;color:var(--muted)" id="hydro-glasses-txt"></div>
+        <div class="hydro-progress"><div class="hydro-bar" id="hydro-bar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+          <span id="hydro-drunk-txt">0 ml tomados</span>
+          <span id="hydro-left-txt"></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:8px">Registro</div>
+        <div class="hydro-glasses" id="hydro-drops"></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn-primary" style="flex:1" onclick="hydroAdd(250)">+ Vaso (250ml)</button>
+          <button class="btn-secondary" style="flex:1" onclick="hydroAdd(-250)">− Vaso</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn-secondary" style="flex:1" onclick="hydroAdd(500)">+ Botella (500ml)</button>
+          <button class="btn-secondary" style="flex:1;font-size:12px;color:var(--danger)" onclick="hydroReset()">Reiniciar día</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONVERSOR DE TIEMPO -->
+<div id="screen-timeconv" class="screen">
+  <div class="screen-pad">
+    <div class="card">
+      <div class="label" style="margin-bottom:14px">Ingresá un valor para convertir todos</div>
+      <div class="tc-grid">
+        <span class="tc-label">Segundos</span><input class="tc-input" id="tc-s"  type="number" placeholder="0" oninput="tcConvert('tc-s',1)">
+        <span class="tc-label">Minutos</span><input class="tc-input" id="tc-m"   type="number" placeholder="0" oninput="tcConvert('tc-m',60)">
+        <span class="tc-label">Horas</span><input class="tc-input" id="tc-h"     type="number" placeholder="0" oninput="tcConvert('tc-h',3600)">
+        <span class="tc-label">Días</span><input class="tc-input" id="tc-d"      type="number" placeholder="0" oninput="tcConvert('tc-d',86400)">
+        <span class="tc-label">Semanas</span><input class="tc-input" id="tc-w"   type="number" placeholder="0" oninput="tcConvert('tc-w',604800)">
+        <span class="tc-label">Meses (30d)</span><input class="tc-input" id="tc-mo" type="number" placeholder="0" oninput="tcConvert('tc-mo',2592000)">
+        <span class="tc-label">Años (365d)</span><input class="tc-input" id="tc-y"  type="number" placeholder="0" oninput="tcConvert('tc-y',31536000)">
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:10px">Operación rápida</div>
+      <div class="tc-op-wrap">
+        <input class="tc-input" id="tc-op-a" placeholder="2h 30m" style="flex:1;min-width:70px" oninput="tcParseOp()">
+        <select class="tc-op-select" id="tc-op-sel" onchange="tcParseOp()">
+          <option value="+">+</option>
+          <option value="-">−</option>
+        </select>
+        <input class="tc-input" id="tc-op-b" placeholder="45m" style="flex:1;min-width:70px" oninput="tcParseOp()">
+      </div>
+      <div style="margin-top:10px;font-size:13px;color:var(--muted)">Resultado</div>
+      <div class="tc-op-result" id="tc-op-result" style="margin-top:4px">—</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px">Formatos: <b>2h 30m</b>, <b>1d 4h</b>, <b>90m</b>, <b>3600s</b></div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <nav id="tabs" style="display:none">
@@ -1720,6 +1825,8 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="sizes" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M7 7v10M12 7v5M17 7v10"/></svg>Tallas</button>
   <button class="tab-btn" data-screen="excusas" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M12 8v4M12 16h.01"/></svg>Excusas</button>
   <button class="tab-btn" data-screen="quintas" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Quintas</button>
+  <button class="tab-btn" data-screen="hydration" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>Hidrat.</button>
+  <button class="tab-btn" data-screen="timeconv" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3M3 12h2M19 12h2M12 3v2M12 19v2"/></svg>Tiempo</button>
 </nav>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1775,8 +1882,10 @@ const CATEGORIES=[
   {id:'referencia',name:'Referencia',icon:'📚',tools:[
     {id:'imc',name:'IMC / Calorías',desc:'Índice de masa corporal y TDEE',icon:'⚖️',sub:'Salud'},
     {id:'level',name:'Nivel de burbuja',desc:'Nivelar superficies con el acelerómetro',icon:'📏',sub:'Salud'},
+    {id:'hydration',name:'Hidratación',desc:'Meta de agua diaria y tracker de vasos',icon:'💧',sub:'Salud'},
     {id:'units',name:'Conversor de unidades',desc:'Longitud, peso, temperatura y más',icon:'📐',sub:'Conversiones'},
     {id:'sizes',name:'Conversor de tallas',desc:'Ropa y zapatos entre AR/EU/US/UK',icon:'👗',sub:'Conversiones'},
+    {id:'timeconv',name:'Conversor de tiempo',desc:'Segundos, minutos, horas, días, semanas, meses, años',icon:'⏰',sub:'Conversiones'},
     {id:'periodic',name:'Tabla periódica',desc:'Referencia de todos los elementos',icon:'⚗️',sub:'Ciencia'},
     {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐',sub:'Online'},
     {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅',sub:'Online'},
@@ -1784,7 +1893,7 @@ const CATEGORIES=[
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo'};
 
 let navStack=[];
 
@@ -2621,6 +2730,145 @@ function quintasModulations(root,scaleKey,scale){
 }
 function quintasJumpTo(root,mode){document.getElementById('quintas-root').value=root;document.getElementById('quintas-scale').value=mode;quintasUpdate();}
 quintasUpdate();
+
+
+// ══ HIDRATACIÓN DIARIA ══
+(function(){
+  const STORE='hydro_v1';
+  let actMult=1.0,climateExtra=0,goalMl=0,drunkMl=0;
+
+  function load(){
+    const d=JSON.parse(localStorage.getItem(STORE)||'{}');
+    const today=new Date().toDateString();
+    drunkMl=(d.date===today)?(d.drunk||0):0;
+    actMult=d.actMult||1.0;
+    climateExtra=d.climate||0;
+    const wEl=document.getElementById('hydro-weight');
+    if(wEl&&d.weight)wEl.value=d.weight;
+    document.querySelectorAll('#hydro-act-pills .hydro-pill').forEach(p=>p.classList.toggle('active',parseFloat(p.dataset.val)===actMult));
+    document.querySelectorAll('#hydro-climate-pills .hydro-pill').forEach(p=>p.classList.toggle('active',parseInt(p.dataset.val)===climateExtra));
+    hydroCalc();
+  }
+
+  function save(){
+    const w=document.getElementById('hydro-weight');
+    localStorage.setItem(STORE,JSON.stringify({date:new Date().toDateString(),drunk:drunkMl,weight:w?w.value:'',actMult,climate:climateExtra}));
+  }
+
+  function render(){
+    if(!goalMl)return;
+    const pct=Math.min(100,Math.round(drunkMl/goalMl*100));
+    document.getElementById('hydro-bar').style.width=pct+'%';
+    document.getElementById('hydro-drunk-txt').textContent=drunkMl+'ml tomados ('+pct+'%)';
+    const left=Math.max(0,goalMl-drunkMl);
+    document.getElementById('hydro-left-txt').textContent=left>0?left+'ml restantes':'¡Meta lograda! 🎉';
+    const glassCount=Math.ceil(goalMl/250);
+    const done=Math.floor(drunkMl/250);
+    document.getElementById('hydro-drops').innerHTML=
+      Array.from({length:glassCount},(_,i)=>`<span class="hydro-drop${i<done?' done':''}" onclick="hydroAdd(250)">💧</span>`).join('');
+  }
+
+  window.hydroCalc=function(){
+    const peso=parseFloat((document.getElementById('hydro-weight')||{}).value);
+    const res=document.getElementById('hydro-result');
+    if(!res)return;
+    if(!peso||peso<20){res.style.display='none';return;}
+    goalMl=Math.round((peso*35*actMult+climateExtra)/50)*50;
+    const glasses=Math.round(goalMl/250);
+    document.getElementById('hydro-goal-txt').textContent=(goalMl/1000).toFixed(1)+'L';
+    document.getElementById('hydro-glasses-txt').textContent='≈ '+glasses+' vasos de 250ml';
+    res.style.display='';
+    render();save();
+  };
+
+  window.hydroSetAct=function(btn){
+    document.querySelectorAll('#hydro-act-pills .hydro-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');actMult=parseFloat(btn.dataset.val);
+    hydroCalc();
+  };
+
+  window.hydroSetClimate=function(btn){
+    document.querySelectorAll('#hydro-climate-pills .hydro-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');climateExtra=parseInt(btn.dataset.val);
+    hydroCalc();
+  };
+
+  window.hydroAdd=function(ml){
+    if(!goalMl)return;
+    drunkMl=Math.max(0,drunkMl+ml);
+    render();save();
+  };
+
+  window.hydroReset=function(){drunkMl=0;render();save();};
+
+  load();
+})();
+
+// ══ CONVERSOR DE TIEMPO ══
+(function(){
+  const TC=[
+    {id:'tc-s',f:1},{id:'tc-m',f:60},{id:'tc-h',f:3600},
+    {id:'tc-d',f:86400},{id:'tc-w',f:604800},{id:'tc-mo',f:2592000},{id:'tc-y',f:31536000}
+  ];
+
+  window.tcConvert=function(srcId,srcFactor){
+    const v=parseFloat(document.getElementById(srcId).value);
+    if(isNaN(v)){TC.forEach(u=>{if(u.id!==srcId){const el=document.getElementById(u.id);if(el)el.value='';}});return;}
+    const base=v*srcFactor;
+    TC.forEach(u=>{
+      if(u.id===srcId)return;
+      const el=document.getElementById(u.id);if(!el)return;
+      const r=base/u.f;
+      el.value=r===0?0:(Math.abs(r)<0.0001?r.toExponential(3):(r%1===0?r:parseFloat(r.toPrecision(10))));
+    });
+  };
+
+  function tcParseStr(s){
+    if(!s.trim())return NaN;
+    let sec=0;
+    const re=/(\d+(?:[.,]\d+)?)\s*(y|a\u00f1o|a\u00f1os|mo|mes|meses|w|sem|semana|d|d\u00eda|dia|h|hora|horas|m|min|s|seg)/gi;
+    let m,found=false;
+    while((m=re.exec(s))!==null){
+      found=true;
+      const n=parseFloat(m[1].replace(',','.'));
+      const u=m[2].toLowerCase();
+      if(u.startsWith('y')||u.startsWith('a\u00f1'))sec+=n*31536000;
+      else if(u==='mo'||u.startsWith('mes'))sec+=n*2592000;
+      else if(u==='w'||u.startsWith('sem'))sec+=n*604800;
+      else if(u==='d'||u.startsWith('d\u00ed')||u==='dia')sec+=n*86400;
+      else if(u==='h'||u.startsWith('hora'))sec+=n*3600;
+      else if(u==='m'||u==='min')sec+=n*60;
+      else if(u==='s'||u==='seg')sec+=n;
+    }
+    if(!found){const n=parseFloat(s.replace(',','.'));return isNaN(n)?NaN:n;}
+    return sec;
+  }
+
+  function tcFmt(sec){
+    if(isNaN(sec))return '—';
+    const neg=sec<0;sec=Math.abs(sec);
+    const parts=[];
+    const y=Math.floor(sec/31536000);if(y){parts.push(y+'a');sec-=y*31536000;}
+    const mo=Math.floor(sec/2592000);if(mo){parts.push(mo+'mo');sec-=mo*2592000;}
+    const w=Math.floor(sec/604800);if(w){parts.push(w+'sem');sec-=w*604800;}
+    const d=Math.floor(sec/86400);if(d){parts.push(d+'d');sec-=d*86400;}
+    const h=Math.floor(sec/3600);if(h){parts.push(h+'h');sec-=h*3600;}
+    const mn=Math.floor(sec/60);if(mn){parts.push(mn+'m');sec-=mn*60;}
+    const s=Math.round(sec);if(s||!parts.length)parts.push(s+'s');
+    return (neg?'−':'')+parts.join(' ');
+  }
+
+  window.tcParseOp=function(){
+    const a=tcParseStr((document.getElementById('tc-op-a')||{}).value||'');
+    const b=tcParseStr((document.getElementById('tc-op-b')||{}).value||'');
+    const op=(document.getElementById('tc-op-sel')||{}).value||'+';
+    const res=document.getElementById('tc-op-result');
+    if(!res)return;
+    if(isNaN(a)&&isNaN(b)){res.textContent='—';return;}
+    const av=isNaN(a)?0:a, bv=isNaN(b)?0:b;
+    res.textContent=tcFmt(op==='+'?av+bv:av-bv);
+  };
+})();
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
