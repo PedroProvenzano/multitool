@@ -3152,7 +3152,20 @@ const _aud={ctx:null,stream:null,raf:null,
 })();
 
 // ══ SERVICE WORKER ══
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>{
+  // updateViaCache:'none' → Chrome siempre re-descarga sw.js sin usar caché HTTP
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'})
+    .then(reg=>{
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        if(nw)nw.addEventListener('statechange',()=>{
+          if(nw.state==='installed'&&navigator.serviceWorker.controller){
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(()=>{});
+});
 </script>
 </body>
 </html>
