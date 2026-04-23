@@ -592,6 +592,14 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .team-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
 .team-member{padding:5px 0;border-bottom:1px solid var(--border);font-size:14px}
 .team-member:last-child{border-bottom:none}
+/* SINÓNIMOS */
+.sino-chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:9px 16px;margin:4px 3px;cursor:pointer;transition:all .15s;animation:fadeUp .15s ease}
+.sino-chip:active{background:#7c6af720;border-color:var(--accent)}
+.sino-chip.copied{background:#7c6af720;border-color:var(--accent)}
+.sino-word{font-size:15px;font-weight:500}
+.sino-len{font-size:10px;color:var(--muted);font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1px 5px}
+.sino-chips-wrap{display:flex;flex-wrap:wrap;padding:2px 0}
+.sino-empty{text-align:center;padding:18px;color:var(--muted);font-size:13px}
 </style>
 </head>
 <body>
@@ -1513,6 +1521,32 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   </div>
 </div>
 
+<!-- SINÓNIMOS SOFISTICADOS -->
+<div id="screen-sino" class="screen">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:8px">Palabra en español</div>
+    <input class="sm-input" id="sino-input" type="text" placeholder="Ej: feliz, inteligente, rápido..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')sinoBuscar()" oninput="sinoClear()">
+    <button class="btn btn-primary" style="margin-top:10px" onclick="sinoBuscar()">✨ Buscar sinónimos sofisticados</button>
+    <div id="sino-status" class="fx-status" style="text-align:center;margin-top:9px;min-height:18px;display:none"></div>
+  </div>
+  <div id="sino-results" class="card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="card-label" style="margin:0">🎩 Alternativas para impresionar</div>
+      <div id="sino-count" style="font-size:11px;color:var(--muted)"></div>
+    </div>
+    <div class="sino-chips-wrap" id="sino-list"></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:11px;text-align:center">Tapeá una palabra para copiarla al portapapeles</div>
+    <button class="share-btn" style="margin-top:11px" onclick="sinoShare()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Compartir sinónimos
+    </button>
+  </div>
+  <div class="card" style="margin-top:0">
+    <div class="card-label" style="margin-bottom:8px">💡 ¿Para qué sirve?</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6">Esta herramienta busca sinónimos sofisticados para impresionar con tu vocabulario. Los resultados se ordenan priorizando palabras más elaboradas y formales.</div>
+  </div>
+</div>
+
 <!-- HOME -->
 <!-- POMODORO -->
 <div id="screen-pomodoro" class="screen">
@@ -1940,6 +1974,7 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="timeconv" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3M3 12h2M19 12h2M12 3v2M12 19v2"/></svg>Tiempo</button>
   <button class="tab-btn" data-screen="tuner" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>Afinador</button>
   <button class="tab-btn" data-screen="noise" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Ruido</button>
+  <button class="tab-btn" data-screen="sino" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 11h10M4 16h6M17 14l2 2 4-4"/></svg>Sinónimos</button>
 </nav>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -2005,10 +2040,11 @@ const CATEGORIES=[
     {id:'trans',name:'Traductor',desc:'Traducir entre idiomas',icon:'🌐',sub:'Online'},
     {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅',sub:'Online'},
     {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰',sub:'Online'},
+    {id:'sino',name:'Sinónimos',desc:'Sinónimos sofisticados para impresionar',icon:'✨',sub:'Online'},
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos'};
 
 let navStack=[];
 
@@ -3892,6 +3928,81 @@ const _aud={ctx:null,stream:null,raf:null,
     if(canvas)canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
   };
 })();
+
+// ══ SINÓNIMOS SOFISTICADOS ══
+// Puntaje de "sofisticación": palabras más largas y con sufijos cultos primero
+function sinoScore(w){
+  let s=w.length*3;
+  // Sufijos de registro formal/culto en español
+  if(/ción$|sión$|xión$/.test(w))s+=7;
+  if(/miento$|mento$/.test(w))s+=6;
+  if(/idad$|tud$|dumbre$/.test(w))s+=5;
+  if(/mente$/.test(w))s+=4;
+  if(/eza$|ura$|ancia$|encia$/.test(w))s+=4;
+  if(/ivo$|oso$|esco$|ico$|áneo$/.test(w))s+=3;
+  if(/ble$|nte$|dor$|tor$/.test(w))s+=2;
+  // Penalizar palabras muy cortas (probablemente coloquiales)
+  if(w.length<=4)s-=8;
+  return s;
+}
+async function sinoBuscar(){
+  const word=document.getElementById('sino-input').value.trim().toLowerCase();
+  if(!word)return;
+  const status=document.getElementById('sino-status'),results=document.getElementById('sino-results');
+  status.style.display='block';status.className='fx-status loading';status.textContent='🔍 Buscando sinónimos sofisticados...';
+  results.style.display='none';
+  try{
+    // ConceptNet: base de datos multilingüe de conocimiento libre, sin API key
+    const r=await fetch(`https://api.conceptnet.io/query?node=/c/es/${encodeURIComponent(word)}&rel=/r/Synonym&limit=40`);
+    const d=await r.json();
+    let syns=[];
+    if(d.edges&&d.edges.length){
+      d.edges.forEach(e=>{
+        // ConceptNet devuelve los edges en ambas direcciones; tomamos el nodo que NO es la palabra buscada
+        [e.start,e.end].forEach(node=>{
+          const lbl=(node.label||'').trim();
+          // Filtrar: solo español, sin la palabra original, sin barras (URIs), solo letras
+          if(lbl&&lbl.toLowerCase()!==word&&/^[a-záéíóúñüÁÉÍÓÚÑÜ\s-]+$/.test(lbl)&&!lbl.includes('/')&&lbl.length>1)
+            syns.push(lbl);
+        });
+      });
+    }
+    // Deduplicar y ordenar por sofisticación
+    syns=[...new Set(syns)];
+    if(!syns.length){
+      status.textContent='Sin sinónimos en la base de datos. Probá otra palabra.';
+      status.className='fx-status err';
+      return;
+    }
+    syns.sort((a,b)=>sinoScore(b)-sinoScore(a));
+    const top=syns.slice(0,10);
+    status.style.display='none';
+    results.style.display='block';
+    document.getElementById('sino-count').textContent=`${syns.length} encontrados`;
+    document.getElementById('sino-list').innerHTML=top.map((s,i)=>`<div class="sino-chip" onclick="sinoCopy(this,'${s.replace(/'/g,"\\'")}')"><span class="sino-word">${s}</span><span class="sino-len">${s.length} letras</span></div>`).join('');
+  }catch(e){
+    status.textContent='Sin conexión o error al consultar';
+    status.className='fx-status err';
+  }
+}
+function sinoCopy(el,word){
+  navigator.clipboard?.writeText(word).catch(()=>{});
+  el.classList.add('copied');
+  const wordEl=el.querySelector('.sino-word');
+  const orig=wordEl.textContent;
+  wordEl.textContent='✓ Copiado';
+  setTimeout(()=>{el.classList.remove('copied');wordEl.textContent=orig;},1000);
+}
+function sinoShare(){
+  const word=document.getElementById('sino-input').value.trim();
+  const chips=Array.from(document.querySelectorAll('#sino-list .sino-word')).map(c=>'• '+c.textContent.replace('✓ Copiado','')).filter(Boolean).join('\n');
+  if(!chips)return;
+  window.open('https://wa.me/?text='+encodeURIComponent(`✨ Sinónimos sofisticados para "${word}":\n\n${chips}\n\n(Encontrado con ToolKit 🧰)`),'_blank');
+}
+function sinoClear(){
+  document.getElementById('sino-results').style.display='none';
+  document.getElementById('sino-status').style.display='none';
+}
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>{
