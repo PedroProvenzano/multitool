@@ -3930,10 +3930,8 @@ const _aud={ctx:null,stream:null,raf:null,
 })();
 
 // ══ SINÓNIMOS SOFISTICADOS ══
-// Puntaje de "sofisticación": palabras más largas y con sufijos cultos primero
 function sinoScore(w){
   let s=w.length*3;
-  // Sufijos de registro formal/culto en español
   if(/ción$|sión$|xión$/.test(w))s+=7;
   if(/miento$|mento$/.test(w))s+=6;
   if(/idad$|tud$|dumbre$/.test(w))s+=5;
@@ -3941,49 +3939,57 @@ function sinoScore(w){
   if(/eza$|ura$|ancia$|encia$/.test(w))s+=4;
   if(/ivo$|oso$|esco$|ico$|áneo$/.test(w))s+=3;
   if(/ble$|nte$|dor$|tor$/.test(w))s+=2;
-  // Penalizar palabras muy cortas (probablemente coloquiales)
   if(w.length<=4)s-=8;
   return s;
 }
+function sinoOk(lbl,word){lbl=(lbl||'').trim();return lbl&&lbl.toLowerCase()!==word&&/^[a-záéíóúñüÁÉÍÓÚÑÜ\s-]+$/.test(lbl)&&lbl.length>1;}
 async function sinoBuscar(){
   const word=document.getElementById('sino-input').value.trim().toLowerCase();
   if(!word)return;
   const status=document.getElementById('sino-status'),results=document.getElementById('sino-results');
   status.style.display='block';status.className='fx-status loading';status.textContent='🔍 Buscando sinónimos sofisticados...';
   results.style.display='none';
+  let syns=[],fails=0;
+
+  // Fuente 1: Free Dictionary API — soporte real de español, CORS libre
   try{
-    // ConceptNet: base de datos multilingüe de conocimiento libre, sin API key
-    const r=await fetch(`https://api.conceptnet.io/query?node=/c/es/${encodeURIComponent(word)}&rel=/r/Synonym&limit=40`);
-    const d=await r.json();
-    let syns=[];
-    if(d.edges&&d.edges.length){
-      d.edges.forEach(e=>{
-        // ConceptNet devuelve los edges en ambas direcciones; tomamos el nodo que NO es la palabra buscada
-        [e.start,e.end].forEach(node=>{
-          const lbl=(node.label||'').trim();
-          // Filtrar: solo español, sin la palabra original, sin barras (URIs), solo letras
-          if(lbl&&lbl.toLowerCase()!==word&&/^[a-záéíóúñüÁÉÍÓÚÑÜ\s-]+$/.test(lbl)&&!lbl.includes('/')&&lbl.length>1)
-            syns.push(lbl);
-        });
-      });
+    const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/es/${encodeURIComponent(word)}`);
+    if(r.ok){
+      const data=await r.json();
+      data.forEach(entry=>entry.meanings?.forEach(m=>{
+        (m.synonyms||[]).forEach(s=>{if(sinoOk(s,word))syns.push(s);});
+        m.definitions?.forEach(d=>(d.synonyms||[]).forEach(s=>{if(sinoOk(s,word))syns.push(s);}));
+      }));
     }
-    // Deduplicar y ordenar por sofisticación
-    syns=[...new Set(syns)];
-    if(!syns.length){
-      status.textContent='Sin sinónimos en la base de datos. Probá otra palabra.';
-      status.className='fx-status err';
-      return;
+  }catch(e){fails++;}
+
+  // Fuente 2: Datamuse con vocabulario español (ml = "means like")
+  try{
+    const r2=await fetch(`https://api.datamuse.com/words?ml=${encodeURIComponent(word)}&v=es&max=40`);
+    if(r2.ok){const d2=await r2.json();d2.forEach(i=>{if(sinoOk(i.word,word))syns.push(i.word);});}
+  }catch(e){fails++;}
+
+  // Fuente 3: ConceptNet multilingüe (Synonym relation)
+  try{
+    const r3=await fetch(`https://api.conceptnet.io/c/es/${encodeURIComponent(word)}?rel=/r/Synonym&limit=30`);
+    if(r3.ok){
+      const d3=await r3.json();
+      d3.edges?.forEach(e=>[e.start,e.end].forEach(n=>{const l=(n.label||'').trim();if(sinoOk(l,word)&&!l.includes('/'))syns.push(l);}));
     }
-    syns.sort((a,b)=>sinoScore(b)-sinoScore(a));
-    const top=syns.slice(0,10);
-    status.style.display='none';
-    results.style.display='block';
-    document.getElementById('sino-count').textContent=`${syns.length} encontrados`;
-    document.getElementById('sino-list').innerHTML=top.map((s,i)=>`<div class="sino-chip" onclick="sinoCopy(this,'${s.replace(/'/g,"\\'")}')"><span class="sino-word">${s}</span><span class="sino-len">${s.length} letras</span></div>`).join('');
-  }catch(e){
-    status.textContent='Sin conexión o error al consultar';
+  }catch(e){fails++;}
+
+  syns=[...new Set(syns.map(s=>s.trim()))].filter(s=>sinoOk(s,word));
+  if(!syns.length){
+    status.textContent=fails===3?'Sin conexión. Verificá tu red.':'Sin sinónimos encontrados. Probá con otra palabra.';
     status.className='fx-status err';
+    return;
   }
+  syns.sort((a,b)=>sinoScore(b)-sinoScore(a));
+  const top=syns.slice(0,10);
+  status.style.display='none';
+  results.style.display='block';
+  document.getElementById('sino-count').textContent=`${syns.length} encontrados`;
+  document.getElementById('sino-list').innerHTML=top.map(s=>`<div class="sino-chip" onclick="sinoCopy(this,'${s.replace(/'/g,"\\'")}')"><span class="sino-word">${s}</span><span class="sino-len">${s.length} letras</span></div>`).join('');
 }
 function sinoCopy(el,word){
   navigator.clipboard?.writeText(word).catch(()=>{});
@@ -3991,11 +3997,11 @@ function sinoCopy(el,word){
   const wordEl=el.querySelector('.sino-word');
   const orig=wordEl.textContent;
   wordEl.textContent='✓ Copiado';
-  setTimeout(()=>{el.classList.remove('copied');wordEl.textContent=orig;},1000);
+  setTimeout(()=>{el.classList.remove('copied');wordEl.textContent=orig;},1100);
 }
 function sinoShare(){
   const word=document.getElementById('sino-input').value.trim();
-  const chips=Array.from(document.querySelectorAll('#sino-list .sino-word')).map(c=>'• '+c.textContent.replace('✓ Copiado','')).filter(Boolean).join('\n');
+  const chips=Array.from(document.querySelectorAll('#sino-list .sino-word')).map(c=>c.textContent).filter(t=>t!=='✓ Copiado').map(t=>'• '+t).join('\n');
   if(!chips)return;
   window.open('https://wa.me/?text='+encodeURIComponent(`✨ Sinónimos sofisticados para "${word}":\n\n${chips}\n\n(Encontrado con ToolKit 🧰)`),'_blank');
 }
