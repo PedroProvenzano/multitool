@@ -146,6 +146,26 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .world-ing-item::before{content:'·';color:var(--accent);font-size:20px;line-height:1;flex-shrink:0;margin-top:-1px}
 .world-prep-text{font-size:14px;line-height:1.75;color:var(--text);white-space:pre-line}
 .world-back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0 0 14px;font-family:var(--font-body);font-weight:500}
+
+.frutas-mode-bar{display:flex;gap:8px;margin-bottom:16px}
+.frutas-mode-btn{flex:1;padding:9px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .18s}
+.frutas-mode-btn.active{background:oklch(44% 0.13 155 / 0.12);border-color:var(--accent);color:var(--accent)}
+.frutas-location-chip{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;margin-bottom:14px;width:fit-content}
+.frutas-season-banner{border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.frutas-season-icon{font-size:32px;line-height:1}
+.frutas-season-name{font-size:18px;font-weight:700;color:var(--text)}
+.frutas-season-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.frutas-season-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.frutas-season-tab{padding:10px 8px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .18s}
+.frutas-season-tab.active{border-color:var(--accent);background:oklch(44% 0.13 155 / 0.12);color:var(--accent)}
+.frutas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fruta-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 12px;transition:border-color .15s}
+.fruta-card:hover{border-color:var(--accent)}
+.fruta-emoji{font-size:28px;margin-bottom:6px;display:block}
+.fruta-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.fruta-desc{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:5px}
+.fruta-peak{font-size:10px;color:var(--accent);font-weight:600}
+.frutas-tropical-note{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;padding:8px;background:var(--surface2);border-radius:8px}
 .roulette-winner{font-size:20px;font-weight:600;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
 .option-text-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
 .option-text-input:focus{border-color:var(--accent)}
@@ -1976,6 +1996,45 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="noise" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Ruido</button>
   <button class="tab-btn" data-screen="sino" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 11h10M4 16h6M17 14l2 2 4-4"/></svg>Sinónimos</button>
 </nav>
+<div id="screen-frutas" class="screen">
+  <h2 class="section-title">🍎 Frutas de Temporada</h2>
+  <div class="frutas-mode-bar">
+    <button class="frutas-mode-btn active" id="frutas-btn-auto" onclick="frutasSetMode('auto')">📍 Según mi ubicación</button>
+    <button class="frutas-mode-btn" id="frutas-btn-manual" onclick="frutasSetMode('manual')">📅 Elegir estación</button>
+  </div>
+
+  <!-- Panel: auto -->
+  <div id="frutas-auto-panel">
+    <div id="frutas-location-chip" class="frutas-location-chip" style="display:none">
+      <span>📍</span><span id="frutas-location-text"></span>
+    </div>
+    <div id="frutas-auto-placeholder" style="text-align:center;padding:30px 0">
+      <div style="font-size:40px;margin-bottom:10px">📍</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px">Detectar mi ubicación</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Usamos tu latitud para saber el hemisferio y la estación actual</div>
+      <button class="btn-primary" onclick="frutasDetectLocation()" style="margin:0 auto;display:flex;gap:6px;align-items:center">📍 Detectar ubicación</button>
+    </div>
+    <div id="frutas-auto-result" style="display:none">
+      <div id="frutas-season-banner" class="frutas-season-banner"></div>
+      <div class="frutas-grid" id="frutas-auto-grid"></div>
+      <div class="frutas-tropical-note" id="frutas-tropical-note" style="display:none">🌴 En zonas tropicales muchas frutas están disponibles casi todo el año. Lista basada en el hemisferio norte.</div>
+    </div>
+  </div>
+
+  <!-- Panel: manual -->
+  <div id="frutas-manual-panel" style="display:none">
+    <div class="frutas-season-tabs">
+      <button class="frutas-season-tab" id="frutas-tab-primavera" onclick="frutasSelectSeason('primavera')">🌸 Primavera</button>
+      <button class="frutas-season-tab" id="frutas-tab-verano" onclick="frutasSelectSeason('verano')">☀️ Verano</button>
+      <button class="frutas-season-tab" id="frutas-tab-otono" onclick="frutasSelectSeason('otono')">🍂 Otoño</button>
+      <button class="frutas-season-tab" id="frutas-tab-invierno" onclick="frutasSelectSeason('invierno')">❄️ Invierno</button>
+    </div>
+    <div class="frutas-grid" id="frutas-manual-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:13px">Elegí una estación para ver las frutas</div>
+    </div>
+  </div>
+</div>
+
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -2041,10 +2100,11 @@ const CATEGORIES=[
     {id:'weather',name:'Clima',desc:'Pronóstico del tiempo',icon:'⛅',sub:'Online'},
     {id:'news',name:'Noticias',desc:'Últimas noticias',icon:'📰',sub:'Online'},
     {id:'sino',name:'Sinónimos',desc:'Sinónimos sofisticados para impresionar',icon:'✨',sub:'Online'},
+    {id:'frutas',name:'Frutas de temporada',desc:'Qué frutas están en estación según tu ubicación y fecha',icon:'🍎',sub:'Naturaleza'},
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada'};
 
 let navStack=[];
 
@@ -2968,6 +3028,259 @@ function worldBack(ci){
   worldCurrentRecipe=null;
   document.getElementById('world-detail-panel').style.display='none';
   document.getElementById('world-recipes-panel').style.display='block';
+}
+
+
+// ══ FRUTAS DE TEMPORADA ══
+const FRUTAS_DATA = {
+  norte: {
+    primavera: [
+      {e:'🍓',n:'Frutilla',d:'Dulce y aromática. Perfecta para postres y batidos.',p:'Marzo – Mayo'},
+      {e:'🍒',n:'Cereza',d:'Jugosa con sabor intenso. Temporada corta y muy esperada.',p:'Abril – Junio'},
+      {e:'🥭',n:'Mango',d:'Tropical y dulce. Llega a su punto óptimo en primavera.',p:'Marzo – Mayo'},
+      {e:'🍑',n:'Damasco / Albaricoque',d:'Suave, dulce y levemente ácido. Excelente para mermeladas.',p:'Mayo – Junio'},
+      {e:'🥝',n:'Kiwi',d:'Ácido y rico en vitamina C. Temporada larga.',p:'Abril – Junio'},
+      {e:'🍋',n:'Limón',d:'Versátil en cocina y bebidas. Cosecha abundante.',p:'Todo el año (pico: primavera)'},
+      {e:'🫐',n:'Arándano',d:'Antioxidante y dulce-ácido. Ideal para desayunos.',p:'Mayo – Junio'},
+      {e:'🍈',n:'Níspero',d:'Fruta amarilla suave y aromática, poco conocida fuera de su temporada.',p:'Abril – Mayo'},
+      {e:'🍇',n:'Uva (temprana)',d:'Variedades precoces llegan al final de la primavera.',p:'Mayo – Junio'},
+      {e:'🥑',n:'Palta / Aguacate',d:'Cremosa y nutritiva. Primeras cosechas en primavera.',p:'Abril – Junio'},
+    ],
+    verano: [
+      {e:'🍉',n:'Sandía',d:'Refrescante y dulce. La fruta emblema del verano.',p:'Junio – Agosto'},
+      {e:'🍈',n:'Melón',d:'Suave y aromático. Mejor con jamón o solo bien frío.',p:'Junio – Agosto'},
+      {e:'🍑',n:'Durazno / Melocotón',d:'Jugoso y fragante. En su punto máximo en pleno verano.',p:'Julio – Agosto'},
+      {e:'🫐',n:'Arándano',d:'Plena temporada. Perfecto para muffins, batidos y ensaladas.',p:'Junio – Agosto'},
+      {e:'🍒',n:'Cereza',d:'Final de temporada. Aprovechá las últimas de la cosecha.',p:'Junio – Julio'},
+      {e:'🍑',n:'Nectarina',d:'Similar al durazno pero sin pelusa. Dulce y jugosa.',p:'Julio – Agosto'},
+      {e:'🫐',n:'Mora',d:'Silvestre y oscura. Ideal para confituras y tartas.',p:'Julio – Agosto'},
+      {e:'🍇',n:'Higo',d:'Dulce, suave y con semillas crujientes. Plena temporada.',p:'Julio – Septiembre'},
+      {e:'🍋',n:'Maracuyá',d:'Ácido y aromático. En temporada alta durante el verano.',p:'Junio – Agosto'},
+      {e:'🍑',n:'Ciruela',d:'Variedades dulces y ácidas. Excelente para mermeladas.',p:'Julio – Septiembre'},
+    ],
+    otono: [
+      {e:'🍎',n:'Manzana',d:'Clásica del otoño. Cientos de variedades para todos los gustos.',p:'Septiembre – Noviembre'},
+      {e:'🍐',n:'Pera',d:'Suave y dulce. Mejor cuando cede levemente al presionar.',p:'Agosto – Octubre'},
+      {e:'🍇',n:'Uva',d:'Plena vendimia. Variedades tintas y blancas en su mejor momento.',p:'Septiembre – Octubre'},
+      {e:'🍊',n:'Mandarina',d:'Fácil de pelar y dulce. Las primeras aparecen en otoño.',p:'Octubre – Diciembre'},
+      {e:'🍅',n:'Granada',d:'Sus granos rojos son antioxidantes y decorativos.',p:'Septiembre – Noviembre'},
+      {e:'🫐',n:'Membrillo',d:'Amarillo y perfumado. Solo se consume cocinado.',p:'Octubre – Noviembre'},
+      {e:'🍊',n:'Caqui / Kaki',d:'Naranja intenso, dulce cuando está bien maduro.',p:'Octubre – Diciembre'},
+      {e:'🌰',n:'Castaña',d:'Tostada o al horno. Otoño es su única estación.',p:'Octubre – Noviembre'},
+      {e:'🍋',n:'Limón',d:'Segunda cosecha otoñal. Abundante y económico.',p:'Octubre – Diciembre'},
+      {e:'🫒',n:'Aceituna',d:'Se cosecha en otoño para aceite y consumo en salmuera.',p:'Octubre – Diciembre'},
+    ],
+    invierno: [
+      {e:'🍊',n:'Naranja',d:'Jugosa y rica en vitamina C. La fruta del invierno por excelencia.',p:'Diciembre – Febrero'},
+      {e:'🍊',n:'Mandarina',d:'Plena temporada. Dulce, fácil de pelar, perfecta para el frío.',p:'Noviembre – Enero'},
+      {e:'🍋',n:'Pomelo',d:'Ácido y amargo. Excelente para jugos y ensaladas.',p:'Diciembre – Marzo'},
+      {e:'🥝',n:'Kiwi',d:'Ácido y nutritivo. Plena temporada en invierno.',p:'Diciembre – Marzo'},
+      {e:'🍋',n:'Limón',d:'Pico de producción invernal. Esencial en cocina.',p:'Diciembre – Febrero'},
+      {e:'🍌',n:'Banana',d:'Importada pero siempre disponible. Energética y versátil.',p:'Todo el año'},
+      {e:'🍍',n:'Piña / Ananás',d:'Tropical. Se importa en invierno pero sigue disponible.',p:'Todo el año (pico: invierno)'},
+      {e:'🌿',n:'Chirimoya',d:'Suave y cremosa, con sabor a vainilla y plátano. Joya invernal.',p:'Diciembre – Febrero'},
+      {e:'🫐',n:'Dátil',d:'Dulce concentrado. Se cosecha en otoño-invierno.',p:'Noviembre – Enero'},
+      {e:'🍊',n:'Clementina',d:'Pequeña y sin semillas. Fácil de comer en el frío.',p:'Diciembre – Febrero'},
+    ]
+  },
+  sur: {
+    primavera: [
+      {e:'🍓',n:'Frutilla',d:'Dulce y aromática. Llega con la primavera del sur.',p:'Septiembre – Noviembre'},
+      {e:'🍒',n:'Cereza',d:'Jugosa y de temporada corta. Muy esperada.',p:'Octubre – Diciembre'},
+      {e:'🍑',n:'Damasco',d:'Suave y dulce. Primeras cosechas a fin de temporada.',p:'Noviembre – Diciembre'},
+      {e:'🥝',n:'Kiwi',d:'En plena primavera del hemisferio sur. Ácido y nutritivo.',p:'Septiembre – Noviembre'},
+      {e:'🫐',n:'Arándano',d:'Antioxidante. Llega al comienzo de la primavera.',p:'Octubre – Noviembre'},
+      {e:'🍋',n:'Limón',d:'Cosecha abundante en primavera austral.',p:'Todo el año (pico: primavera)'},
+      {e:'🍇',n:'Uva (temprana)',d:'Primeras variedades precoces antes del verano.',p:'Noviembre – Diciembre'},
+      {e:'🥑',n:'Palta / Aguacate',d:'Cremosa y nutritiva. Primeras cosechas primaverales.',p:'Octubre – Diciembre'},
+      {e:'🍈',n:'Níspero',d:'Amarillo y suave. Cosecha a fin de primavera.',p:'Octubre – Noviembre'},
+      {e:'🍊',n:'Mandarina',d:'Última de la temporada anterior. Hasta octubre.',p:'Hasta octubre'},
+    ],
+    verano: [
+      {e:'🍉',n:'Sandía',d:'Refrescante y dulce. La reina del verano austral.',p:'Diciembre – Febrero'},
+      {e:'🍈',n:'Melón',d:'Suave y aromático. Ideal para el calor veraneño.',p:'Diciembre – Febrero'},
+      {e:'🍑',n:'Durazno / Melocotón',d:'Jugoso y fragante. Pico en pleno verano austral.',p:'Diciembre – Febrero'},
+      {e:'🍒',n:'Cereza',d:'Plena temporada austral. Temporada corta y preciada.',p:'Diciembre – Enero'},
+      {e:'🍑',n:'Nectarina',d:'Dulce y jugosa. Se cosecha junto al durazno.',p:'Enero – Febrero'},
+      {e:'🫐',n:'Mora',d:'Silvestre y oscura. Ideal para confituras en el verano austral.',p:'Enero – Febrero'},
+      {e:'🍇',n:'Higo',d:'Dulce y con semillas crujientes. Temporada estival.',p:'Enero – Marzo'},
+      {e:'🍑',n:'Ciruela',d:'Varios colores y sabores. Plena cosecha veraniega.',p:'Enero – Febrero'},
+      {e:'🫐',n:'Arándano',d:'Plena temporada en enero-febrero.',p:'Diciembre – Febrero'},
+      {e:'🍋',n:'Maracuyá',d:'Ácido y aromático. En temporada alta veraniega.',p:'Diciembre – Febrero'},
+    ],
+    otono: [
+      {e:'🍎',n:'Manzana',d:'Cosecha otoñal del sur. Cientos de variedades.',p:'Marzo – Mayo'},
+      {e:'🍐',n:'Pera',d:'Suave y dulce. En su pico entre marzo y mayo.',p:'Marzo – Mayo'},
+      {e:'🍇',n:'Uva',d:'Vendimia austral. Marzo es el mes del vino y la uva.',p:'Marzo – Abril'},
+      {e:'🍅',n:'Granada',d:'Sus granos rojos se cosechan en otoño austral.',p:'Marzo – Mayo'},
+      {e:'🫐',n:'Membrillo',d:'Amarillo y perfumado. Solo cocinado. Clásico del otoño.',p:'Abril – Mayo'},
+      {e:'🍊',n:'Caqui / Kaki',d:'Naranja intenso, dulce cuando está muy maduro.',p:'Abril – Junio'},
+      {e:'🍊',n:'Mandarina',d:'Las primeras aparecen al entrar el otoño.',p:'Abril – Julio'},
+      {e:'🌰',n:'Castaña',d:'Otoño es su única estación también en el sur.',p:'Abril – Mayo'},
+      {e:'🍋',n:'Limón',d:'Segunda cosecha abundante en otoño austral.',p:'Abril – Junio'},
+      {e:'🥑',n:'Palta / Aguacate',d:'Plena cosecha. El otoño es su mejor momento.',p:'Marzo – Junio'},
+    ],
+    invierno: [
+      {e:'🍊',n:'Naranja',d:'Jugosa en pleno invierno del sur. Rica en vitamina C.',p:'Junio – Agosto'},
+      {e:'🍊',n:'Mandarina',d:'Plena temporada invernal. Dulce y fácil de pelar.',p:'Mayo – Agosto'},
+      {e:'🍋',n:'Pomelo',d:'Ácido y refrescante. Cosecha invernal abundante.',p:'Junio – Septiembre'},
+      {e:'🥝',n:'Kiwi',d:'Nutritivo y ácido. Plena cosecha en invierno austral.',p:'Junio – Agosto'},
+      {e:'🍋',n:'Limón',d:'Producción pico en invierno. Esencial en cocina.',p:'Junio – Agosto'},
+      {e:'🌿',n:'Chirimoya',d:'Suave y cremosa. Joya del invierno austral.',p:'Junio – Agosto'},
+      {e:'🍌',n:'Banana',d:'Siempre disponible. Energética en el frío invernal.',p:'Todo el año'},
+      {e:'🍊',n:'Clementina',d:'Pequeña y sin semillas. Perfecta para el frío.',p:'Junio – Agosto'},
+      {e:'🫐',n:'Dátil',d:'Dulce y concentrado. Disponible durante el invierno.',p:'Mayo – Agosto'},
+      {e:'🍍',n:'Piña / Ananás',d:'Tropical importada. Disponible todo el año.',p:'Todo el año'},
+    ]
+  },
+  tropical: [
+    {e:'🍌',n:'Banana / Plátano',d:'Disponible todo el año. Base energética de la dieta tropical.',p:'Todo el año'},
+    {e:'🥭',n:'Mango',d:'El rey tropical. Pico según variedad, pero siempre hay.',p:'Todo el año (pico: verano)'},
+    {e:'🍍',n:'Piña / Ananás',d:'Dulce y ácida. Cosecha escalonada durante todo el año.',p:'Todo el año'},
+    {e:'🥥',n:'Coco',d:'Agua fresca y pulpa. Esencial en la cocina tropical.',p:'Todo el año'},
+    {e:'🍈',n:'Papaya',d:'Suave y digestiva. Producción constante en el trópico.',p:'Todo el año'},
+    {e:'🍋',n:'Maracuyá',d:'Ácido e intenso. Se da en clima cálido todo el año.',p:'Todo el año'},
+    {e:'🍓',n:'Guayaba',d:'Dulce y aromática. Rica en vitamina C.',p:'Todo el año'},
+    {e:'🍊',n:'Carambola',d:'Forma de estrella, sabor ácido-dulce. Tropical pura.',p:'Todo el año'},
+    {e:'🥑',n:'Palta / Aguacate',d:'Tropical-subtropical. Cosecha durante todo el año.',p:'Todo el año'},
+    {e:'🍈',n:'Guanábana',d:'Pulpa blanca y ácida. Crece en climas cálidos todo el año.',p:'Todo el año'},
+  ]
+};
+
+const SEASON_INFO = {
+  primavera: {icon:'🌸', name:'Primavera', color:'oklch(70% 0.15 340 / 0.12)', border:'oklch(70% 0.15 340 / 0.5)'},
+  verano:    {icon:'☀️', name:'Verano',    color:'oklch(85% 0.15 80  / 0.12)', border:'oklch(75% 0.15 80  / 0.5)'},
+  otono:     {icon:'🍂', name:'Otoño',     color:'oklch(70% 0.15 50  / 0.12)', border:'oklch(65% 0.15 50  / 0.5)'},
+  invierno:  {icon:'❄️', name:'Invierno',  color:'oklch(65% 0.10 240 / 0.12)', border:'oklch(60% 0.10 240 / 0.5)'},
+};
+
+let frutasMode = 'auto';
+let frutasUserLat = null;
+let frutasUserLon = null;
+let frutasManualSeason = null;
+
+function frutasSetMode(mode) {
+  frutasMode = mode;
+  document.getElementById('frutas-btn-auto').classList.toggle('active', mode === 'auto');
+  document.getElementById('frutas-btn-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('frutas-auto-panel').style.display = mode === 'auto' ? 'block' : 'none';
+  document.getElementById('frutas-manual-panel').style.display = mode === 'manual' ? 'block' : 'none';
+}
+
+function frutasGetHemisphere(lat) {
+  if (lat > 15) return 'norte';
+  if (lat < -15) return 'sur';
+  return 'tropical';
+}
+
+function frutasGetSeason(lat, month) {
+  const hem = frutasGetHemisphere(lat);
+  if (hem === 'tropical') return {hem, season: null};
+  // month: 0=Jan ... 11=Dec
+  let season;
+  if (hem === 'norte') {
+    if ([2,3,4].includes(month)) season = 'primavera';
+    else if ([5,6,7].includes(month)) season = 'verano';
+    else if ([8,9,10].includes(month)) season = 'otono';
+    else season = 'invierno';
+  } else {
+    // sur: seasons flipped
+    if ([2,3,4].includes(month)) season = 'otono';
+    else if ([5,6,7].includes(month)) season = 'invierno';
+    else if ([8,9,10].includes(month)) season = 'primavera';
+    else season = 'verano';
+  }
+  return {hem, season};
+}
+
+function frutasRenderGrid(gridId, fruits) {
+  document.getElementById(gridId).innerHTML = fruits.map(f =>
+    `<div class="fruta-card">
+      <span class="fruta-emoji">${f.e}</span>
+      <div class="fruta-name">${f.n}</div>
+      <div class="fruta-desc">${f.d}</div>
+      <div class="fruta-peak">📅 ${f.p}</div>
+    </div>`
+  ).join('');
+}
+
+function frutasRenderBanner(season) {
+  const si = SEASON_INFO[season];
+  const banner = document.getElementById('frutas-season-banner');
+  banner.style.background = si.color;
+  banner.style.border = '1px solid ' + si.border;
+  banner.innerHTML = `<div class="frutas-season-icon">${si.icon}</div>
+    <div><div class="frutas-season-name">${si.name}</div>
+    <div class="frutas-season-sub">Frutas en temporada ahora</div></div>`;
+}
+
+function frutasDetectLocation() {
+  if (!navigator.geolocation) {
+    alert('Tu navegador no soporta geolocalización.');
+    return;
+  }
+  const btn = document.querySelector('#frutas-auto-placeholder .btn-primary');
+  if (btn) { btn.textContent = '⏳ Detectando...'; btn.disabled = true; }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      frutasUserLat = pos.coords.latitude;
+      frutasUserLon = pos.coords.longitude;
+      const month = new Date().getMonth();
+      const {hem, season} = frutasGetSeason(frutasUserLat, month);
+
+      document.getElementById('frutas-auto-placeholder').style.display = 'none';
+      document.getElementById('frutas-auto-result').style.display = 'block';
+
+      // Location chip
+      const hemLabel = {norte:'Hemisferio Norte', sur:'Hemisferio Sur', tropical:'Zona Tropical'}[hem];
+      const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      document.getElementById('frutas-location-chip').style.display = 'flex';
+      document.getElementById('frutas-location-text').textContent =
+        hemLabel + ' · ' + monthNames[month];
+
+      if (hem === 'tropical') {
+        document.getElementById('frutas-season-banner').style.display = 'none';
+        document.getElementById('frutas-tropical-note').style.display = 'block';
+        frutasRenderGrid('frutas-auto-grid', FRUTAS_DATA.tropical);
+      } else {
+        document.getElementById('frutas-season-banner').style.display = 'flex';
+        document.getElementById('frutas-tropical-note').style.display = 'none';
+        frutasRenderBanner(season);
+        frutasRenderGrid('frutas-auto-grid', FRUTAS_DATA[hem][season]);
+      }
+    },
+    err => {
+      if (btn) { btn.textContent = '📍 Detectar ubicación'; btn.disabled = false; }
+      // fallback: use device date only, assume northern hemisphere
+      const month = new Date().getMonth();
+      const {hem, season} = frutasGetSeason(40, month); // default lat 40 (N)
+      document.getElementById('frutas-auto-placeholder').style.display = 'none';
+      document.getElementById('frutas-auto-result').style.display = 'block';
+      document.getElementById('frutas-location-chip').style.display = 'flex';
+      document.getElementById('frutas-location-text').textContent = 'Sin ubicación — usando Hemisferio Norte';
+      document.getElementById('frutas-season-banner').style.display = 'flex';
+      document.getElementById('frutas-tropical-note').style.display = 'none';
+      frutasRenderBanner(season);
+      frutasRenderGrid('frutas-auto-grid', FRUTAS_DATA[hem][season]);
+    },
+    {timeout: 8000}
+  );
+}
+
+function frutasSelectSeason(season) {
+  frutasManualSeason = season;
+  ['primavera','verano','otono','invierno'].forEach(s => {
+    document.getElementById('frutas-tab-' + s).classList.toggle('active', s === season);
+  });
+  // In manual mode, show north hemisphere (most users are northern)
+  // but if user already detected location, use their hemisphere
+  let hem = 'norte';
+  if (frutasUserLat !== null) {
+    const h = frutasGetHemisphere(frutasUserLat);
+    if (h !== 'tropical') hem = h;
+  }
+  frutasRenderGrid('frutas-manual-grid', FRUTAS_DATA[hem][season]);
 }
 
 function rouletteRenderItems(){document.getElementById('roulette-items').innerHTML=rouletteOptions.map((o,i)=>`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><div style="width:9px;height:9px;border-radius:50%;background:${RC[i%RC.length]};flex-shrink:0"></div><input class="option-text-input" value="${o}" oninput="rouletteUpdateOption(${i},this.value)" placeholder="Opción ${i+1}"><button class="option-remove" onclick="rouletteRemoveOption(${i})">×</button></div>`).join('');rouletteRender();}
