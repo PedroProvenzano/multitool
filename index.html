@@ -384,12 +384,31 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .dolar-var{font-size:11px;margin-top:2px}
 .dolar-var.up{color:var(--success)}.dolar-var.dn{color:var(--danger)}
 
-/* GASTOS */
+/* BALANCE (ingresos & egresos) */
 .exp-cat-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
 .exp-item-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border)}
 .exp-day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .exp-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 2px;opacity:.5;transition:opacity .15s}
 .exp-del-btn:hover{opacity:1;color:var(--danger)}
+.exp-type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:3px;margin-bottom:10px}
+.exp-type-btn{padding:8px 0;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:none;color:var(--muted);transition:background .15s,color .15s}
+.exp-type-btn.active-income{background:var(--success);color:#fff}
+.exp-type-btn.active-expense{background:var(--danger);color:#fff}
+.exp-currency-toggle{display:flex;gap:5px;margin-bottom:10px}
+.exp-cur-btn{flex:1;padding:6px 0;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface2);color:var(--muted);transition:background .15s,color .15s,border-color .15s}
+.exp-cur-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.exp-recurring-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:var(--surface2);border-radius:9px;border:1px solid var(--border);cursor:pointer}
+.exp-recurring-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+.exp-recurring-badge{font-size:10px;background:var(--accent);color:#fff;border-radius:5px;padding:1px 5px;margin-left:4px;opacity:.85}
+.exp-income-amount{color:var(--success)!important}
+.exp-expense-amount{color:var(--danger)!important}
+/* BOTÓN RÁPIDO EN HOME */
+.balance-quick-btn{display:flex;align-items:center;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer;transition:border-color .15s,transform .1s;margin:0 14px 12px;width:calc(100% - 28px);box-sizing:border-box;text-align:left}
+.balance-quick-btn:active{transform:scale(0.98)}
+.balance-quick-btn:hover{border-color:var(--accent)}
+.balance-quick-icon{font-size:28px;flex-shrink:0}
+.balance-quick-title{font-size:15px;font-weight:600;color:var(--text)}
+.balance-quick-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* HOME / CATEGORÍAS */
 #screen-home{padding:14px}
@@ -1302,9 +1321,20 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 <!-- GASTOS -->
 <div id="screen-expenses" class="screen">
   <div class="card" style="padding:12px">
+    <!-- Tipo: Egreso / Ingreso -->
+    <div class="exp-type-toggle" id="exp-type-toggle">
+      <button class="exp-type-btn active-expense" id="exp-type-expense" onclick="expSetType('expense')">📤 Egreso</button>
+      <button class="exp-type-btn" id="exp-type-income" onclick="expSetType('income')">📥 Ingreso</button>
+    </div>
+    <!-- Moneda -->
+    <div class="exp-currency-toggle">
+      <button class="exp-cur-btn active" id="exp-cur-ars" onclick="expSetCurrency('ARS')">$ ARS</button>
+      <button class="exp-cur-btn" id="exp-cur-usd" onclick="expSetCurrency('USD')">USD</button>
+    </div>
+    <!-- Importe y Fecha -->
     <div class="row-2" style="margin-bottom:10px">
       <div>
-        <div class="field-label">Importe ($)</div>
+        <div class="field-label" id="exp-amount-label">Importe ($)</div>
         <input class="sm-input" type="number" id="exp-amount" placeholder="0.00" style="font-family:var(--font-mono);font-size:18px" inputmode="decimal">
       </div>
       <div>
@@ -1312,47 +1342,68 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
         <input class="sm-input" type="date" id="exp-date">
       </div>
     </div>
+    <!-- Descripción -->
     <div style="margin-bottom:10px">
       <div class="field-label">Descripción</div>
-      <input class="sm-input" id="exp-desc" placeholder="¿En qué gastaste?" onkeydown="if(event.key==='Enter')expAdd()">
+      <input class="sm-input" id="exp-desc" placeholder="¿De qué es?" onkeydown="if(event.key==='Enter')expAdd()">
     </div>
-    <div style="margin-bottom:12px">
+    <!-- Categoría -->
+    <div style="margin-bottom:10px">
       <div class="field-label" style="margin-bottom:7px">Categoría</div>
       <div class="exp-cat-pills" id="exp-cat-pills">
         <button class="mode-pill active" data-cat="🍔 Comida" onclick="expSetCat(this)">🍔 Comida</button>
         <button class="mode-pill" data-cat="🚗 Transporte" onclick="expSetCat(this)">🚗 Trans.</button>
         <button class="mode-pill" data-cat="🏠 Hogar" onclick="expSetCat(this)">🏠 Hogar</button>
         <button class="mode-pill" data-cat="⚕️ Salud" onclick="expSetCat(this)">⚕️ Salud</button>
+        <button class="mode-pill" data-cat="💼 Trabajo" onclick="expSetCat(this)">💼 Trabajo</button>
         <button class="mode-pill" data-cat="🎮 Ocio" onclick="expSetCat(this)">🎮 Ocio</button>
         <button class="mode-pill" data-cat="📦 Otro" onclick="expSetCat(this)">📦 Otro</button>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="expAdd()">+ Agregar gasto</button>
+    <!-- Fijo mensual -->
+    <label class="exp-recurring-row" onclick="expToggleRecurring()">
+      <input type="checkbox" id="exp-recurring" style="pointer-events:none">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">Fijo mensual</div>
+        <div style="font-size:11px;color:var(--muted)">Suscripciones, alquiler, servicios…</div>
+      </div>
+      <span class="exp-recurring-badge" id="exp-recurring-badge" style="display:none">🔁 Fijo</span>
+    </label>
+    <button class="btn btn-primary" id="exp-add-btn" onclick="expAdd()">+ Agregar egreso</button>
   </div>
 
+  <!-- Resumen del mes -->
   <div class="card">
-    <div class="card-label">Este mes</div>
-    <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="card-label" id="exp-month-label-top">Este mes</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div>
-        <div id="exp-total" style="font-family:var(--font-mono);font-size:32px;font-weight:500;color:var(--danger)">$0</div>
-        <div id="exp-month-label" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Egresos</div>
+        <div id="exp-total-out" style="font-family:var(--font-mono);font-size:22px;font-weight:500;color:var(--danger)">$0</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Balance</div>
+        <div id="exp-balance" style="font-family:var(--font-mono);font-size:22px;font-weight:600">$0</div>
       </div>
       <div style="text-align:right">
-        <div id="exp-count" style="font-family:var(--font-mono);font-size:26px;font-weight:500">0</div>
-        <div style="font-size:11px;color:var(--muted)">gastos</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Ingresos</div>
+        <div id="exp-total-in" style="font-family:var(--font-mono);font-size:22px;font-weight:500;color:var(--success)">$0</div>
       </div>
+    </div>
+    <div id="exp-recurring-total-row" style="display:none;margin-top:4px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
+      🔁 Fijos mensuales: <span id="exp-recurring-total" style="font-family:var(--font-mono);font-weight:500;color:var(--text)">$0</span>
     </div>
   </div>
 
+  <!-- Google Sheets -->
   <div class="card" style="padding:12px">
     <div class="card-label">Google Sheets <span style="color:var(--muted);font-size:10px;text-transform:none;letter-spacing:0">(opcional)</span></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Pegá la URL de tu Apps Script para guardar cada gasto automáticamente en una hoja de cálculo.</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Pegá la URL de tu Apps Script para guardar cada movimiento automáticamente en tu hoja de cálculo.</div>
     <input class="sm-input" id="exp-webhook" placeholder="https://script.google.com/macros/s/..." style="margin-bottom:6px" oninput="expSaveWebhook()">
     <div id="exp-webhook-status" style="font-size:11px;min-height:14px"></div>
   </div>
 
   <div id="exp-list"></div>
-  <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:10px;font-size:12px;margin-top:4px" onclick="expClearAll()">Borrar todos los gastos</button>
+  <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:10px;font-size:12px;margin-top:4px" onclick="expClearAll()">Borrar todos los movimientos</button>
 </div>
 
 <!-- TEMPORIZADOR DE TURNOS -->
@@ -1770,6 +1821,13 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
     <input class="home-search" type="text" placeholder="Buscar herramienta..." oninput="navSearch(this.value)" id="home-search-input">
   </div>
   <div id="search-results" style="padding:0 14px;display:none;flex-direction:column;gap:7px"></div>
+  <button class="balance-quick-btn" onclick="navOpenTool('expenses')">
+    <div class="balance-quick-icon">💰</div>
+    <div>
+      <div class="balance-quick-title">Balance personal</div>
+      <div class="balance-quick-sub">Registrar ingresos y egresos · Sincronizar con Sheets</div>
+    </div>
+  </button>
   <div class="cat-grid" style="padding:0 14px 14px" id="cat-grid"></div>
 </div>
 
@@ -2066,7 +2124,7 @@ const CATEGORIES=[
     {id:'recipe',name:'Recetas',desc:'Escalar ingredientes de cualquier receta',icon:'🍳',sub:'Apuntes'},
     {id:'habits',name:'Hábitos',desc:'Rastrear hábitos diarios con racha',icon:'🔥',sub:'Seguimiento'},
     {id:'tally',name:'Contador',desc:'Contar con +/−',icon:'🔢',sub:'Seguimiento'},
-    {id:'expenses',name:'Gastos',desc:'Registrar gastos y sincronizar con Google Sheets',icon:'💸',sub:'Seguimiento'},
+    {id:'expenses',name:'Balance',desc:'Ingresos, egresos y suscripciones · Sync con Sheets',icon:'💰',sub:'Seguimiento'},
     {id:'teams',name:'Equipos',desc:'Sortear personas en equipos al azar',icon:'👥',sub:'Grupos'},
     {id:'namegen',name:'Generador de nombres',desc:'Nombres para personas, bandas y proyectos',icon:'✨',sub:'Grupos'},
     {id:'excusas',name:'Excusas',desc:'Generador de excusas para toda ocasión',icon:'😅',sub:'Grupos'},
@@ -2104,7 +2162,7 @@ const CATEGORIES=[
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Gastos',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Balance',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada'};
 
 let navStack=[];
 
@@ -3515,58 +3573,126 @@ async function newsFetch(){const list=document.getElementById('news-list'),loadi
 if(navigator.onLine)newsFetch();else document.getElementById('news-loading').textContent='Sin conexión para cargar noticias';
 
 // ══ GASTOS ══
-let expenses=JSON.parse(localStorage.getItem('expenses')||'[]'),expCat='🍔 Comida';
-function expSetCat(btn){document.querySelectorAll('#exp-cat-pills .mode-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');expCat=btn.dataset.cat;}
+let expenses=JSON.parse(localStorage.getItem('expenses')||'[]'),expCat='🍔 Comida',expType='expense',expCurrency='ARS';
+
+function expSetType(type){
+  expType=type;
+  const btnExp=document.getElementById('exp-type-expense');
+  const btnInc=document.getElementById('exp-type-income');
+  btnExp.className='exp-type-btn'+(type==='expense'?' active-expense':'');
+  btnInc.className='exp-type-btn'+(type==='income'?' active-income':'');
+  document.getElementById('exp-add-btn').textContent=type==='expense'?'+ Agregar egreso':'+ Agregar ingreso';
+  // Ocultar/mostrar categorías según tipo
+  const catPills=document.getElementById('exp-cat-pills');
+  catPills.style.display=type==='income'?'none':'flex';
+}
+
+function expSetCurrency(cur){
+  expCurrency=cur;
+  document.getElementById('exp-cur-ars').className='exp-cur-btn'+(cur==='ARS'?' active':'');
+  document.getElementById('exp-cur-usd').className='exp-cur-btn'+(cur==='USD'?' active':'');
+  document.getElementById('exp-amount-label').textContent=cur==='ARS'?'Importe ($)':'Importe (USD)';
+}
+
+function expSetCat(btn){
+  document.querySelectorAll('#exp-cat-pills .mode-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  expCat=btn.dataset.cat;
+}
+
+function expToggleRecurring(){
+  const cb=document.getElementById('exp-recurring');
+  const badge=document.getElementById('exp-recurring-badge');
+  // toggling happens naturally via label, just update badge
+  setTimeout(()=>{badge.style.display=cb.checked?'inline':'none';},0);
+}
+
 function expAdd(){
   const amount=parseFloat(document.getElementById('exp-amount').value);
   if(!amount||amount<=0)return;
-  const desc=document.getElementById('exp-desc').value.trim()||expCat;
+  const desc=document.getElementById('exp-desc').value.trim()||(expType==='income'?'Ingreso':expCat);
   const date=document.getElementById('exp-date').value||new Date().toISOString().slice(0,10);
-  const exp={id:Date.now()+'',amount,desc,cat:expCat,date};
+  const recurring=document.getElementById('exp-recurring').checked;
+  const exp={id:Date.now()+'',amount,desc,cat:(expType==='income'?'💼 Ingreso':expCat),date,type:expType,currency:expCurrency,recurring};
   expenses.unshift(exp);
   localStorage.setItem('expenses',JSON.stringify(expenses));
   document.getElementById('exp-amount').value='';
   document.getElementById('exp-desc').value='';
+  document.getElementById('exp-recurring').checked=false;
+  document.getElementById('exp-recurring-badge').style.display='none';
   expRender();
   expSyncSheets(exp);
 }
+
+function expFmtAmount(amount,currency){
+  if(currency==='USD'){
+    return 'USD '+amount.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  return '$'+amount.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
 function expRender(){
   const now=new Date();
   const thisMonth=now.toISOString().slice(0,7);
   const monthExp=expenses.filter(e=>e.date.startsWith(thisMonth));
-  const total=monthExp.reduce((s,e)=>s+e.amount,0);
-  document.getElementById('exp-total').textContent='$'+total.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById('exp-count').textContent=monthExp.length;
-  document.getElementById('exp-month-label').textContent=now.toLocaleString('es-AR',{month:'long',year:'numeric'});
+  // Resumen: solo ARS para simplificar el balance mixto
+  const totalOut=monthExp.filter(e=>e.type==='expense'||!e.type).reduce((s,e)=>s+(e.currency==='USD'?e.amount*1200:e.amount),0);
+  const totalIn=monthExp.filter(e=>e.type==='income').reduce((s,e)=>s+(e.currency==='USD'?e.amount*1200:e.amount),0);
+  const balance=totalIn-totalOut;
+  const recurringTotal=expenses.filter(e=>e.recurring&&(e.type==='expense'||!e.type)).reduce((s,e)=>s+(e.currency==='USD'?e.amount*1200:e.amount),0);
+  document.getElementById('exp-total-out').textContent='$'+totalOut.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('exp-total-in').textContent='$'+totalIn.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const balEl=document.getElementById('exp-balance');
+  balEl.textContent=(balance>=0?'+':'')+'$'+balance.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  balEl.style.color=balance>=0?'var(--success)':'var(--danger)';
+  document.getElementById('exp-month-label-top').textContent='Este mes · '+now.toLocaleString('es-AR',{month:'long',year:'numeric'});
+  const recRow=document.getElementById('exp-recurring-total-row');
+  if(recurringTotal>0){
+    recRow.style.display='block';
+    document.getElementById('exp-recurring-total').textContent='$'+recurringTotal.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  } else {recRow.style.display='none';}
   const list=document.getElementById('exp-list');
-  if(!expenses.length){list.innerHTML='<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">Sin gastos registrados</div>';return;}
+  if(!expenses.length){list.innerHTML='<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">Sin movimientos registrados</div>';return;}
   const grouped={};
   expenses.forEach(e=>{if(!grouped[e.date])grouped[e.date]=[];grouped[e.date].push(e);});
   list.innerHTML=Object.keys(grouped).sort().reverse().slice(0,60).map(date=>{
-    const dayTotal=grouped[date].reduce((s,e)=>s+e.amount,0);
+    const dayOut=grouped[date].filter(e=>e.type==='expense'||!e.type).reduce((s,e)=>s+e.amount,0);
+    const dayIn=grouped[date].filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
     const d=new Date(date+'T12:00:00');
     const dateLabel=d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
-    return `<div class="card" style="padding:10px 13px"><div class="exp-day-header"><span style="font-size:12px;font-weight:500;color:var(--muted);text-transform:capitalize">${dateLabel}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">$${dayTotal.toLocaleString('es-AR',{minimumFractionDigits:2})}</span></div>${grouped[date].map(e=>`<div class="exp-item-row"><div style="flex:1"><div style="font-size:14px">${e.cat.split(' ')[0]} ${e.desc}</div><div style="font-size:11px;color:var(--muted)">${e.cat}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-mono);font-size:15px;font-weight:500">$${e.amount.toLocaleString('es-AR',{minimumFractionDigits:2})}</span><button class="exp-del-btn" onclick="expRemove('${e.id}')">&#215;</button></div></div>`).join('')}</div>`;
+    const daySummary=dayIn>0&&dayOut>0?`<span style="color:var(--success);font-family:var(--font-mono);font-size:11px">+${dayIn.toLocaleString('es-AR',{minimumFractionDigits:0})}</span> <span style="color:var(--muted);font-family:var(--font-mono);font-size:11px">−${dayOut.toLocaleString('es-AR',{minimumFractionDigits:0})}</span>`:dayIn>0?`<span style="color:var(--success);font-family:var(--font-mono);font-size:12px">+${dayIn.toLocaleString('es-AR',{minimumFractionDigits:0})}</span>`:`<span style="color:var(--muted);font-family:var(--font-mono);font-size:12px">$${dayOut.toLocaleString('es-AR',{minimumFractionDigits:0})}</span>`;
+    return `<div class="card" style="padding:10px 13px"><div class="exp-day-header"><span style="font-size:12px;font-weight:500;color:var(--muted);text-transform:capitalize">${dateLabel}</span>${daySummary}</div>${grouped[date].map(e=>{
+      const isIncome=e.type==='income';
+      const amtColor=isIncome?'var(--success)':'var(--text)';
+      const prefix=isIncome?'+ ':'';
+      const recurBadge=e.recurring?`<span style="font-size:9px;background:var(--accent);color:#fff;border-radius:4px;padding:1px 4px;margin-left:4px;opacity:.8">🔁</span>`:'';
+      const curBadge=e.currency==='USD'?`<span style="font-size:9px;background:var(--surface2);color:var(--muted);border-radius:4px;padding:1px 4px;margin-left:3px;border:1px solid var(--border)">USD</span>`:'';
+      return `<div class="exp-item-row"><div style="flex:1"><div style="font-size:14px">${e.cat.split(' ')[0]} ${e.desc}${recurBadge}</div><div style="font-size:11px;color:var(--muted)">${e.cat}${curBadge}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-mono);font-size:15px;font-weight:500;color:${amtColor}">${prefix}${expFmtAmount(e.amount,e.currency||'ARS')}</span><button class="exp-del-btn" onclick="expRemove('${e.id}')">&#215;</button></div></div>`;
+    }).join('')}</div>`;
   }).join('');
 }
+
 async function expSyncSheets(exp){
   const url=localStorage.getItem('exp-webhook');
   if(!url)return;
   const st=document.getElementById('exp-webhook-status');
   try{
-    await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:exp.date,amount:exp.amount,desc:exp.desc,cat:exp.cat})});
+    await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:exp.date,amount:exp.amount,desc:exp.desc,cat:exp.cat,type:exp.type||'expense',currency:exp.currency||'ARS',recurring:exp.recurring||false})});
     st.textContent='✓ Sincronizado con Sheets';st.style.color='var(--success)';
   }catch(e){st.textContent='Error al sincronizar';st.style.color='var(--danger)';}
 }
+
 function expSaveWebhook(){
   const url=document.getElementById('exp-webhook').value.trim();
   localStorage.setItem('exp-webhook',url);
   const st=document.getElementById('exp-webhook-status');
-  st.textContent=url?'✓ URL guardada — se usará en el próximo gasto':'';
+  st.textContent=url?'✓ URL guardada — se usará en el próximo movimiento':'';
   st.style.color='var(--success)';
 }
+
 function expRemove(id){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem('expenses',JSON.stringify(expenses));expRender();}
-function expClearAll(){if(confirm('¿Borrar todos los gastos?')){expenses=[];localStorage.setItem('expenses',JSON.stringify(expenses));expRender();}}
+function expClearAll(){if(confirm('¿Borrar todos los movimientos?')){expenses=[];localStorage.setItem('expenses',JSON.stringify(expenses));expRender();}}
+
 (function(){
   document.getElementById('exp-date').value=new Date().toISOString().slice(0,10);
   const url=localStorage.getItem('exp-webhook');
