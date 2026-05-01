@@ -1374,22 +1374,26 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 
   <!-- Resumen del mes -->
   <div class="card">
-    <div class="card-label" id="exp-month-label-top">Este mes</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Egresos</div>
-        <div id="exp-total-out" style="font-family:var(--font-mono);font-size:22px;font-weight:500;color:var(--danger)">$0</div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+      <div class="card-label" id="exp-month-label-top" style="margin-bottom:0">Este mes</div>
+    </div>
+    <!-- Balance destacado arriba -->
+    <div style="text-align:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Balance</div>
+      <div id="exp-balance" style="font-family:var(--font-mono);font-size:clamp(22px,7vw,36px);font-weight:700;line-height:1;word-break:break-all">$0</div>
+    </div>
+    <!-- Egresos e Ingresos abajo en dos columnas -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--surface2);border-radius:10px;padding:10px 12px;border:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">📤 Egresos</div>
+        <div id="exp-total-out" style="font-family:var(--font-mono);font-size:clamp(14px,4.5vw,20px);font-weight:600;color:var(--danger);word-break:break-all;line-height:1.2">$0</div>
       </div>
-      <div style="text-align:center">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Balance</div>
-        <div id="exp-balance" style="font-family:var(--font-mono);font-size:22px;font-weight:600">$0</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Ingresos</div>
-        <div id="exp-total-in" style="font-family:var(--font-mono);font-size:22px;font-weight:500;color:var(--success)">$0</div>
+      <div style="background:var(--surface2);border-radius:10px;padding:10px 12px;border:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">📥 Ingresos</div>
+        <div id="exp-total-in" style="font-family:var(--font-mono);font-size:clamp(14px,4.5vw,20px);font-weight:600;color:var(--success);word-break:break-all;line-height:1.2">$0</div>
       </div>
     </div>
-    <div id="exp-recurring-total-row" style="display:none;margin-top:4px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
+    <div id="exp-recurring-total-row" style="display:none;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
       🔁 Fijos mensuales: <span id="exp-recurring-total" style="font-family:var(--font-mono);font-weight:500;color:var(--text)">$0</span>
     </div>
   </div>
