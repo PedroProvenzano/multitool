@@ -665,6 +665,22 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .fb-sheet-modal{background:var(--bg);border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;box-sizing:border-box}
 .fb-sheet-modal h3{font-size:18px;font-weight:700;margin:0 0 8px}
 .fb-sheet-modal p{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.5}
+
+/* LISTA DE COMPRAS */
+.shop-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.shop-item:last-child{border-bottom:none}
+.shop-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.shop-check.done{background:var(--success);border-color:var(--success);color:#fff}
+.shop-name{flex:1;font-size:14px;transition:opacity .15s}
+.shop-name.done{text-decoration:line-through;opacity:.4}
+.shop-qty-badge{font-size:11px;color:var(--muted);font-family:var(--font-mono);background:var(--surface2);border-radius:5px;padding:1px 6px;border:1px solid var(--border)}
+.shop-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;opacity:.4;padding:0 2px}
+.shop-del:hover{opacity:1;color:var(--danger)}
+/* PRESUPUESTO MENSUAL */
+.budget-row{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-bottom:1px solid var(--border)}
+.budget-row:last-child{border-bottom:none}
+.budget-bar-track{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.budget-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 </style>
 <!-- Firebase SDK (compat) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1465,7 +1481,29 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
     <div id="exp-webhook-status" style="font-size:11px;min-height:14px"></div>
   </div>
 
-  <div id="exp-list"></div>
+
+  <!-- Presupuesto mensual -->
+  <div class="card" id="exp-budget-card" style="padding:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:13px;font-weight:600;color:var(--text)">💰 Presupuesto del mes</span>
+      <button id="exp-budget-toggle" class="btn btn-ghost" style="padding:4px 10px;font-size:11px;border-radius:8px" onclick="expBudgetToggle()">Configurar</button>
+    </div>
+    <div id="exp-budget-content"></div>
+    <div id="exp-budget-editor" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
+      <div id="exp-budget-inputs"></div>
+      <button class="btn btn-primary" style="width:100%;padding:8px;border-radius:10px;font-size:13px;margin-top:6px" onclick="expBudgetSave()">Guardar presupuestos</button>
+    </div>
+  </div>
+  <!-- Historial mensual -->
+  <div class="card" style="padding:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:13px;font-weight:600;color:var(--text)">📅 Historial mensual</span>
+      <select class="sm-input" id="exp-history-month" style="width:auto;padding:4px 8px;font-size:12px" onchange="expRenderHistory()"></select>
+    </div>
+    <div id="exp-history-content" style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0">Seleccioná un mes</div>
+  </div>
+
+    <div id="exp-list"></div>
   <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:10px;font-size:12px;margin-top:4px" onclick="expClearAll()">Borrar todos los movimientos</button>
 </div>
 
@@ -1724,6 +1762,25 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   </div>
 </div>
 
+
+<!-- LISTA DE COMPRAS -->
+<div id="screen-shopping" class="screen">
+  <div class="card" style="padding:12px">
+    <div style="display:flex;gap:7px;margin-bottom:10px">
+      <input class="sm-input" id="shop-input" placeholder="Agregar ítem..." style="flex:1" onkeydown="if(event.key==='Enter')shopAdd()">
+      <input class="sm-input" id="shop-qty" placeholder="Cant." style="width:64px;text-align:center">
+      <button class="btn btn-primary" style="padding:9px 14px;border-radius:10px;flex-shrink:0" onclick="shopAdd()">+</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:11px;color:var(--muted)" id="shop-count"></span>
+      <button class="btn btn-ghost" style="font-size:11px;padding:3px 9px;border-radius:7px" onclick="shopClearDone()">Limpiar ✓</button>
+    </div>
+  </div>
+  <div class="card" id="shop-list-card" style="padding:10px 13px">
+    <div id="shop-list"></div>
+  </div>
+  <div id="shop-sync-status" style="text-align:center;font-size:11px;color:var(--muted);padding:4px 0;min-height:16px"></div>
+</div>
 <!-- RASTREADOR DE HÁBITOS -->
 <div id="screen-habits" class="screen">
   <div class="card" style="margin-bottom:10px">
@@ -2225,7 +2282,7 @@ const CATEGORIES=[
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Balance',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Balance',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada',shopping:'Lista de compras'};
 
 let navStack=[];
 
@@ -3451,18 +3508,18 @@ function notesRender(){const search=document.getElementById('notes-search').valu
 function notesNew(){editingNoteId='new';document.getElementById('note-title-input').value='';document.getElementById('note-body-input').value='';document.getElementById('note-tag-input').value='';document.getElementById('note-tags-display').innerHTML='';document.getElementById('notes-list').style.display='none';document.getElementById('notes-search').style.display='none';document.querySelectorAll('#screen-notes > .btn-primary')[0] && (document.querySelectorAll('#screen-notes > button')[0].style.display='none');document.getElementById('note-editor').classList.add('open');document.getElementById('note-share-btn').style.display='none';}
 function notesOpen(id){editingNoteId=id;const n=notes.find(x=>x.id===id);if(!n)return;document.getElementById('note-title-input').value=n.title;document.getElementById('note-body-input').value=n.body;document.getElementById('note-tag-input').value=(n.tags||[]).join(', ');document.getElementById('note-tags-display').innerHTML=(n.tags||[]).map(t=>`<span class="note-tag">${t}</span>`).join('');document.getElementById('notes-list').style.display='none';document.getElementById('notes-search').style.display='none';document.getElementById('note-editor').classList.add('open');document.getElementById('note-share-btn').style.display=n.body?'flex':'none';}
 function notesBack(){document.getElementById('note-editor').classList.remove('open');document.getElementById('notes-list').style.display='';document.getElementById('notes-search').style.display='';editingNoteId=null;notesRender();}
-function notesSave(){const title=document.getElementById('note-title-input').value.trim()||'Sin título',body=document.getElementById('note-body-input').value,tags=document.getElementById('note-tag-input').value.split(',').map(t=>t.trim()).filter(Boolean),date=new Date().toLocaleDateString('es-AR');if(editingNoteId==='new')notes.unshift({id:Date.now()+'',title,body,tags,date});else{const i=notes.findIndex(x=>x.id===editingNoteId);if(i>=0)notes[i]={...notes[i],title,body,tags,date};}localStorage.setItem('notes',JSON.stringify(notes));notesBack();}
-function notesDelete(){if(!editingNoteId||editingNoteId==='new'){notesBack();return;}notes=notes.filter(x=>x.id!==editingNoteId);localStorage.setItem('notes',JSON.stringify(notes));notesBack();}
+function notesSave(){const title=document.getElementById('note-title-input').value.trim()||'Sin título',body=document.getElementById('note-body-input').value,tags=document.getElementById('note-tag-input').value.split(',').map(t=>t.trim()).filter(Boolean),date=new Date().toLocaleDateString('es-AR');if(editingNoteId==='new')notes.unshift({id:Date.now()+'',title,body,tags,date});else{const i=notes.findIndex(x=>x.id===editingNoteId);if(i>=0)notes[i]={...notes[i],title,body,tags,date};}localStorage.setItem('notes',JSON.stringify(notes));fbSyncNotes();notesBack();}
+function notesDelete(){if(!editingNoteId||editingNoteId==='new'){notesBack();return;}notes=notes.filter(x=>x.id!==editingNoteId);localStorage.setItem('notes',JSON.stringify(notes));fbSyncNotes();notesBack();}
 notesRender();
 
 // ══ TAREAS con fecha/prioridad ══
 let todos=JSON.parse(localStorage.getItem('todos')||'[]'),todoFilterCat='all',todoPrio='low';
 function todoSetPrio(btn){document.querySelectorAll('.prio-btn').forEach(b=>{b.className='prio-btn';});todoPrio=btn.dataset.p;btn.className=`prio-btn active-${todoPrio}`;}
-function todoAdd(){const inp=document.getElementById('todo-input'),text=inp.value.trim();if(!text)return;const date=document.getElementById('todo-date').value;todos.unshift({id:Date.now()+'',text,done:false,prio:todoPrio,date});inp.value='';localStorage.setItem('todos',JSON.stringify(todos));todoRender();}
-function todoToggle(id){const t=todos.find(x=>x.id===id);if(t)t.done=!t.done;localStorage.setItem('todos',JSON.stringify(todos));todoRender();}
-function todoRemove(id){todos=todos.filter(x=>x.id!==id);localStorage.setItem('todos',JSON.stringify(todos));todoRender();}
+function todoAdd(){const inp=document.getElementById('todo-input'),text=inp.value.trim();if(!text)return;const date=document.getElementById('todo-date').value;todos.unshift({id:Date.now()+'',text,done:false,prio:todoPrio,date});inp.value='';localStorage.setItem('todos',JSON.stringify(todos));fbSyncTodos();todoRender();}
+function todoToggle(id){const t=todos.find(x=>x.id===id);if(t)t.done=!t.done;localStorage.setItem('todos',JSON.stringify(todos));fbSyncTodos();todoRender();}
+function todoRemove(id){todos=todos.filter(x=>x.id!==id);localStorage.setItem('todos',JSON.stringify(todos));fbSyncTodos();todoRender();}
 function todoFilter(btn){document.querySelectorAll('.todo-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');todoFilterCat=btn.dataset.cat;todoRender();}
-function todoClearDone(){todos=todos.filter(x=>!x.done);localStorage.setItem('todos',JSON.stringify(todos));todoRender();}
+function todoClearDone(){todos=todos.filter(x=>!x.done);localStorage.setItem('todos',JSON.stringify(todos));fbSyncTodos();todoRender();}
 function todoRender(){const list=document.getElementById('todo-list'),empty=document.getElementById('todo-empty');let filtered=todos;if(todoFilterCat==='done')filtered=todos.filter(x=>x.done);else if(todoFilterCat==='pending')filtered=todos.filter(x=>!x.done);else if(todoFilterCat==='high')filtered=todos.filter(x=>x.prio==='high'&&!x.done);else if(todoFilterCat==='mid')filtered=todos.filter(x=>x.prio==='mid'&&!x.done);const prioColors={low:'var(--success)',mid:'var(--warn)',high:'var(--danger)'};if(!filtered.length){list.innerHTML='';empty.style.display='block';return;}empty.style.display='none';const today=new Date().toISOString().slice(0,10);list.innerHTML=filtered.map(t=>{const isUrgent=t.date&&t.date<=today&&!t.done;return`<div class="todo-item"><button class="todo-check${t.done?' done':''}" onclick="todoToggle('${t.id}')">${t.done?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>':''}</button><div style="flex:1"><span class="todo-text${t.done?' done':''}" onclick="todoToggle('${t.id}')">${t.text}</span>${t.date?`<div class="todo-meta${isUrgent?' urgent':''}">${isUrgent?'⚠️ ':''}📅 ${t.date}</div>`:''}</div><div style="width:4px;height:36px;border-radius:2px;background:${prioColors[t.prio]||'var(--muted)'};flex-shrink:0;margin-right:4px"></div><button class="todo-del" onclick="todoRemove('${t.id}')">×</button></div>`;}).join('');}
 todoRender();
 
@@ -3737,6 +3794,8 @@ function expRender(){
       return `<div class="exp-item-row"><div style="flex:1"><div style="font-size:14px">${e.cat.split(' ')[0]} ${e.desc}${recurBadge}</div><div style="font-size:11px;color:var(--muted)">${e.cat}${curBadge}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-mono);font-size:15px;font-weight:500;color:${amtColor}">${prefix}${expFmtAmount(e.amount,e.currency||'ARS')}</span><button class="exp-del-btn" onclick="expRemove('${e.id}')">&#215;</button></div></div>`;
     }).join('')}</div>`;
   }).join('');
+  if(typeof expRenderBudgets==='function') expRenderBudgets();
+  if(typeof expInitHistory==='function') expInitHistory();
 }
 
 async function expSyncSheets(exp){
@@ -3886,7 +3945,7 @@ function habitAdd(){const inp=document.getElementById('habit-new-name');const na
 function habitToggle(id){const h=habits.find(x=>x.id===id);if(!h)return;const today=habitTodayKey();if(h.checks[today]){delete h.checks[today];}else{h.checks[today]=true;}habitSave();habitRender();}
 function habitCalcStreak(h){let streak=0,d=new Date();for(let i=0;i<365;i++){const key=d.toISOString().slice(0,10);if(h.checks[key]){streak++;}else if(i>0){break;}d.setDate(d.getDate()-1);}return streak;}
 function habitRemove(id){habits=habits.filter(h=>h.id!==id);habitSave();habitRender();}
-function habitSave(){localStorage.setItem('habits-v2',JSON.stringify(habits));}
+function habitSave(){localStorage.setItem('habits-v2',JSON.stringify(habits));fbSyncHabits();}
 function habitRender(){
   const today=habitTodayKey();
   const d=new Date();
@@ -4607,7 +4666,7 @@ function fbOnAuthChange(user){
 async function fbLoadUserData(uid){
   if(!_fbDb) return;
   try {
-    // Cargar sheetsUrl
+    // Cargar config de usuario (sheetsUrl, budgets)
     const userDoc = await _fbDb.collection('users').doc(uid).get();
     if(userDoc.exists){
       const data = userDoc.data();
@@ -4618,15 +4677,52 @@ async function fbLoadUserData(uid){
       } else {
         fbShowSheetModal();
       }
+      if(data.budgets){ expBudgets = data.budgets; localStorage.setItem('exp-budgets', JSON.stringify(expBudgets)); }
     } else {
       fbShowSheetModal();
     }
 
-    // Cargar movimientos
-    const snap = await _fbDb.collection('users').doc(uid).collection('expenses')
-      .orderBy('date','desc').limit(500).get();
-    expenses = snap.docs.map(d => d.data());
+    // Cargar gastos/ingresos (sin orderBy para evitar índice compuesto)
+    const expSnap = await _fbDb.collection('users').doc(uid).collection('expenses').limit(500).get();
+    if(!expSnap.empty){
+      expenses = expSnap.docs.map(d => d.data())
+        .sort((a,b) => (b.date||'').localeCompare(a.date||'') || (b.id||'').localeCompare(a.id||''));
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+    } else {
+      expenses = JSON.parse(localStorage.getItem('expenses')||'[]');
+    }
     expRender();
+
+    // Cargar lista de compras
+    const shopSnap = await _fbDb.collection('users').doc(uid).collection('shopping').limit(200).get();
+    if(!shopSnap.empty){
+      shopItems = shopSnap.docs.map(d => d.data()).sort((a,b) => (b.id||'').localeCompare(a.id||''));
+      localStorage.setItem('shopping', JSON.stringify(shopItems));
+      shopRender();
+    }
+
+    // Cargar hábitos
+    const habDoc = await _fbDb.collection('users').doc(uid).collection('habits').doc('data').get();
+    if(habDoc.exists && habDoc.data().habits){
+      try { habits = JSON.parse(habDoc.data().habits); localStorage.setItem('habits-v2', JSON.stringify(habits)); habitRender(); } catch(e){}
+    }
+
+    // Cargar notas
+    const notesSnap = await _fbDb.collection('users').doc(uid).collection('notes').limit(200).get();
+    if(!notesSnap.empty){
+      notes = notesSnap.docs.map(d => d.data()).sort((a,b) => (b.id||'').localeCompare(a.id||''));
+      localStorage.setItem('notes', JSON.stringify(notes));
+      notesRender();
+    }
+
+    // Cargar tareas
+    const todosSnap = await _fbDb.collection('users').doc(uid).collection('todos').limit(200).get();
+    if(!todosSnap.empty){
+      todos = todosSnap.docs.map(d => d.data()).sort((a,b) => (b.id||'').localeCompare(a.id||''));
+      localStorage.setItem('todos', JSON.stringify(todos));
+      todoRender();
+    }
+
   } catch(e){ console.warn('Error cargando datos:', e); expRender(); }
 }
 
@@ -4685,6 +4781,183 @@ function fbSaveSheetUrl(){
     _fbDb.collection('users').doc(fbCurrentUser().uid).set({sheetsUrl:url},{merge:true});
   }
   fbCloseSheetModal();
+}
+
+
+// ══ LISTA DE COMPRAS ══
+let shopItems = JSON.parse(localStorage.getItem('shopping')||'[]');
+function shopSave(){ localStorage.setItem('shopping', JSON.stringify(shopItems)); fbSyncCollection('shopping', shopItems); }
+function shopAdd(){
+  const inp=document.getElementById('shop-input'), qty=document.getElementById('shop-qty');
+  const name=inp.value.trim(); if(!name) return;
+  shopItems.unshift({id:Date.now()+'', name, qty:qty.value.trim(), done:false});
+  inp.value=''; qty.value=''; shopSave(); shopRender();
+}
+function shopToggle(id){
+  const item=shopItems.find(x=>x.id===id); if(!item) return;
+  item.done=!item.done; shopSave(); shopRender();
+}
+function shopRemove(id){ shopItems=shopItems.filter(x=>x.id!==id); shopSave(); shopRender(); }
+function shopClearDone(){ shopItems=shopItems.filter(x=>!x.done); shopSave(); shopRender(); }
+function shopRender(){
+  const list=document.getElementById('shop-list'); if(!list) return;
+  const pending=shopItems.filter(x=>!x.done), done=shopItems.filter(x=>x.done);
+  const countEl=document.getElementById('shop-count');
+  if(countEl) countEl.textContent=pending.length ? `${pending.length} pendiente${pending.length>1?'s':''}` : 'Todo listo ✓';
+  if(!shopItems.length){ list.innerHTML='<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">La lista está vacía</div>'; return; }
+  const renderItem=x=>`<div class="shop-item">
+    <button class="shop-check${x.done?' done':''}" onclick="shopToggle('${x.id}')">${x.done?'✓':''}</button>
+    <span class="shop-name${x.done?' done':''}">${x.name}</span>
+    ${x.qty?`<span class="shop-qty-badge">${x.qty}</span>`:''}
+    <button class="shop-del" onclick="shopRemove('${x.id}')">×</button>
+  </div>`;
+  list.innerHTML=[...pending,...done].map(renderItem).join('');
+}
+shopRender();
+
+// ══ PRESUPUESTO MENSUAL ══
+const EXP_CATS=['🍔 Comida','🚗 Transporte','🏠 Hogar','⚕️ Salud','💼 Trabajo','🎮 Ocio','📦 Otro'];
+let expBudgets = JSON.parse(localStorage.getItem('exp-budgets')||'{}');
+function expBudgetToggle(){
+  const ed=document.getElementById('exp-budget-editor');
+  const open=ed.style.display==='none';
+  ed.style.display=open?'block':'none';
+  document.getElementById('exp-budget-toggle').textContent=open?'Cerrar':'Configurar';
+  if(open) expBudgetRenderEditor();
+}
+function expBudgetRenderEditor(){
+  document.getElementById('exp-budget-inputs').innerHTML=EXP_CATS.map(cat=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+      <span style="font-size:13px;flex:1">${cat}</span>
+      <input class="sm-input" type="number" placeholder="0" style="width:90px;text-align:right;font-family:var(--font-mono)"
+        id="bgt-${cat.replace(/[^a-z]/gi,'')}" value="${expBudgets[cat]||''}">
+    </div>`).join('');
+}
+function expBudgetSave(){
+  EXP_CATS.forEach(cat=>{
+    const el=document.getElementById('bgt-'+cat.replace(/[^a-z]/gi,''));
+    const val=parseFloat(el?el.value:0)||0;
+    if(val>0) expBudgets[cat]=val; else delete expBudgets[cat];
+  });
+  localStorage.setItem('exp-budgets', JSON.stringify(expBudgets));
+  if(fbCurrentUser()&&_fbDb) _fbDb.collection('users').doc(fbCurrentUser().uid).set({budgets: expBudgets},{merge:true});
+  expBudgetToggle();
+  expRenderBudgets();
+}
+function expRenderBudgets(){
+  const content=document.getElementById('exp-budget-content'); if(!content) return;
+  const now=new Date();
+  const ym=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const monthExp=expenses.filter(e=>e.type==='expense'&&(e.date||'').startsWith(ym));
+  const byCat={};
+  monthExp.forEach(e=>{ byCat[e.cat]=(byCat[e.cat]||0)+parseFloat(e.amount||0); });
+  const hasBudgets=EXP_CATS.some(c=>expBudgets[c]);
+  if(!hasBudgets){ content.innerHTML='<div style="font-size:12px;color:var(--muted);padding:4px 0">Sin presupuestos configurados</div>'; return; }
+  content.innerHTML=EXP_CATS.filter(c=>expBudgets[c]).map(cat=>{
+    const budget=expBudgets[cat]||0, spent=byCat[cat]||0;
+    const pct=budget>0?Math.min(100,Math.round(spent/budget*100)):0;
+    const color=pct>=100?'var(--danger)':pct>=80?'var(--warn)':'var(--success)';
+    return `<div class="budget-row">
+      <div style="display:flex;justify-content:space-between;font-size:12px">
+        <span>${cat}</span>
+        <span style="font-family:var(--font-mono);color:${color}">${pct}% · $${spent.toLocaleString('es-AR')} / $${budget.toLocaleString('es-AR')}</span>
+      </div>
+      <div class="budget-bar-track"><div class="budget-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ══ HISTORIAL MENSUAL ══
+function expInitHistory(){
+  const sel=document.getElementById('exp-history-month'); if(!sel) return;
+  const now=new Date();
+  const months=[];
+  for(let i=0;i<12;i++){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const ym=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const label=d.toLocaleDateString('es-AR',{year:'numeric',month:'long'});
+    months.push({ym,label});
+  }
+  sel.innerHTML=months.map(m=>`<option value="${m.ym}">${m.label}</option>`).join('');
+  expRenderHistory();
+}
+function expRenderHistory(){
+  const sel=document.getElementById('exp-history-month');
+  const content=document.getElementById('exp-history-content');
+  if(!sel||!content) return;
+  const ym=sel.value;
+  const monthExp=expenses.filter(e=>(e.date||'').startsWith(ym));
+  const ingresos=monthExp.filter(e=>e.type==='income').reduce((a,e)=>a+parseFloat(e.amount||0),0);
+  const egresos=monthExp.filter(e=>e.type!=='income').reduce((a,e)=>a+parseFloat(e.amount||0),0);
+  const balance=ingresos-egresos;
+  if(!monthExp.length){ content.innerHTML='<div style="padding:8px 0;text-align:center;color:var(--muted)">Sin registros este mes</div>'; return; }
+  const byCat={};
+  monthExp.filter(e=>e.type!=='income').forEach(e=>{ byCat[e.cat]=(byCat[e.cat]||0)+parseFloat(e.amount||0); });
+  const topCats=Object.entries(byCat).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  content.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:var(--surface2);border-radius:8px;padding:8px;border:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Ingresos</div>
+        <div style="font-family:var(--font-mono);font-size:15px;color:var(--success)">$${ingresos.toLocaleString('es-AR')}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:8px;border:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Egresos</div>
+        <div style="font-family:var(--font-mono);font-size:15px;color:var(--danger)">$${egresos.toLocaleString('es-AR')}</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-family:var(--font-mono);font-size:16px;font-weight:700;padding:6px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px;color:${balance>=0?'var(--success)':'var(--danger)'}">
+      Balance: ${balance>=0?'+':''}$${Math.abs(balance).toLocaleString('es-AR')}
+    </div>
+    ${topCats.length?`<div style="font-size:11px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">Top categorías</div>
+    ${topCats.map(([cat,amt])=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0"><span>${cat}</span><span style="font-family:var(--font-mono)">$${amt.toLocaleString('es-AR')}</span></div>`).join('')}`:''}`;
+}
+
+// ══ FIREBASE SYNC HELPERS ══
+async function fbSyncCollection(collectionName, items){
+  if(!_fbDb||!fbCurrentUser()) return;
+  const uid=fbCurrentUser().uid;
+  const st=document.getElementById('shop-sync-status');
+  try {
+    const colRef=_fbDb.collection('users').doc(uid).collection(collectionName);
+    const snap=await colRef.limit(200).get();
+    const batch=_fbDb.batch();
+    snap.docs.forEach(d=>batch.delete(d.ref));
+    items.forEach(item=>batch.set(colRef.doc(item.id+''), item));
+    await batch.commit();
+    if(st){ st.textContent='✓ Sincronizado'; setTimeout(()=>{ if(st) st.textContent=''; },2000); }
+  } catch(e){
+    if(st){ st.textContent='Sin conexión · guardado local'; setTimeout(()=>{ if(st) st.textContent=''; },2500); }
+  }
+}
+async function fbSyncHabits(){
+  if(!_fbDb||!fbCurrentUser()) return;
+  try {
+    await _fbDb.collection('users').doc(fbCurrentUser().uid).collection('habits').doc('data').set({habits: JSON.stringify(habits)});
+  } catch(e){}
+}
+async function fbSyncNotes(){
+  if(!_fbDb||!fbCurrentUser()) return;
+  try {
+    const uid=fbCurrentUser().uid;
+    const colRef=_fbDb.collection('users').doc(uid).collection('notes');
+    const snap=await colRef.limit(200).get();
+    const batch=_fbDb.batch();
+    snap.docs.forEach(d=>batch.delete(d.ref));
+    notes.forEach(n=>batch.set(colRef.doc(n.id+''), n));
+    await batch.commit();
+  } catch(e){}
+}
+async function fbSyncTodos(){
+  if(!_fbDb||!fbCurrentUser()) return;
+  try {
+    const uid=fbCurrentUser().uid;
+    const colRef=_fbDb.collection('users').doc(uid).collection('todos');
+    const snap=await colRef.limit(200).get();
+    const batch=_fbDb.batch();
+    snap.docs.forEach(d=>batch.delete(d.ref));
+    todos.forEach(t=>batch.set(colRef.doc(t.id+''), t));
+    await batch.commit();
+  } catch(e){}
 }
 
 // Arranque: ocultar app, mostrar login o continuar según estado
