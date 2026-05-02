@@ -43,9 +43,9 @@ if (!fbOk) {
 }
 
 // Escribir dist
-const distDir = path.join(__dirname, 'dist');
+const distDir = path.join(__dirname, 'docs');
 if (!fs.existsSync(distDir)) fs.mkdirSync(distDir);
 fs.copyFileSync(path.join(__dirname, 'manifest.json'), path.join(distDir, 'manifest.json'));
 fs.copyFileSync(path.join(__dirname, 'sw.js'), path.join(distDir, 'sw.js'));
 fs.writeFileSync(path.join(distDir, 'index.html'), html, 'utf8');
-console.log('[OK] Build generado en /dist');
+console.log('[OK] Build generado en /docs');
