@@ -680,7 +680,39 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .budget-row{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-bottom:1px solid var(--border)}
 .budget-row:last-child{border-bottom:none}
 .budget-bar-track{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.budget-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.budget-bar-fill{height:100%;border-radius:3px;transition:width .4f}
+
+/* ── MORSE ── */
+.morse-output{font-family:var(--font-mono);font-size:22px;letter-spacing:.18em;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:64px;word-break:break-all;line-height:1.7;color:var(--text);margin-bottom:10px}
+.morse-mode-bar{display:flex;gap:0;background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:3px;margin-bottom:12px}
+.morse-mode-btn{flex:1;padding:9px 0;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:none;color:var(--muted);transition:background .15s,color .15s;font-family:var(--font-body)}
+.morse-mode-btn.active{background:var(--accent);color:#fff}
+.morse-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.morse-speed-label{font-size:12px;color:var(--muted);white-space:nowrap}
+.morse-playing{animation:morsePulse .3s ease infinite alternate}
+@keyframes morsePulse{from{opacity:.6}to{opacity:1}}
+.morse-ref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:4px}
+.morse-ref-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center}
+.morse-ref-char{font-size:16px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:2px}
+.morse-ref-code{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.1em}
+
+/* ── LECTOR QR ── */
+.qrr-video-wrap{position:relative;border-radius:14px;overflow:hidden;background:#000;margin-bottom:12px;aspect-ratio:1;max-width:320px;margin-left:auto;margin-right:auto}
+#qrr-video{width:100%;height:100%;object-fit:cover;display:block}
+#qrr-canvas{display:none}
+.qrr-scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.qrr-frame{width:62%;aspect-ratio:1;border:3px solid var(--accent);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.45)}
+.qrr-corner{position:absolute;width:22px;height:22px;border-color:var(--accent);border-style:solid;border-radius:3px}
+.qrr-corner.tl{top:0;left:0;border-width:3px 0 0 3px}
+.qrr-corner.tr{top:0;right:0;border-width:3px 3px 0 0}
+.qrr-corner.bl{bottom:0;left:0;border-width:0 0 3px 3px}
+.qrr-corner.br{bottom:0;right:0;border-width:0 3px 3px 0}
+.qrr-result-box{background:oklch(44% 0.13 155 / 0.12);border:1px solid oklch(44% 0.13 155 / 0.3);border-radius:12px;padding:14px;margin-bottom:10px;word-break:break-all;font-size:14px;line-height:1.6;animation:fadeUp .2s ease}
+.qrr-history-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.qrr-history-item:last-child{border-bottom:none}
+.qrr-hist-text{flex:1;font-size:13px;word-break:break-all;color:var(--text)}
+.qrr-hist-copy{background:none;border:1px solid var(--border);border-radius:7px;padding:4px 9px;font-size:11px;color:var(--muted);cursor:pointer;flex-shrink:0;transition:all .15s}
+.qrr-hist-copy:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 <!-- Firebase SDK (compat) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -2122,6 +2154,88 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   </div>
 </div>
 
+<!-- MORSE -->
+<div id="screen-morse" class="screen">
+  <div class="screen-pad">
+    <div class="morse-mode-bar">
+      <button class="morse-mode-btn active" id="morse-btn-encode" onclick="morseSetMode('encode')">Texto → Morse</button>
+      <button class="morse-mode-btn" id="morse-btn-decode" onclick="morseSetMode('decode')">Morse → Texto</button>
+    </div>
+    <div class="card">
+      <div class="field-label" id="morse-input-label">Texto</div>
+      <textarea class="trans-textarea" id="morse-input" placeholder="Escribí el texto aquí..." oninput="morseConvert()" style="min-height:80px;margin-bottom:10px"></textarea>
+      <div class="field-label" id="morse-output-label" style="margin-top:2px">Código Morse</div>
+      <div class="morse-output" id="morse-output">—</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" style="flex:1" onclick="morseCopy()">Copiar</button>
+        <button class="btn" style="background:oklch(44% 0.13 155 / 0.12);color:var(--accent);border:1px solid oklch(44% 0.13 155 / 0.3);flex:1;border-radius:12px;font-family:var(--font-body);font-size:15px;font-weight:500;cursor:pointer" id="morse-play-btn" onclick="morsePlay()">▶ Reproducir</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field-label" style="margin-bottom:10px">Configuración de audio</div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Velocidad: <span id="morse-wpm-val">15</span> WPM</div>
+          <input type="range" id="morse-wpm" min="5" max="40" value="15" oninput="document.getElementById('morse-wpm-val').textContent=this.value" style="width:100%;accent-color:var(--accent)">
+        </div>
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Tono: <span id="morse-freq-val">600</span> Hz</div>
+          <input type="range" id="morse-freq" min="300" max="1200" value="600" step="50" oninput="document.getElementById('morse-freq-val').textContent=this.value" style="width:100%;accent-color:var(--accent)">
+        </div>
+      </div>
+      <button class="btn btn-danger" style="width:100%;margin-top:10px;border-radius:12px;padding:10px" id="morse-stop-btn" onclick="morseStop()" style="display:none">⏹ Detener</button>
+    </div>
+    <div class="card">
+      <div class="field-label" style="margin-bottom:10px">Referencia</div>
+      <div class="morse-ref-grid" id="morse-ref-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LECTOR QR -->
+<div id="screen-qrreader" class="screen">
+  <div class="screen-pad">
+    <div class="card" style="text-align:center;padding:20px 16px" id="qrr-start-panel">
+      <div style="font-size:50px;margin-bottom:12px">📷</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Lector de códigos QR</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:18px">Apuntá la cámara a un código QR para escanearlo</div>
+      <button class="btn btn-primary" onclick="qrrStart()">Activar cámara</button>
+    </div>
+    <div id="qrr-live-panel" style="display:none">
+      <div class="qrr-video-wrap">
+        <video id="qrr-video" autoplay playsinline muted></video>
+        <canvas id="qrr-canvas"></canvas>
+        <div class="qrr-scanner-overlay">
+          <div style="position:relative;width:62%;aspect-ratio:1">
+            <div class="qrr-corner tl"></div>
+            <div class="qrr-corner tr"></div>
+            <div class="qrr-corner bl"></div>
+            <div class="qrr-corner br"></div>
+          </div>
+        </div>
+        <div id="qrr-scan-line" style="position:absolute;left:19%;right:19%;height:2px;background:var(--accent);opacity:.7;top:20%;animation:qrrScanAnim 2s ease-in-out infinite"></div>
+      </div>
+      <style>@keyframes qrrScanAnim{0%,100%{top:20%}50%{top:75%}}</style>
+      <div id="qrr-status" style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:10px">Buscando código QR...</div>
+      <button class="btn btn-danger" style="width:100%;border-radius:12px;padding:12px;margin-bottom:10px" onclick="qrrStop()">⏹ Detener cámara</button>
+    </div>
+    <div id="qrr-result-panel" style="display:none">
+      <div class="card-label">Último resultado</div>
+      <div class="qrr-result-box" id="qrr-result-text"></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="btn btn-primary" style="flex:1" onclick="qrrCopyLast()">Copiar</button>
+        <button class="btn btn-ghost" style="flex:1;border-radius:12px" onclick="qrrOpen()">Abrir URL</button>
+        <button class="btn btn-ghost" style="border-radius:12px;padding:11px 14px" onclick="qrrRescan()" title="Escanear otro">🔄</button>
+      </div>
+    </div>
+    <div id="qrr-history-card" class="card" style="display:none">
+      <div class="card-label" style="margin-bottom:8px">Historial</div>
+      <div id="qrr-history-list"></div>
+      <button class="btn btn-danger" style="width:100%;margin-top:8px;border-radius:10px" onclick="qrrClearHistory()">Limpiar historial</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <nav id="tabs" style="display:none">
@@ -2173,6 +2287,8 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
   <button class="tab-btn" data-screen="tuner" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>Afinador</button>
   <button class="tab-btn" data-screen="noise" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Ruido</button>
   <button class="tab-btn" data-screen="sino" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 11h10M4 16h6M17 14l2 2 4-4"/></svg>Sinónimos</button>
+  <button class="tab-btn" data-screen="morse" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="5" cy="12" r="2" fill="currentColor"/><rect x="10" y="10" width="9" height="4" rx="2" fill="currentColor" stroke="none"/></svg>Morse</button>
+  <button class="tab-btn" data-screen="qrreader" onclick="switchTab(this)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><circle cx="17.5" cy="17.5" r="2.5" fill="currentColor" stroke="none"/></svg>Lector QR</button>
 </nav>
 <div id="screen-frutas" class="screen">
   <h2 class="section-title">🍎 Frutas de Temporada</h2>
@@ -2215,6 +2331,7 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
 // ══ NAVEGACIÓN POR CATEGORÍAS ══
 const CATEGORIES=[
@@ -2263,6 +2380,8 @@ const CATEGORIES=[
     {id:'quintas',name:'Círculo de quintas',desc:'Notas, acordes y modulaciones por escala',icon:'🎵',sub:'Música'},
     {id:'tuner',name:'Afinador',desc:'Detecta la nota musical con el micrófono',icon:'🎹',sub:'Música'},
     {id:'qr',name:'Generador QR',desc:'Texto, URL, WiFi, contacto',icon:'📷',sub:'Generadores'},
+    {id:'qrreader',name:'Lector QR',desc:'Escanear códigos QR con la cámara',icon:'🔍',sub:'Generadores'},
+    {id:'morse',name:'Código Morse',desc:'Convertir texto a Morse y reproducir audio',icon:'📡',sub:'Generadores'},
     {id:'pass',name:'Contraseñas',desc:'Generar contraseñas seguras',icon:'🔐',sub:'Generadores'},
   ]},
   {id:'referencia',name:'Referencia',icon:'📚',tools:[
@@ -2282,7 +2401,7 @@ const CATEGORIES=[
   ]},
 ];
 
-const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Balance',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada',shopping:'Lista de compras'};
+const toolNames={calc:'Calculadora',dice:'Dados',timer:'Cronómetro',fx:'Conversor de moneda',units:'Conversor de unidades',roulette:'Ruleta',coin:'Moneda',tip:'Propinas',split:'Dividir gastos',tally:'Contador',rand:'Números al azar',notes:'Notas',todo:'Tareas',expenses:'Balance',weather:'Clima',crypto:'Cripto',dates:'Fechas',qr:'Generador QR',qrreader:'Lector QR',morse:'Código Morse',loan:'Préstamos',games:'Marcador',colors:'Colores',imc:'IMC / Calorías',pass:'Contraseñas',pct:'Porcentajes',recipe:'Recetas',metro:'Metrónomo',level:'Nivel',trans:'Traductor',dolar:'Dólar blue',news:'Noticias',pomodoro:'Pomodoro',worldclock:'Reloj mundial',habits:'Hábitos',fuel:'Combustible',savings:'Meta de ahorro',gradient:'Gradientes',periodic:'Tabla periódica',teams:'Equipos',turns:'Turnos',palette:'Paleta de colores',namegen:'Generador de nombres',sizes:'Conversor de tallas',excusas:'Excusas',quintas:'Círculo de quintas',hydration:'Hidratación diaria',timeconv:'Conversor de tiempo',tuner:'Afinador',noise:'Nivel de ruido',sino:'Sinónimos',frutas:'Frutas de temporada',shopping:'Lista de compras'};
 
 let navStack=[];
 
@@ -4984,6 +5103,251 @@ async function fbSyncTodos(){
   }
   // Si sí está configurado, fbOnAuthChange se encarga de todo
 })();
+
+// ══ SERVICE WORKER ══
+
+// ══ CÓDIGO MORSE ══
+const MORSE_TABLE={
+  'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
+  'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
+  'U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+  '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+  '.':'.-.-.-',',':'--..--','?':'..--..','!':'-.-.--',"'":'.----.','(':'-.--.',')':'-.--.-',
+  '&':'.-...',':':'---...',';':'-.-.-.','=':'-...-','+':'.-.-.','-':'-....-','/':'-..-.','@':'.--.-.'};
+};
+const MORSE_REVERSE=Object.fromEntries(Object.entries(MORSE_TABLE).map(([k,v])=>[v,k]));
+
+let morseMode='encode',morseAudioCtx=null,morsePlaying=false,morseScheduledNodes=[];
+
+function morseSetMode(m){
+  morseMode=m;
+  morseStop();
+  document.getElementById('morse-btn-encode').classList.toggle('active',m==='encode');
+  document.getElementById('morse-btn-decode').classList.toggle('active',m==='decode');
+  document.getElementById('morse-input-label').textContent=m==='encode'?'Texto':'Código Morse';
+  document.getElementById('morse-output-label').textContent=m==='encode'?'Código Morse':'Texto';
+  document.getElementById('morse-input').placeholder=m==='encode'?'Escribí el texto aquí...':'Ingresá código Morse (ej: .... --- .-.. .-   -- ..- -. -.. -)';
+  document.getElementById('morse-input').value='';
+  document.getElementById('morse-output').textContent='—';
+}
+
+function morseConvert(){
+  const inp=document.getElementById('morse-input').value;
+  const out=document.getElementById('morse-output');
+  if(!inp.trim()){out.textContent='—';return;}
+  if(morseMode==='encode'){
+    const result=inp.toUpperCase().split('').map(c=>{
+      if(c===' ')return '/';
+      return MORSE_TABLE[c]||c;
+    }).join(' ');
+    out.textContent=result;
+  }else{
+    const words=inp.trim().split(/\s*\/\s*/);
+    const result=words.map(w=>{
+      if(!w.trim())return ' ';
+      return w.trim().split(/\s+/).map(code=>MORSE_REVERSE[code]||'?').join('');
+    }).join(' ');
+    out.textContent=result;
+  }
+}
+
+function morseCopy(){
+  const text=document.getElementById('morse-output').textContent;
+  if(text==='—')return;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('[onclick="morseCopy()"]');
+    const prev=btn.textContent;btn.textContent='✓ Copiado';
+    setTimeout(()=>btn.textContent=prev,1500);
+  });
+}
+
+function morsePlay(){
+  if(morsePlaying){morseStop();return;}
+  const morseStr=document.getElementById('morse-output').textContent;
+  if(!morseStr||morseStr==='—')return;
+  morseAudioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  const wpm=parseInt(document.getElementById('morse-wpm').value)||15;
+  const freq=parseInt(document.getElementById('morse-freq').value)||600;
+  const unit=1.2/wpm;
+  let t=morseAudioCtx.currentTime+0.05;
+  morseScheduledNodes=[];
+  morsePlaying=true;
+  const playBtn=document.getElementById('morse-play-btn');
+  const stopBtn=document.getElementById('morse-stop-btn');
+  playBtn.textContent='⏸ Reproduciendo';
+  stopBtn.style.display='block';
+  const tokens=morseStr.split('');
+  tokens.forEach(ch=>{
+    if(ch==='.'){
+      const osc=morseAudioCtx.createOscillator();
+      const gain=morseAudioCtx.createGain();
+      osc.connect(gain);gain.connect(morseAudioCtx.destination);
+      osc.type='sine';osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0,t);
+      gain.gain.linearRampToValueAtTime(0.4,t+0.005);
+      gain.gain.setValueAtTime(0.4,t+unit-0.005);
+      gain.gain.linearRampToValueAtTime(0,t+unit);
+      osc.start(t);osc.stop(t+unit);
+      morseScheduledNodes.push(osc);
+      t+=unit*2;
+    }else if(ch==='-'){
+      const osc=morseAudioCtx.createOscillator();
+      const gain=morseAudioCtx.createGain();
+      osc.connect(gain);gain.connect(morseAudioCtx.destination);
+      osc.type='sine';osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0,t);
+      gain.gain.linearRampToValueAtTime(0.4,t+0.005);
+      gain.gain.setValueAtTime(0.4,t+unit*3-0.005);
+      gain.gain.linearRampToValueAtTime(0,t+unit*3);
+      osc.start(t);osc.stop(t+unit*3);
+      morseScheduledNodes.push(osc);
+      t+=unit*4;
+    }else if(ch===' '){
+      t+=unit*2;
+    }else if(ch==='/'){
+      t+=unit*4;
+    }
+  });
+  const totalTime=(t-morseAudioCtx.currentTime)*1000+300;
+  const endTimer=setTimeout(()=>{
+    morsePlaying=false;
+    playBtn.textContent='▶ Reproducir';
+    stopBtn.style.display='none';
+  },totalTime);
+  morseScheduledNodes._endTimer=endTimer;
+}
+
+function morseStop(){
+  if(!morsePlaying&&!morseAudioCtx)return;
+  morsePlaying=false;
+  if(morseScheduledNodes._endTimer)clearTimeout(morseScheduledNodes._endTimer);
+  morseScheduledNodes.forEach(n=>{try{n.stop();}catch(e){}});
+  morseScheduledNodes=[];
+  if(morseAudioCtx){try{morseAudioCtx.close();}catch(e){}}
+  morseAudioCtx=null;
+  const pb=document.getElementById('morse-play-btn');
+  const sb=document.getElementById('morse-stop-btn');
+  if(pb)pb.textContent='▶ Reproducir';
+  if(sb)sb.style.display='none';
+}
+
+function morseRenderRef(){
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+  const el=document.getElementById('morse-ref-grid');
+  if(!el)return;
+  el.innerHTML=letters.map(c=>'<div class="morse-ref-item"><div class="morse-ref-char">'+c+'</div><div class="morse-ref-code">'+MORSE_TABLE[c]+'</div></div>').join('');
+}
+morseRenderRef();
+
+// ══ LECTOR QR ══
+let qrrStream=null,qrrRAF=null,qrrHistory=JSON.parse(localStorage.getItem('qrr-history')||'[]'),qrrLastResult='';
+
+function qrrStart(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    alert('Tu navegador no soporta acceso a la cámara');return;
+  }
+  if(typeof jsQR==='undefined'){
+    alert('La librería de escaneo no está disponible. Verificá tu conexión a internet e intentá nuevamente.');return;
+  }
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:640},height:{ideal:640}}})
+    .then(stream=>{
+      qrrStream=stream;
+      const video=document.getElementById('qrr-video');
+      video.srcObject=stream;
+      video.play();
+      document.getElementById('qrr-start-panel').style.display='none';
+      document.getElementById('qrr-live-panel').style.display='block';
+      document.getElementById('qrr-result-panel').style.display='none';
+      qrrTick();
+    })
+    .catch(err=>{
+      if(err.name==='NotAllowedError')alert('Permiso de cámara denegado. Habilitalo en la configuración del navegador.');
+      else alert('No se pudo acceder a la cámara: '+err.message);
+    });
+}
+
+function qrrTick(){
+  const video=document.getElementById('qrr-video');
+  const canvas=document.getElementById('qrr-canvas');
+  if(!qrrStream||video.readyState!==video.HAVE_ENOUGH_DATA){
+    qrrRAF=requestAnimationFrame(qrrTick);return;
+  }
+  const w=video.videoWidth,h=video.videoHeight;
+  canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d');
+  ctx.drawImage(video,0,0,w,h);
+  const imageData=ctx.getImageData(0,0,w,h);
+  const code=jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'dontInvert'});
+  if(code&&code.data){qrrFoundResult(code.data);return;}
+  qrrRAF=requestAnimationFrame(qrrTick);
+}
+
+function qrrFoundResult(data){
+  qrrStop();
+  qrrLastResult=data;
+  if(!qrrHistory.includes(data)){
+    qrrHistory.unshift(data);
+    if(qrrHistory.length>20)qrrHistory.pop();
+    localStorage.setItem('qrr-history',JSON.stringify(qrrHistory));
+  }
+  document.getElementById('qrr-live-panel').style.display='none';
+  document.getElementById('qrr-result-panel').style.display='block';
+  document.getElementById('qrr-result-text').textContent=data;
+  const isUrl=/^https?:\/\//i.test(data)||/^www\./i.test(data);
+  const openBtn=document.querySelector('[onclick="qrrOpen()"]');
+  if(openBtn)openBtn.style.display=isUrl?'':'none';
+  qrrRenderHistory();
+}
+
+function qrrStop(){
+  if(qrrRAF)cancelAnimationFrame(qrrRAF);qrrRAF=null;
+  if(qrrStream){qrrStream.getTracks().forEach(t=>t.stop());qrrStream=null;}
+  const video=document.getElementById('qrr-video');
+  if(video)video.srcObject=null;
+}
+
+function qrrRescan(){
+  document.getElementById('qrr-result-panel').style.display='none';
+  document.getElementById('qrr-start-panel').style.display='block';
+  qrrRenderHistory();
+}
+
+function qrrCopyLast(){
+  if(!qrrLastResult)return;
+  navigator.clipboard.writeText(qrrLastResult).then(()=>{
+    const btn=document.querySelector('[onclick="qrrCopyLast()"]');
+    if(btn){const prev=btn.textContent;btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent=prev,1500);}
+  });
+}
+
+function qrrOpen(){
+  if(!qrrLastResult)return;
+  let url=qrrLastResult;
+  if(!/^https?:\/\//i.test(url))url='https://'+url;
+  window.open(url,'_blank');
+}
+
+function qrrClearHistory(){
+  qrrHistory=[];localStorage.removeItem('qrr-history');
+  document.getElementById('qrr-history-card').style.display='none';
+}
+
+function qrrRenderHistory(){
+  const card=document.getElementById('qrr-history-card');
+  const list=document.getElementById('qrr-history-list');
+  if(!card||!list)return;
+  if(!qrrHistory.length){card.style.display='none';return;}
+  card.style.display='block';
+  list.innerHTML=qrrHistory.map((h,i)=>'<div class="qrr-history-item"><div class="qrr-hist-text">'+h+'</div><button class="qrr-hist-copy" onclick="qrrCopyItem('+i+')">Copiar</button></div>').join('');
+}
+
+function qrrCopyItem(i){
+  navigator.clipboard.writeText(qrrHistory[i]).then(()=>{
+    const btns=document.querySelectorAll('.qrr-hist-copy');
+    if(btns[i]){const p=btns[i].textContent;btns[i].textContent='✓';setTimeout(()=>btns[i].textContent=p,1500);}
+  });
+}
+qrrRenderHistory();
 
 // ══ SERVICE WORKER ══
 if('serviceWorker' in navigator)window.addEventListener('load',()=>{
