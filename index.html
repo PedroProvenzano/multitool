@@ -680,7 +680,7 @@ input[type="date"].sm-input{-webkit-appearance:none;appearance:none;max-width:16
 .budget-row{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-bottom:1px solid var(--border)}
 .budget-row:last-child{border-bottom:none}
 .budget-bar-track{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.budget-bar-fill{height:100%;border-radius:3px;transition:width .4f}
+.budget-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 
 /* ── MORSE ── */
 .morse-output{font-family:var(--font-mono);font-size:22px;letter-spacing:.18em;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:64px;word-break:break-all;line-height:1.7;color:var(--text);margin-bottom:10px}
@@ -5114,7 +5114,6 @@ const MORSE_TABLE={
   '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
   '.':'.-.-.-',',':'--..--','?':'..--..','!':'-.-.--',"'":'.----.','(':'-.--.',')':'-.--.-',
   '&':'.-...',':':'---...',';':'-.-.-.','=':'-...-','+':'.-.-.','-':'-....-','/':'-..-.','@':'.--.-.'};
-};
 const MORSE_REVERSE=Object.fromEntries(Object.entries(MORSE_TABLE).map(([k,v])=>[v,k]));
 
 let morseMode='encode',morseAudioCtx=null,morsePlaying=false,morseScheduledNodes=[];
