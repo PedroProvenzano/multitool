@@ -1,4 +1,4 @@
-const CACHE = 'toolkit-v2';
+const CACHE = 'toolkit-v3';
 
 // Solo pre-cacheamos assets estáticos que no cambian seguido — NO index.html
 const STATIC = [
